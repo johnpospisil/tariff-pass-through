@@ -100,7 +100,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 
 ### Phase 1 — Ingest and reconcile (Week 1)
 
-**P03 — Census International Trade ingest**
+**P03 — Census International Trade ingest ✅ DONE!**
 > Implement `src/tpt/ingest/census_trade.py` against `api.census.gov/data/timeseries/intltrade/imports/hs`.
 > First, fetch the endpoint's `variables.json` and confirm exact variable names; we need HS10 commodity,
 > country code/name, general value, consumption value, dutiable value, calculated duties, quantity 1 and
