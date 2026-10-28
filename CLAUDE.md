@@ -76,7 +76,7 @@ project rules and the prompt sequence; run the prompts in order, one per session
 
 ## Progress
 
-- [x] P01 Scaffold · [ ] P02 HTTP/cache layer
+- [x] P01 Scaffold · [x] P02 HTTP/cache layer
 - [ ] P03 Census ingest · [ ] P04 Reconciliation gates · [ ] P05 BLS ingest · [ ] P06 Reference concordances
 - [ ] P07 Timeline schema · [ ] P08 2018–19 actions · [ ] P09 2025–26 actions · [ ] P10 Rate panel · [ ] P11 Timeline validation
 - [ ] P12 Import panel · [ ] P13 Theme + effective rates · [ ] P14 Front-running + de minimis
