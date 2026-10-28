@@ -1,12 +1,15 @@
-.PHONY: setup ingest ingest-status build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-status build models figures report test lint format all
 
 UV := uv run
 
 setup:
 	uv sync
 
-ingest:
-	@echo "ingest: not implemented yet (P03, P05, P06)"
+ingest: ingest-census
+	@echo "ingest: BLS and BEA not implemented yet (P05, P06)"
+
+ingest-census:  ## HS10 x country x month imports; resumable (cached chunks are skipped)
+	$(UV) python -m tpt.ingest.census_trade
 
 ingest-status:  ## live progress bar for a running ingest: make ingest-status SOURCE=bls
 	@$(UV) python -m tpt.ingest.progress $(or $(SOURCE),census)

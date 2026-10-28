@@ -325,3 +325,13 @@ def test_known_sources_registered():
     assert _http.SOURCES["census"].key_param == "key"
     assert _http.SOURCES["bls"].key_location == "json"
     assert _http.SOURCES["bls"].key_param == "registrationkey"
+
+
+def test_cached_lookup_never_hits_network(source, tmp_path):
+    rec = Recorder()
+    client, _ = make_client(source, tmp_path, rec)
+    assert client.cached(URL, {"t": "1"}) is None
+    client.get(URL, params={"t": "1"})
+    hit = client.cached(URL, {"t": "1"})
+    assert hit is not None and hit.from_cache
+    assert len(rec.requests) == 1

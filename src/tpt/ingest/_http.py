@@ -276,6 +276,11 @@ class CachedClient:
     ) -> CachedResponse:
         return self._fetch("POST", url, {}, dict(payload), refresh, validate)
 
+    def cached(self, url: str, params: dict[str, Any] | None = None) -> CachedResponse | None:
+        """Return the cached GET response, or None, without touching the network."""
+        key = self._cache_key("GET", url, dict(params or {}), None)
+        return self._read_cache(key)
+
     def record_rows(self, response: CachedResponse, rows: int) -> None:
         """Attach a parsed row count to a fetch's manifest entry."""
         _append_manifest(
@@ -302,6 +307,14 @@ class CachedClient:
         base = self.raw_dir / self.source.name / key[:2]
         return base / f"{key}.bin", base / f"{key}.meta.json"
 
+    def _read_cache(self, key: str) -> CachedResponse | None:
+        body_path, meta_path = self._paths(key)
+        if not (body_path.exists() and meta_path.exists()):
+            return None
+        meta = json.loads(meta_path.read_text())
+        log.debug("cache hit %s %s", self.source.name, key[:12])
+        return self._response(body_path.read_bytes(), meta["status"], True, body_path, key)
+
     def _fetch(
         self,
         method: str,
@@ -314,11 +327,8 @@ class CachedClient:
         key = self._cache_key(method, url, params, body)
         body_path, meta_path = self._paths(key)
 
-        if not refresh and body_path.exists() and meta_path.exists():
-            meta = json.loads(meta_path.read_text())
-            content = body_path.read_bytes()
-            log.debug("cache hit %s %s", self.source.name, key[:12])
-            return self._response(content, meta["status"], True, body_path, key)
+        if not refresh and (hit := self._read_cache(key)) is not None:
+            return hit
 
         response = self._send(method, url, params, body)
         content = response.content
