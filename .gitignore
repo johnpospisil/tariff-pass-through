@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Secrets
+.env*
+!.env.example
+
+# Data (rebuilt by make; reference/ and published/ are committed)
+data/raw/
+data/interim/
+data/processed/
+
+# Quarto output
+report/_site/
+report/.quarto/
+report/*_files/
+/.quarto/
+
+# OS / editors
+.DS_Store
+.vscode/
+.idea/

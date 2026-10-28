@@ -1,0 +1,40 @@
+[project]
+name = "tpt"
+version = "0.1.0"
+description = "Who pays the tariffs? Tariff pass-through to US import and consumer prices, 2025-26"
+authors = [
+    { name = "johnpospisil", email = "audiofreak7@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb>=2.0.0",
+    "httpx>=0.28.1",
+    "matplotlib>=3.11.2",
+    "polars>=2.1.0",
+    "pyarrow>=26.0.0",
+    "pyfixest>=0.60.0",
+    "python-dotenv>=1.2.4",
+    "tenacity>=9.2.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.13.1,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "ruff>=0.17.3",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["SIM300"]  # flags module constants like config.SAMPLE_START as literals
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
