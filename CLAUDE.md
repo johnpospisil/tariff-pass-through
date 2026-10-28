@@ -101,7 +101,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > Keys come from `tpt.config`; redact them from logs and manifests. Tests first: cache hit skips the
 > network (mock transport), retries on 429, keys never appear in manifest or log output. Commit `P02`.
 
-### Phase 1 — Ingest and reconcile (Week 1)
+### Phase 1 — Ingest and reconcile (Week 1) ✅ DONE!
 
 **P03 — Census International Trade ingest ✅ DONE!**
 > Implement `src/tpt/ingest/census_trade.py` against `api.census.gov/data/timeseries/intltrade/imports/hs`.
@@ -137,7 +137,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > first on fixture responses including missing values ("-"). Report the series count and coverage.
 > Commit `P05`.
 
-**P06 — Reference data and concordances**
+**P06 — Reference data and concordances ✅ DONE!**
 > Build `src/tpt/build/concordance.py` and `src/tpt/ingest/bea_io.py`. Assemble: (1) a cross-year HS10
 > concordance 2017–present following Pierce & Schott (synthetic family IDs for split/merged codes), using
 > Census annual HS10 concordance files; (2) HS10 → NAICS (Census import concordance); (3) BEA

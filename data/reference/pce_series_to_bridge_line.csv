@@ -1,0 +1,10 @@
+pce_code,pce_desc,nipa_line,bridge_category,note
+DCPPRC,Personal computers and peripheral equipment,49,Personal computers/tablets and peripheral equipment,"Renamed in 2017 benchmark (tablets added)"
+DTCERC,Telephone and facsimile equipment,71,Telephone and related communication equipment,"Renamed in 2017 benchmark"
+DRXDRC,Prescription drugs,122,Pharmaceutical products,"2017 bridge has one line for prescription and nonprescription drugs"
+DNRDRC,Nonprescription drugs,122,Pharmaceutical products,"2017 bridge has one line for prescription and nonprescription drugs"
+DOVERC,"Video cassettes and discs, blank and prerecorded",46,"Video discs, tapes, and permanent digital downloads","Renamed in 2017 benchmark"
+DRTDRC,Prerecorded and blank audio discs/tapes/digital files/downloads,45,"Audio discs, tapes, vinyl, and permanent digital downloads","Renamed in 2017 benchmark"
+DAPIRC,"Repair of audio-visual, photographic, and information processing equipment",222,"Repair and rental of audio-visual, photographic, and information processing equipment","Renamed in 2017 benchmark (rental added)"
+DNETRC,Net transactions in used autos,13,Used autos,"Same concept"
+DUTNRC,Net transactions in used trucks,17,Used light trucks,"Same concept"

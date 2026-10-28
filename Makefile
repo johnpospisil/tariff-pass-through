@@ -1,12 +1,11 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-status reconcile build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance build models figures report test lint format all
 
 UV := uv run
 
 setup:
 	uv sync
 
-ingest: ingest-census ingest-bls
-	@echo "ingest: BEA not implemented yet (P06)"
+ingest: ingest-census ingest-bls ingest-reference
 
 ingest-census:  ## HS10 x country x month imports; resumable (cached chunks are skipped)
 	$(UV) python -m tpt.ingest.census_trade
@@ -16,13 +15,22 @@ ingest-bls:  ## BLS import prices, CPI, PPI (API v2; ~45 requests)
 	$(UV) python -m tpt.ingest.bls_cpi
 	$(UV) python -m tpt.ingest.bls_ppi
 
+ingest-reference:  ## HS10 code lists, BEA I-O tables and PCE bridge, Rauch, BLS CPI-PCE map
+	$(UV) python -m tpt.ingest.hs_codes
+	$(UV) python -m tpt.ingest.bea_io
+	$(UV) python -m tpt.ingest.rauch
+	$(UV) python -m tpt.ingest.cpi_pce_map
+
 ingest-status:  ## live progress bar for a running ingest: make ingest-status SOURCE=bls
 	@$(UV) python -m tpt.ingest.progress $(or $(SOURCE),census)
 
 reconcile:  ## P04 gates: HS10 sums vs FT-900, duties vs Treasury (re-downloads both checks)
 	$(UV) python -m tpt.build.reconcile
 
-build:
+concordance:  ## P06 HS10 families, HS10->NAICS->BEA, Rauch, CPI<->PCE
+	$(UV) python -m tpt.build.concordance
+
+build: concordance
 	@echo "build: not implemented yet (P10, P12, P18)"
 
 models:

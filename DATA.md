@@ -11,7 +11,11 @@ Every source, vintage, licence and known issue used in this project. Updated as 
 | Monthly Treasury Statement, table 4 | Reconciliation of customs duties | api.fiscaldata.treasury.gov | FY2017 to 2026-09, retrieved 2026-10-27 (P04) | Public domain |
 | BLS Import Price Indexes (MXP) | Pre-duty import prices | api.bls.gov (data), download.bls.gov (catalog) | 2015-01 to 2026-09, retrieved 2026-10-28 (P05) | Public domain |
 | BLS CPI / PPI | Consumer and producer prices | api.bls.gov (data), download.bls.gov (catalog) | 2015-01 to 2026-09, retrieved 2026-10-28 (P05) | Public domain |
-| BEA input-output tables, PCE bridge | HS → CPI concordance | bea.gov | — (P06) | Public domain |
+| BEA input-output tables (2017 detail), PCE bridge 2017 | HS → CPI concordance, import shares | apps.bea.gov | 2017 benchmark, retrieved 2026-10-28 (P06) | Public domain |
+| Census HS10 import code lists | HS10 → NAICS, SITC, end use; code families | census.gov (impconcordYY, sbsdf.zip) | 2017–2026, retrieved 2026-10-28 (P06) | Public domain |
+| Census NAICS concordances 2012→2017, 2022→2017 | NAICS → BEA commodity | census.gov/naics/concordances | retrieved 2026-10-28 (P06) | Public domain |
+| Rauch (1999) classification; HS→SITC2 tables | Differentiated vs homogeneous goods | R `concordance` package (GitHub insongkim/concordance) | v2.1.0, retrieved 2026-10-28 (P06) | MIT |
+| BLS CPI ELI → PCE mapping | CPI ↔ PCE crosswalk | bls.gov/cpi/additional-resources/pce-cpi-code-mapping.htm | 2011 vintage, retrieved 2026-10-28 (P06) | Public domain |
 | Tariff actions | Tariff timeline | Federal Register, USTR, CBP CSMS | — (P08, P09) | Public domain |
 
 ## Tariff timeline
@@ -31,6 +35,45 @@ verified. Legal status (including the Supreme Court IEEPA case) is recorded here
   USMCA, ...). The all-countries total, code `-`, is also `DET`; individual countries are `DET` and not
   `-`. See `data/reference/census_countries.csv`.
 - Outputs: `data/interim/census_imports/year=YYYY/data.parquet`, `data/interim/census_totals.parquet`.
+
+## Concordances (P06)
+
+Run `make ingest-reference concordance`. Outputs in `data/processed/`: `hs10_families.parquet`,
+`hs10_attributes.parquet` (year × HS10: descriptions, units, SITC, end use, NAICS, BEA commodity,
+Rauch class, family), `cpi_pce_crosswalk.parquet`; coverage in `reports/qa/concordance_coverage.csv`.
+
+**HS10 families.** Pierce & Schott's published concordance ends in 2007, and Census publishes no
+machine-readable code-change list for 2017+, so codes are linked by prefix in the same spirit (details
+in `src/tpt/build/concordance.py`): a dropped code links to added codes in the same HS8, else HS6,
+else HS4; merges and carve-outs link to continuing codes in the same HS8. Result: 22,040 codes →
+17,879 families; 507 multi-code families hold 27.7% of import value (largest: 155 codes in HS 4403,
+wood, restructured in HS 2022; apparel in chapters 61–62 and medicaments in 3004 are similar). 9.7%
+of value sits in families spanning more than one HS6. **Recommendation for P12:** compute 12-month
+changes at the HS10 level when the code exists in both months and fall back to the family only when
+the code changed, so families do not blur detail they do not need to.
+
+**HS10 → NAICS → BEA commodity.** NAICS from Census's annual lists (latest available year as fallback).
+BEA's 2017 detail tables cite 2017 NAICS, while Census lists carry 2022 NAICS from 2022 (e.g. cars,
+336110) and some 2012 codes before; these go through Census's 2022→2017 and 2012→2017 concordances.
+Census special codes are hand-mapped in `data/reference/census_special_naics_to_bea.csv`: 910000
+(waste and scrap) → BEA S00401 Scrap; 930000 (used, rebuilt and antique goods) → S00402 Used and
+secondhand goods. 980000 (US goods returned) and 990000 (special provisions) have no BEA commodity.
+
+**Rauch.** HS6 → SITC Rev. 2 (HS 2017 tables for 2017–2021, HS 2022 tables from 2022) → Rauch
+conservative and liberal classes (w organized exchange, r reference priced, n differentiated);
+modal class when an HS6 maps to several SITC codes, flagged `rauch_mixed`. Fallbacks, recorded in
+`rauch_source`: the other HS revision's table, then the modal class of the HS4 (3.5% of value).
+
+**Coverage by import value, 2017–2026** (regular goods, excluding HS chapters 98–99 / all goods):
+family 100% / 100%; NAICS 99.99% / 99.99%; BEA commodity 99.88% / 95.8%; Rauch 96.2% / 93.0%.
+
+**CPI ↔ PCE.** The BLS mapping lists 2011-vintage ELIs. ELI → current CPI series code is "SE" + its
+first four characters (e.g. AA011 → SEAA01, Men's suits, sport coats, and outerwear); where that
+strata no longer exists, its expenditure class ("SE" + first two, e.g. SEAB Boys' apparel). 309 of
+315 ELIs map. PCE series → BEA bridge line by normalised description; nine renamed goods lines are
+hand-mapped in `data/reference/pce_series_to_bridge_line.csv` (e.g. personal computers → line 49,
+prescription and nonprescription drugs → line 122 Pharmaceutical products). 156 of 167 PCE series map;
+the 11 unmapped are services (hospitals, higher education, owner-occupied housing, ...).
 
 ## BLS prices (P05)
 

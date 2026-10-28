@@ -1,0 +1,2 @@
+0101210010    HORSES, LIVE, PUREBRED BREEDING MALE                   HORSES, LIVE, PUREBRED BREEDING MALE                                                                                                                       NO              00150     12060     0    112920     00
+8471300100    PORT DGTL ADP MACH,< 10 KG,AT LEAST CPU,KBRD,DSPLY     PORTABLE DIGTL AUTOMATIC DATA PROCESSING MACHINES,WEIGHT NOT MORE THAN 10 KG,CONSISTING OF AT LEAST A CENTRAL PROCESSING UNIT,KEYBOARD & A DISPLAY         NO              75220     21300     1    334111     04
