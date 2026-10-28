@@ -211,7 +211,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 
 ### Phase 3 — Panel and descriptives (Week 3)
 
-**P12 — Import panel**
+**P12 — Import panel ✅ DONE!**
 > Build `src/tpt/build/import_panel.py` → `data/processed/import_panel.parquet` at HS10-family × country ×
 > month: values, quantity, unit, unit value, effective rate, statutory rate (from P10), 12-month log
 > changes in unit value, duty-inclusive price, quantity and value, and `Δln(1+τ)`. Cleaning: drop

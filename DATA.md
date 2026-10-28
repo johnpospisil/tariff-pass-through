@@ -440,7 +440,56 @@ legal cause):
 (9999, Ch. 98) from product panels, treat 2025-02 to 2025-05 and 2025-08/09 as in-transit months,
 and use the implied rate as the alternative measure (P16).
 
+## Import panel (P12)
+
+`make import-panel` (`src/tpt/build/import_panel.py`; DuckDB for the family aggregation and
+12-month joins, about 40 s) → `data/processed/import_panel.parquet`: 18,070,261 rows, one per
+product × individual country × month with imports for consumption, 2017-01 to 2026-08; keys
+unique; value reconciles exactly with the Census HS10 detail ($27.83tn). Drop reports:
+`reports/qa/import_panel_drops*.csv`; invariants: `tests/test_import_panel_built.py`.
+
+- **Product unit**: the HS10 code when its family (P06) has the same codes this year and last
+  year; otherwise the family aggregate (`level = family`, 172,286 rows, 1.1% of the price sample):
+  values and duties summed, rates value-weighted, quantity summed only when all codes share a unit.
+- **Prices**: `unit_value` = consumption value ÷ quantity 1 (pre-duty); `uv_duty_incl` =
+  (value + calculated duties) ÷ quantity; `eff_rate` = calculated duties ÷ value (all duties, incl.
+  MFN); `stat_rate` = P10 `rate_total` (statutory additional), with `mfn_rate` and the authority
+  rates. 12-month changes: `dln_val`, `dln_qty`, `dln_uv`, `dln_uv_dut`, `dln_1p_tau_stat`,
+  `dln_1p_tau_eff` = Δ ln(1 + τ).
+- **Cleaning** (rules in the `Cleaning` dataclass, varied in P17): rows are flagged in
+  `drop_reason`, not deleted (value changes stay available for rows without a usable quantity).
+  Price changes are winsorised at the 1st/99th percentiles, pooled (raw values in `*_raw`); trimming
+  instead is `Cleaning(mode="trim")`.
+- **Quantity units come from the annual HS10 lists, not the API.** The Census API's `UNIT_QY1` is
+  the *current* unit for every month: codes with no quantity unit ("X") before 2020 (computer parts
+  8473.30.1180, toys 9503.00.0073, video game consoles 9504.50, wiring sets 8544.30, turbine parts
+  8411.91.9085) show unit "NO" with zero quantity in 2017–19 (10–15% of value). With the
+  annual-list unit they are `no_quantity`, and codes that gained a unit are `unit_change`.
+
+**Import value by drop reason** (`import_panel_drops_by_period.csv`):
+
+| Reason | 2018–19 | 2020–24 | 2025–26 |
+|---|---|---|---|
+| In the price sample | **77.2%** | **90.3%** | **91.2%** |
+| no_quantity (no quantity unit, mostly "X" codes before 2020) | 13.9% | 1.3% | 0.02% |
+| special_provision (HS 98–99) | 4.2% | 4.1% | 4.5% |
+| no_base (no imports 12 months earlier) | 3.2% | 3.7% | 2.9% |
+| mixed_units (family aggregate) | 1.3% | 0.5% | 0.6% |
+| unit_change | 0.13% | 0.12% | 0.92% |
+| duty_outlier (duties > 5 × value) | — | 1 row | — |
+
+2017 is the base year (no 12-month changes). Sample rows: 2.14m (2018–19), 6.51m (2020–24),
+2.34m (2025–26). Mean Δ ln(1 + τ_stat) in the sample: 0.008 (2018–19), 0.084 (2025–26); s.d. of
+Δ ln unit value 1.11 (raw 1.21) and 1.24 (raw 1.36). Effective rates above 300% (57 rows, $9.7m)
+are over-quota tobacco and dairy shipments with specific duties; the one above 500% is flagged.
+
+**For P15**: about 14% of 2018–19 value has no quantity (unit "X" codes); unit-value
+regressions there cover the remaining 77%.
+
 ## Known issues
+
+- **Census API quantity units (found in P12)**: `UNIT_QY1` in the API is the current unit for all
+  months; use the annual HS10 list unit for historical months (see "Import panel").
 
 - **October 2025 (federal shutdown)**: BLS did not collect most October 2025 prices ("Data unavailable
   due to the 2025 lapse in appropriations"). CPI: only 21 of ~700 series have an October 2025 value;

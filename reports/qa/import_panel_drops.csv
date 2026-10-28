@@ -1,0 +1,8 @@
+drop_reason,rows,value_bn,value_share
+duty_outlier,1,0.0000,0.0000
+mixed_units,15288,176.0922,0.0063
+no_base,6236342,3103.5173,0.1115
+no_quantity,568269,894.5442,0.0321
+special_provision,253863,1157.5963,0.0416
+unit_change,5874,76.4679,0.0027
+,10990624,22426.0202,0.8057

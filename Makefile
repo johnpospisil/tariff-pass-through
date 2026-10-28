@@ -1,4 +1,4 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel build models figures report test lint format all
 
 UV := uv run
 
@@ -46,13 +46,16 @@ rates: mfn usmca-share  ## P10 HS10 x country x month additional-duty panel
 validate-rates:  ## P11 statutory (P10 panel) vs implied rates from Census calculated duties
 	$(UV) python -m tpt.build.validate_rates
 
+import-panel:  ## P12 HS10-family x country x month panel: unit values, rates, 12-month changes
+	$(UV) python -m tpt.build.import_panel
+
 timeline-2025:  ## P09 regenerate the 2024-26 rows of tariff_actions.csv
 	$(UV) python -m tpt.build.actions_2025
 
 timeline-validate:  ## P07 check data/reference/tariff_actions.csv (citations, dates, HS codes, overlaps)
 	$(UV) python -m tpt.build.tariff_timeline
 
-build: concordance timeline-validate rates validate-rates
+build: concordance timeline-validate rates validate-rates import-panel
 	@echo "build: not implemented yet (P10, P12, P18)"
 
 models:
