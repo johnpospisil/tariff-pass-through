@@ -33,3 +33,23 @@ def test_chart2_writes_svg_and_png(effective_csv, tmp_path, mode):
 def test_tokens_reject_unknown_mode():
     with pytest.raises(ValueError, match="mode"):
         theme.tokens("sepia")
+
+
+@pytest.mark.parametrize("mode", theme.MODES)
+def test_chart5_and_chart6_render(tmp_path, mode):
+    ks = list(range(-9, 10))
+    fr = pl.DataFrame([
+        {"action": a, "label": a.title(), "k": k, "month": date(2025, 1, 1), "value": 1.0,
+         "counterfactual": 1.0, "excess_pct": 0.01 * k, "band": 0.1, "band_low": -0.1}
+        for a in ("a", "b", "c", "d", "e", "f") for k in ks
+    ])  # fmt: skip
+    fr.write_csv(tmp_path / "fr.csv")
+    months = [date(2024, m, 1) for m in range(1, 13)] + [date(2025, m, 1) for m in range(1, 13)]
+    lv = pl.DataFrame({"month": months, "china_hk_bn": [0.4] * 24, "rest_bn": [1.6] * 24,
+                       "total_bn": [2.0] * 24, "imports_bn": [270.0] * 24,
+                       "share_of_imports": [0.007] * 24})  # fmt: skip
+    lv.write_csv(tmp_path / "lv.csv")
+    p5 = figures.chart5_front_running(mode, data=tmp_path / "fr.csv", out_dir=tmp_path)
+    p6 = figures.chart6_low_value(mode, data=tmp_path / "lv.csv", out_dir=tmp_path)
+    assert all(p.exists() for p in p5 + p6)
+    assert "$54.5bn" in p6[0].read_text()  # currency, not math text

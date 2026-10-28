@@ -515,6 +515,61 @@ Gaps follow the P11 bridge: in-transit exemptions (2025-04 China: 108.6% statuto
 assessed), USMCA claims and metal-content duties (Canada, Mexico), metal-content duties (EU 2026-01).
 Penn Wharton's China effective rate for 2026-08 is 24.3% (ours 22.8%).
 
+## Front-running and de minimis (P14)
+
+**Front-running** (`make front-running`, `src/tpt/build/front_running.py` →
+`data/published/front_running.csv`, `front_running_summary.csv`; chart 5). For each action the
+treated set is the HS6 × country pairs whose P10 statutory rate for that authority rose across the
+effective date (HS6 is stable within HS 2022). Counterfactual: the set's value 12 months earlier ×
+its year-on-year growth before the 2024 election (geometric mean, 2023-10 to 2024-09), which keeps
+the set's own seasonality. Band: ±2 s.d. of that monthly log growth (the counterfactual's noise).
+The August 2025 country rates are also differenced against a control set: pairs whose reciprocal
+rate stayed at 10%. Pharmaceuticals (HS 30) use the month the Section 232 inquiry opened (90 FR
+15951, initiated 2025-04-01) as month 0; the duty only applies from 2026-09-29.
+
+| Action (month 0) | 2024 imports | Peak excess (month) | Months > 0 before | Excess imports in those months | Months above band | Months 0 to +5 vs counterfactual |
+|---|---|---|---|---|---|---|
+| China fentanyl (2025-02) | $417bn | +18% (−1) | 7 | $23.8bn (5.7% of 2024) | 1 | −$47.7bn |
+| Steel and aluminum (2025-03) | $103bn | +16% (−2) | 8 | $5.2bn (5.0%) | 0 | −$7.0bn |
+| Reciprocal baseline, excl. CN/HK/CA/MX (2025-04) | $899bn | +14% (−1) | 9 | $42.1bn (4.7%) | 1 | +$9.3bn |
+| Autos (2025-04) | $220bn | +9% (−1) | 1 | $1.9bn (0.9%) | 0 | −$38.9bn |
+| Country-specific rates, vs 10% control (2025-08) | $503bn | +7% (−2) | 2 | $5.2bn (1.0%) | 0 | −$7.7bn |
+| Pharmaceuticals (inquiry 2025-04) | $215bn | +53% (−1) | 2 | $13.4bn (6.3%) | 1 | −$25.5bn |
+
+Reading: stockpiling ran from roughly mid-2024 (China, metals, reciprocal-affected goods; 7–9
+months) at +5% to +18% a month, peaking in the month before the duty; the largest single surge is
+pharmaceuticals in March 2025 (+53%, about $11bn above the counterfactual). Only four of the 54
+pre-months (six actions × nine) exceed the noise band, so monthly excesses are individually
+uncertain; the evidence is the run of 7–9 positive months for China, metals and
+reciprocal-affected goods followed by a drop. Autos and the August country rates show no clear
+pre-surge. After the effective date imports of
+China-affected products fell 37–49% below the counterfactual from month +3 (this also reflects the
+April 2025 escalation), autos 25–42% and metals 12–27%. Reciprocal-affected goods held up through
+month +3 (in-transit window) and then fell 4–10%. Treat months −6 to +6 around each date as
+contaminated when estimating pass-through (P16/P17).
+
+**De minimis and low-value imports** (`make low-value`, `src/tpt/build/low_value.py` →
+`data/published/low_value_imports.csv`; chart 6). How small parcels appear in Census data:
+- Import transactions under $2,000 that cannot be rolled up into commodity detail are reported
+  as estimates by country under HTS 9999.95.0000, built from electronically filed (ACE), paper,
+  courier and foreign-trade-zone components ([Census, Guide to Foreign Trade Statistics, sec.
+  2](https://www.census.gov/foreign-trade/guide/sec2.html), checked 2026-10-28).
+- De minimis (Section 321) shipments, under $800, were not recorded in Census trade data: $54.5bn
+  over more than 1 billion shipments in 2023 ([Fajgelbaum and Khandelwal, "The Value of de Minimis
+  Imports", 2025](https://akhandelwal8.github.io/files/wp_DM/DM_post.pdf)).
+- De minimis ended for China and Hong Kong on 2025-05-02 (EO 14256) and for all countries on
+  2025-08-29 (EO 14324); continued after the IEEPA ruling by EO 14388 (P09).
+
+The 9999.95 line for China and Hong Kong went from $0.42–0.45bn a month (2025-01 to 04) to
+$0.66bn (2025-05), $0.91bn (2025-07) and $1.06bn (2026-08); other countries from $1.6–1.8bn to
+$2.3bn (2026-08). The rise is a **measurement change** at least in part: shipments that used to
+enter unrecorded under de minimis are now formal or informal entries, and those under $2,000 land
+in 9999.95. It is far smaller than the 2023 de minimis flow (about $4.5bn a month), so most of
+that trade either stopped or is still not visible in this line. No Census notice on the
+treatment of former de minimis shipments was found (searched 2026-10-28). The series is a
+recording indicator, not a measure of parcel imports; the 9999.95 line carries no calculated
+duty (P11) and is excluded from the price panel (P12).
+
 ## Known issues
 
 - **Census API quantity units (found in P12)**: `UNIT_QY1` in the API is the current unit for all

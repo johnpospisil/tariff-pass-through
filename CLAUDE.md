@@ -227,7 +227,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > statutory rate. Export the series to `data/published/effective_rates.csv`. Save chart 2 as SVG + PNG in
 > `report/figures/`. Commit `P13`.
 
-**P14 — Front-running and de minimis (charts 5 and 6)**
+**P14 — Front-running and de minimis (charts 5 and 6) ✅ DONE!**
 > Front-running: for products hit by each major 2025 action, estimate the pre-effective-date surge and
 > post-date drop relative to a counterfactual (same products' 2023–24 seasonal pattern and/or unaffected
 > products), as an event study in months around each effective date; quantify excess imports and how long

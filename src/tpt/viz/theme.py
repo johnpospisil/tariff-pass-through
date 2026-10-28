@@ -63,6 +63,7 @@ def style(mode: str = "light") -> Iterator[dict]:
         "axes.titlecolor": t["text"], "axes.titlelocation": "left", "axes.titlepad": 6,
         "lines.linewidth": LINE_WIDTH, "lines.solid_capstyle": "round",
         "lines.solid_joinstyle": "round", "legend.frameon": False,
+        "text.parse_math": False,  # "$" in labels and notes is a currency sign
         "svg.fonttype": "none",  # keep text as text in SVG (selectable, accessible)
     }  # fmt: skip
     with mpl.rc_context(rc):

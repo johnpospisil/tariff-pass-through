@@ -1,0 +1,7 @@
+action,label,effective_month,citation,treated_pairs,imports_2024_bn,control,stockpile_months,positive_months,peak_k,peak_pct,excess_pre_bn,excess_positive_bn,excess_positive_pct_of_2024,excess_pre_pct_of_2024,shortfall_post_bn,band
+cn_fentanyl,China: fentanyl duty (Feb 2025),2025-02-01,"EO 14195, 90 FR 9121",3789,417.1412,false,1,7,-1,0.1844,6.2408,23.7672,0.0570,0.0150,-47.6685,0.1379
+metals,Steel and aluminum (Mar 2025),2025-03-01,"Proclamations 10895, 10896",4225,103.1873,false,0,8,-2,0.1644,0.0000,5.1967,0.0504,0.0000,-7.0154,0.1374
+reciprocal,"Reciprocal baseline, excl. China (Apr 2025)",2025-04-01,"EO 14257, 90 FR 15041",63282,899.0462,false,1,9,-1,0.1363,10.4450,42.0735,0.0468,0.0116,9.2879,0.1041
+autos,Autos (Apr 2025),2025-04-01,Proclamation 10908,132,219.5713,false,0,1,-1,0.0942,0.0000,1.8720,0.0085,0.0000,-38.8714,0.2469
+country_rates,Country-specific rates (Aug 2025),2025-08-01,"EO 14326, 90 FR 37963",37173,503.0647,true,0,2,-2,0.0727,0.0000,5.2158,0.0104,0.0000,-7.5683,0.1092
+pharma,Pharmaceuticals (inquiry opened Apr 2025),2025-04-01,Section 232 investigation initiated 2025-04-01 (90 FR 15951); duty from 2026-09-29,705,215.0958,false,1,2,-1,0.5307,10.9824,13.4475,0.0625,0.0511,-25.5151,0.3689

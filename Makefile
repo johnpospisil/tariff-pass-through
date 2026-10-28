@@ -1,4 +1,4 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value build models figures report test lint format all
 
 UV := uv run
 
@@ -52,13 +52,19 @@ import-panel:  ## P12 HS10-family x country x month panel: unit values, rates, 1
 effective-rates:  ## P13 monthly effective vs statutory tariff rates by partner -> data/published/
 	$(UV) python -m tpt.build.effective_rates
 
+front-running:  ## P14 event studies of imports around the 2025 tariff actions -> data/published/
+	$(UV) python -m tpt.build.front_running
+
+low-value:  ## P14 Census low-value import estimates (HTS 9999.95) by origin -> data/published/
+	$(UV) python -m tpt.build.low_value
+
 timeline-2025:  ## P09 regenerate the 2024-26 rows of tariff_actions.csv
 	$(UV) python -m tpt.build.actions_2025
 
 timeline-validate:  ## P07 check data/reference/tariff_actions.csv (citations, dates, HS codes, overlaps)
 	$(UV) python -m tpt.build.tariff_timeline
 
-build: concordance timeline-validate rates validate-rates import-panel effective-rates
+build: concordance timeline-validate rates validate-rates import-panel effective-rates front-running low-value
 	@echo "build: not implemented yet (P10, P12, P18)"
 
 models:
