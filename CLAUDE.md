@@ -159,7 +159,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > citation fields, dates parse, no overlapping rows for the same authority × country × HS without an
 > explicit supersedes link, HS lists resolve to real HS10 codes. Commit `P07`.
 
-**P08 — Compile 2018–19 actions (validation set)**
+**P08 — Compile 2018–19 actions (validation set) ✅ DONE!**
 > Populate `tariff_actions.csv` with the 2018–19 trade war actions needed to replicate
 > Amiti–Redding–Weinstein and Fajgelbaum et al.: Section 201 (washers, solar), Section 232 (steel,
 > aluminum, including country exemptions and quotas), Section 301 China Lists 1, 2, 3 (10% then 25%) and

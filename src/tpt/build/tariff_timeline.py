@@ -10,7 +10,7 @@ Columns (see COLUMNS; empty cells mean "not applicable"):
   authority          see AUTHORITIES
   country_iso        ISO 3166 alpha-2, "ALL", or a group in country_groups.csv
   cty_code           Census country code, "ALL", or the same group name
-  exclude_cty_codes  Census codes excluded from an "ALL" row, ';'-separated
+  exclude_cty_codes  Census codes or group names excluded from an "ALL" row, ';'-separated
   hs_scope           ';'-separated HS prefixes (2/4/6/8/10 digits), "ALL", or
                      "file:hs_lists/<name>.csv" (column "hs"; tokens may be mixed with prefixes)
   hs_exclude         same syntax; codes carved out of hs_scope (e.g. Annex II exemptions)
@@ -22,7 +22,7 @@ Columns (see COLUMNS; empty cells mean "not applicable"):
   specific_rate      additional specific duty, with specific_unit (e.g. "kg")
   effective_date     first day goods entered for consumption are subject to the rate
   end_date           first day they are no longer subject (exclusive); empty = in effect
-  supersedes         action_id this row replaces where they overlap (rate changes)
+  supersedes         action_id(s) this row replaces where they overlap (';'-separated)
   stacking           "cumulative", or "not_with:<AUTH>[,<AUTH>...]": the rate does not apply to
                      goods subject to the listed authorities (e.g. reciprocal not on S232 goods)
   exclusions_ref     where product exclusions are listed (citation or file)
@@ -285,6 +285,14 @@ def _scope_errors(label: str, scope: str | None, base: Path, index: _PrefixIndex
 # --- overlaps ----------------------------------------------------------------
 
 
+def expand_countries(tokens: set[str], groups: dict[str, set[str]]) -> set[str]:
+    """Census codes and group names -> Census codes."""
+    out: set[str] = set()
+    for t in tokens:
+        out |= groups.get(t, {t})
+    return out
+
+
 def _countries_overlap(a: TariffAction, b: TariffAction, groups: dict[str, set[str]]) -> bool:
     def members(x: TariffAction) -> set[str] | None:  # None = ALL
         if x.cty_code == "ALL":
@@ -295,9 +303,9 @@ def _countries_overlap(a: TariffAction, b: TariffAction, groups: dict[str, set[s
     if ma is None and mb is None:
         return True
     if ma is None:
-        return bool(mb - a.excluded)
+        return bool(mb - expand_countries(a.excluded, groups))
     if mb is None:
-        return bool(ma - b.excluded)
+        return bool(ma - expand_countries(b.excluded, groups))
     return bool(ma & mb)
 
 
@@ -314,21 +322,49 @@ def _hs_overlap(sa: set[str], sb: set[str]) -> bool:
 
 
 def _supersede_closure(actions: list[TariffAction]) -> set[tuple[str, str]]:
-    links = {a.action_id: a.supersedes for a in actions if a.supersedes}
+    """Pairs of actions linked by supersedes, directly or through a chain (both directions)."""
+    links = {a.action_id: set(_split(a.supersedes)) for a in actions if a.supersedes}
     pairs = set()
     for start in links:
-        cur, seen = start, set()
-        while cur in links and cur not in seen:
+        stack, seen = list(links[start]), set()
+        while stack:
+            cur = stack.pop()
+            if cur in seen:
+                continue
             seen.add(cur)
-            cur = links[cur]
             pairs |= {(start, cur), (cur, start)}
+            stack += links.get(cur, [])
     return pairs
 
 
-def overlap_errors(actions: list[TariffAction], base: Path,
-                   groups: dict[str, set[str]]) -> list[str]:  # fmt: skip
+def resolve_hs10(scope: str | None, exclude: str | None, base: Path, codes: set[str]) -> set[str]:
+    """HS10 codes covered by a scope after exclusions ("ALL" = every code)."""
+
+    def covered(prefixes: set[str]) -> set[str]:
+        if "ALL" in prefixes:
+            return set(codes)
+        return {c for c in codes if any(c[:n] in prefixes for n in range(2, 11, 2))}
+
+    return covered(expand_scope(scope, base)) - covered(expand_scope(exclude, base))
+
+
+def overlap_errors(actions: list[TariffAction], base: Path, groups: dict[str, set[str]],
+                   hs10: set[str] | None = None) -> list[str]:  # fmt: skip
+    """Same-authority rows overlapping in countries, dates and products, not linked by
+    supersedes. With an HS10 universe, products are compared as HS10 sets net of hs_exclude;
+    otherwise as prefixes (exclusions ignored, so more conservative)."""
     linked = _supersede_closure(actions)
-    scopes = {a.action_id: expand_scope(a.hs_scope, base) for a in actions}
+    if hs10:
+        sets = {a.action_id: resolve_hs10(a.hs_scope, a.hs_exclude, base, hs10) for a in actions}
+
+        def products_overlap(x: TariffAction, y: TariffAction) -> bool:
+            return bool(sets[x.action_id] & sets[y.action_id])
+    else:
+        scopes = {a.action_id: expand_scope(a.hs_scope, base) for a in actions}
+
+        def products_overlap(x: TariffAction, y: TariffAction) -> bool:
+            return _hs_overlap(scopes[x.action_id], scopes[y.action_id])
+
     errs = []
     for i, a in enumerate(actions):
         for b in actions[i + 1 :]:
@@ -338,7 +374,7 @@ def overlap_errors(actions: list[TariffAction], base: Path,
                 continue
             if not _countries_overlap(a, b, groups):
                 continue
-            if _hs_overlap(scopes[a.action_id], scopes[b.action_id]):
+            if products_overlap(a, b):
                 errs.append(f"{a.action_id} / {b.action_id}: overlap in authority, countries, HS "
                             "scope and dates with no supersedes link")  # fmt: skip
     return errs
@@ -401,7 +437,7 @@ def validate_file(
             if act.cty_code not in valid_cty:
                 errs.append(f"{label}: cty_code {act.cty_code} is not an individual Census "
                             "country, a group in country_groups.csv, or ALL")  # fmt: skip
-            bad_excl = act.excluded - countries
+            bad_excl = act.excluded - countries - set(groups)
             if bad_excl:
                 errs.append(f"{label}: exclude_cty_codes not Census countries: {sorted(bad_excl)}")
             errs += _scope_errors(f"{label}: hs_scope", act.hs_scope, base, index, required=True)
@@ -411,8 +447,8 @@ def validate_file(
     ids = [a.action_id for a in actions]
     errs += [f"duplicate action_id {i}" for i in sorted({i for i in ids if ids.count(i) > 1})]
     known = set(ids)
-    errs += [f"{a.action_id}: supersedes unknown action {a.supersedes}"
-             for a in actions if a.supersedes and a.supersedes not in known]  # fmt: skip
+    errs += [f"{a.action_id}: supersedes unknown action {sid}"
+             for a in actions for sid in _split(a.supersedes) if sid not in known]  # fmt: skip
     pairs: dict[str, set[str]] = {}
     for a in actions:
         if a.country_iso not in ("ALL", *groups):
@@ -420,7 +456,7 @@ def validate_file(
     errs += [f"country_iso {iso} used with several cty_codes: {sorted(c)}"
              for iso, c in pairs.items() if len(c) > 1]  # fmt: skip
     if check_references:
-        errs += overlap_errors(actions, base, groups)
+        errs += overlap_errors(actions, base, groups, hs10)
     return errs
 
 

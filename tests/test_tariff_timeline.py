@@ -208,6 +208,43 @@ def test_overlap_allowed_with_supersedes(tmp_path):
     assert errors(tmp_path, rows) == []
 
 
+def test_supersedes_accepts_several_ids(tmp_path):
+    rows = [
+        row(action_id="A", hs_scope="7208", end_date="2019-05-20"),
+        row(action_id="B", hs_scope="7208", effective_date="2019-05-20", rate="0.1"),
+        row(
+            action_id="T",
+            hs_scope="7208",
+            country_iso="CN",
+            cty_code="5700",
+            rate="0.5",
+            effective_date="2018-08-13",
+            end_date="2019-05-21",
+            supersedes="A;B",
+        ),  # fmt: skip
+    ]
+    assert errors(tmp_path, rows) == []
+    rows[2]["supersedes"] = "A"
+    assert any("overlap" in e for e in errors(tmp_path, rows))
+
+
+def test_partial_products_split_by_hs10_exclusions_do_not_overlap(tmp_path):
+    codes = HS10 | {"8517620010", "8517620020", "8517620090"}
+    rows = [
+        row(action_id="L3", authority="S301", country_iso="CN", cty_code="5700",
+            hs_scope="85176200", hs_exclude="8517620090"),
+        row(action_id="L4", authority="S301", country_iso="CN", cty_code="5700",
+            hs_scope="85176200", hs_exclude="8517620010;8517620020", rate="0.15"),
+    ]  # fmt: skip
+    path = write(tmp_path, rows)
+    assert tt.validate_file(path, hs10_codes=codes, cty_codes=COUNTRIES) == []
+    rows[1]["hs_exclude"] = "8517620010"
+    path = write(tmp_path, rows)
+    assert any(
+        "overlap" in e for e in tt.validate_file(path, hs10_codes=codes, cty_codes=COUNTRIES)
+    )
+
+
 def test_supersedes_must_reference_existing_action(tmp_path):
     assert errors(tmp_path, [row(supersedes="NOPE")])
 

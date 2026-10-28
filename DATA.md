@@ -16,7 +16,7 @@ Every source, vintage, licence and known issue used in this project. Updated as 
 | Census NAICS concordances 2012→2017, 2022→2017 | NAICS → BEA commodity | census.gov/naics/concordances | retrieved 2026-10-28 (P06) | Public domain |
 | Rauch (1999) classification; HS→SITC2 tables | Differentiated vs homogeneous goods | R `concordance` package (GitHub insongkim/concordance) | v2.1.0, retrieved 2026-10-28 (P06) | MIT |
 | BLS CPI ELI → PCE mapping | CPI ↔ PCE crosswalk | bls.gov/cpi/additional-resources/pce-cpi-code-mapping.htm | 2011 vintage, retrieved 2026-10-28 (P06) | Public domain |
-| Tariff actions | Tariff timeline | Federal Register, USTR, CBP CSMS | — (P08, P09) | Public domain |
+| Tariff actions | Tariff timeline | Federal Register API; HTSUS Chapter 99 (hts.usitc.gov, 2020/2021/2025 Basic Editions) | 2018–2024 actions verified 2026-10-28 (P08); 2025–26 in P09 | Public domain |
 
 ## Tariff timeline
 
@@ -134,6 +134,44 @@ the file's country rows.
 - Net receipts are reported but not gated: refunds jump to $22bn (2026-05), $49bn (2026-06),
   $33bn (2026-07) and $10.5bn (2026-08), making net receipts negative. These are IEEPA tariff refunds
   (below).
+
+## 2018–19 tariff actions (P08)
+
+47 rows in `tariff_actions.csv`, every one checked against the Federal Register (API at
+federalregister.gov) for citation, publication and effective date. Products come from the HTSUS
+Chapter 99 notes that implement each action (see `data/reference/hs_lists/README.md`); the Federal
+Register annexes are images. Country groups (EU28, EU27, Section 201 exempt lists) are in
+`data/reference/country_groups.csv`.
+
+| Action | Rows | Key dates and rates |
+|---|---|---|
+| Section 301 China List 1 / 2 | 2 | 25% from 2018-07-06 / 2018-08-23 |
+| List 3 | 2 | 10% from 2018-09-24; 25% from 2019-05-10 |
+| List 4A | 2 | 15% from 2019-09-01; 7.5% from 2020-02-14 (List 4B never took effect) |
+| Section 232 steel (25%) | 7 | 2018-03-23; country exemptions change 2018-06-01, 2019-05-20, 2022-01-01 (EU), 2022-04-01 (JP), 2022-06-01 (UK, UA); Turkey 50% 2018-08-13 to 2019-05-21 |
+| Section 232 aluminum (10%) | 8 | 2018-03-23; 2018-05-01, 2018-06-01, 2019-05-20, 2022-01-01, 2022-06-01; Canada unwrought 2020-08-16 to 09-01; Russia 200% from 2023-03-10 |
+| Section 232 derivatives | 8 | 25% steel / 10% aluminum derivatives from 2020-02-08, exemptions following the base articles; Russia 200% |
+| Section 201 washers and parts | 10 | 2018-02-07 to 2023-02-08, yearly steps |
+| Section 201 solar modules | 8 | 30% (2018) stepping down to 14% (2025-02-07 to 2026-02-07) |
+
+**Modelling choices** (all also in row notes):
+- Quota and tariff-rate-quota countries under Section 232 (AR, BR, KR quotas; EU, JP, UK TRQs) are
+  treated as exempt; over-quota trade is not modelled.
+- Product exclusions (Section 301 and 232) are not modelled.
+- Washers use the in-quota rate (20% → 14%) as a lower bound; over-quota rates (50% → 30%) are in
+  the notes. Washer parts use the over-quota rate. Solar cells (large duty-free TRQ) are not modelled;
+  bifacial-panel exclusions (2019–2024) are noted but not observable. P11 checks all of this
+  against duties collected.
+- Origin rules that trade data cannot observe (Mexico melt-and-pour, Russian smelt/cast) are noted only.
+- The 2024 Section 301 four-year-review increases and all 2025 changes are added in P09.
+
+**Cross-check against Fajgelbaum et al. (2020, QJE).** Actions in force on 2018-12-31 cover 11,860
+HS10 lines of the 2017 schedule (paper: 12,043 products, 98.5%). Covered 2017 import value is
+$258bn, 11.0% of imports (paper: $303bn, 12.7%). By list, at 2017 values: List 1 $32bn (USTR $34bn),
+List 2 $14bn ($16bn), List 3 $166bn ($200bn), List 4A $103bn (~$112bn); at 2018 values List 3 is
+$187bn. Product scope matches; the value gap reflects the base period and valuation of the
+published figures, and is revisited in P11 against duties actually collected. The replication package
+itself was not openly downloadable.
 
 ## IEEPA ruling and refunds (status as of 2026-10-27; verify in P09)
 
