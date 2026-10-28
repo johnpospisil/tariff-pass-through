@@ -62,8 +62,12 @@ project rules and the prompt sequence; run the prompts in order, one per session
   include refunds/drawback. Expect timing gaps.
 - **IEEPA legal status**: the Supreme Court case on IEEPA tariffs may mean duties were struck down and/or
   refunded. Verify the current status by web search before any prompt that uses IEEPA rates, and note the
-  date checked. Known so far (DATA.md, from P04): struck down 2026-02-20; refunds from 2026-05 show in
-  Treasury receipts (~$115bn by 2026-08); Census calculated duties are as assessed at entry.
+  date checked. Verified in P09 (2026-10-28, DATA.md): struck down 2026-02-20; collection ended
+  2026-02-24 (EO 14389); refunds ordered and paid via CBP CAPE, visible in Treasury receipts from 2026-05;
+  Census calculated duties are as assessed at entry (not revised for refunds). Replaced by Section 122
+  (10%, 2026-02-24 to 2026-07-24, expired), then Section 301 forced-labor (10/12.5%, from 2026-07-24),
+  Section 301 Brazil and Section 338 Canada. Rows with `value_basis = unidentified_subset` (patented
+  drugs, advanced chips, drones) must not be applied to their whole HS scope.
 - **De minimis**: shipments under $800 were mostly absent from official trade statistics before its end,
   so a post-repeal "increase" in recorded small parcels can be a measurement change, not a real increase.
 - **October 2025 BLS gap**: the 2025 shutdown left most CPI (21 of ~700 series) and about half of
@@ -168,7 +172,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > `verified_on` today. Where a published replication dataset exists (e.g. Fajgelbaum et al. replication
 > files), cross-check our HS × date list against it and report mismatches. Commit `P08`.
 
-**P09 — Compile 2025–26 actions**
+**P09 — Compile 2025–26 actions ✅ DONE!**
 > First, web search the current status of all 2025–26 tariff actions and the Supreme Court IEEPA case
 > (ruling, any refunds, replacement authorities), and record findings with dates in DATA.md. Then populate
 > `tariff_actions.csv` for 2025–present, verifying each against the Federal Register, White House

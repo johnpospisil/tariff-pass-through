@@ -33,8 +33,16 @@ recorded here with the date checked.
   duty (e.g. 9903.88.03) goes in `ch99_heading`; it never appears in import statistics.
 - **Countries**: Census `cty_code` and ISO `country_iso`, `ALL` (with `exclude_cty_codes`), or a
   group defined in `data/reference/country_groups.csv`.
-- **Stacking**: `cumulative`, or `not_with:<authorities>` when the rate does not apply to goods
-  subject to another authority (e.g. reciprocal tariffs not on Section 232 goods).
+- **Stacking**: `cumulative`, or `not_with:<authorities or action groups>` when the rate does not
+  apply to goods subject to them (e.g. reciprocal tariffs not on Section 232 goods; metals duties not
+  on goods under the autos duty), optionally `;also_with:<groups>` for two action groups of the same
+  authority that knowingly stack (steel and aluminum derivative duties on one product).
+- **Rate types** (P09): `ad_valorem`, `specific`, and `all_in_floor`, where the additional duty
+  tops the MFN rate up to `rate` (max(0, rate − MFN); the EU, Japan, Korea and Switzerland "15%
+  all-in" deals). **`value_basis`**: full value (default), `metal_content` (Section 232 metals
+  before 2026-04-06, copper), or `unidentified_subset` (duty applies to a subset of the HS scope
+  that trade data cannot identify: patented drugs, advanced chips, drone classes; P10 reports
+  these separately). **`usmca`**: `exempt` or `non_us_content` for USMCA-qualifying goods.
 - **Citations**: `source_type`, `source_citation`, an https `source_url` on an official domain
   (federalregister.gov, whitehouse.gov, ustr.gov, cbp.gov, usitc.gov, courts, ...), `verified_on`.
 - **Validation**: required fields and enums, dates, decimals (no % signs), official URLs,
@@ -173,19 +181,106 @@ $187bn. Product scope matches; the value gap reflects the base period and valuat
 published figures, and is revisited in P11 against duties actually collected. The replication package
 itself was not openly downloadable.
 
-## IEEPA ruling and refunds (status as of 2026-10-27; verify in P09)
+## Legal status of the 2025–26 tariffs (P09; checked 2026-10-28)
 
-From secondary sources (law-firm and trade-policy summaries; official CBP/Federal Register notices
-to be checked in P09):
-- The Supreme Court ruled on 2026-02-20 (6–3) that IEEPA does not authorize tariffs.
-- The Court of International Trade ordered CBP on 2026-03-04 to liquidate unliquidated entries without
-  IEEPA duties. CBP refunds run through its CAPE process in phases from 2026-04-20; about $166bn of
-  IEEPA duties were collected or estimated on about 53 million entries.
-- A replacement 10% surcharge under Section 122 was imposed, struck down by the Court of International
-  Trade on 2026-05-07 (stayed on appeal), and expired on 2026-07-24.
-- **Implication:** Census calculated duties record IEEPA duties as assessed at entry. Whether Census
-  revises them after refunds is unknown (check in P09). Effective-rate and pass-through work must state
-  whether it uses duties as assessed or net of refunds.
+Rows are built from the orders in the Federal Register (FR API, document numbers in
+`source_url`). Court and refund facts are from the sources named; re-check before publication
+(P25).
+
+- **IEEPA tariffs struck down.** *Learning Resources, Inc. v. Trump* (S. Ct., decided
+  2026-02-20) held that IEEPA does not authorize tariffs. EO 14389 (91 FR 9437) ended the IEEPA
+  duties (fentanyl: Canada, Mexico, China; reciprocal; Brazil); CBP stopped collecting them at
+  12:00 a.m. ET on **2026-02-24**. The India Russian-oil duty had already ended 2026-02-07
+  (EO 14384, 91 FR 6501). All IEEPA rows have `legal_status = struck_down` and end 2026-02-24 or
+  earlier.
+- **Refunds.** The Court of International Trade (*Atmus Filtration*) ordered refunds to all
+  importers of record of IEEPA duties (about $165bn); CBP pays them through its CAPE process
+  (phased from 2026-04). Refunds show in Treasury customs receipts from 2026-05 (P04). Litigation
+  over interest and liquidated entries (*Nintendo of America v. Treasury*, CIT) is pending. Sources:
+  [CRS LSB11398](https://www.congress.gov/crs-product/LSB11398),
+  [Skadden 2026-03](https://www.skadden.com/insights/publications/2026/03/tariff-refund-mechanism-takes-shape).
+- **Census calculated duties are as assessed, not net of refunds.** Checked in the 2026-10 pull:
+  the implied duty rate on imports from China is 38–48% in 2025-04 to 2025-10 and 30–32% in
+  2025-11 to 2026-01, and falls to about 22% after 2026-02-24. Pass-through work uses the duty as
+  assessed (the price buyers faced at entry); refunds are a later transfer to importers.
+- **Section 122 bridge, expired.** Proclamation 11012 (91 FR 9339) imposed a 10% surcharge
+  (announced increase to 15% never implemented) from 2026-02-24 for 150 days; it expired at the
+  close of 2026-07-23. The CIT held it unlawful in 2026-05; the ruling is stayed on appeal and no
+  refunds have been made.
+- **Replacement authorities in force.** Section 301 forced-labor actions on 60 economies (10% or
+  12.5%, some net of MFN) from 2026-07-24 (USTR, 91 FR 47318); Section 301 Brazil 25% from
+  2026-07-22 (91 FR 45619); Section 338 duties of 50% on listed Canadian products from 2026-08-22
+  (Proclamations 11046–11048, 11056, 11064–11065); Section 232 actions throughout (below).
+  Open Section 301 investigations (structural excess capacity, Vietnam IP, Germany pharmaceuticals,
+  China Phase One) have no tariffs yet.
+- **De minimis.** Duty-free de minimis ended for China/Hong Kong on 2025-05-02 (EO 14256), for all
+  countries on 2025-08-29 (EO 14324), and was continued after the ruling by EO 14388 (91 FR 9433;
+  corrected 91 FR 17839). Recorded as rate-0 `DE_MINIMIS` event rows.
+
+## 2025–26 tariff actions (P09)
+
+`tariff_actions.csv` has 300 rows: 47 for 2018–19 (P08, four of them now closed on 2025-03-12)
+and 253 for 2024–26, written by `make timeline-2025` (`src/tpt/build/actions_2025.py`). Product
+lists come from the HTSUS Chapter 99 notes (`make hs-lists`, `hs_lists_2025.py`): the IEEPA notes
+as they stood just before the ruling (2026 HTS Revision 3), the pre-2025-11-13 Annex II and Brazil
+lists (2025 Revision 28), and the current Section 232/301/338 notes (2026 Revision 21). Country
+rate schedules are parsed from the HTSUS heading tables (9903.02.02–.71 reciprocal,
+9903.05.21–.84 forced labor). Import value in scope is for 2024 imports for consumption (scope
+only, before rates, exclusions within a scope file and USMCA).
+
+| Action | Authority | Countries | Rate | In force | Products (2024 imports in scope) |
+|---|---|---|---|---|---|
+| Section 301 four-year review (89 FR 76581) | S301 | China | 25/50/100% | 2024-09-27, 2025-01-01, 2026-01-01 steps | EVs, batteries, semis, solar, minerals, medical ($20bn) |
+| Fentanyl, China & HK (EO 14195, 14228, 14357) | IEEPA | CN, HK | 10% → 20% → 10% | 2025-02-04 / 03-04 / 11-10 → 2026-02-24 | all ($431bn) |
+| Fentanyl, Canada (EO 14193, 14197, 14231, 14325) | IEEPA | CA | 25% → 35%; energy, potash 10% | 2025-03-04 / 08-01 → 2026-02-24 | all; USMCA goods exempt from 2025-03-07 |
+| Fentanyl, Mexico (EO 14194, 14198, 14232) | IEEPA | MX | 25%; potash 10% | 2025-03-04 → 2026-02-24 | all; USMCA goods exempt from 2025-03-07 |
+| Reciprocal baseline (EO 14257, 14266) | IEEPA | all but CA, MX | 10% | 2025-04-05 → 2026-02-24 | all less Annex II and S232 goods ($1,595bn) |
+| China reciprocal escalation (EO 14259, 14266, 14298) | IEEPA | CN, HK, MO | 84%, 125%, then 10% | 2025-04-09, 04-10, 05-14 | all less Annex II |
+| Country rates (EO 14326) | IEEPA | 66 partners | 10–41% | 2025-08-07 → 2026-02-24 | e.g. Vietnam 20% ($97bn), India 25%, Switzerland 39% |
+| 15% all-in deals (EO 14345; 90 FR 44638, 46136, 55964, 59281) | IEEPA | EU, JP, KR, CH, LI | max(0, 15% − MFN) | EU, JP 2025-08-07; KR, CH, LI 2025-11-14 | EU ($331bn), Japan ($112bn) |
+| Agricultural exemptions (EO 14360, 14361) | IEEPA | all; Brazil | 0% | 2025-11-13 | beef, coffee, fruit and others ($69bn) |
+| Brazil (EO 14323, 14361) | IEEPA | BR | 40% | 2025-08-06 → 2026-02-24 | all less 129 exempt lines (367 from 2025-11-13) |
+| India Russian oil (EO 14329, 14384) | IEEPA | IN | 25% | 2025-08-27 → 2026-02-07 | all less Annex II |
+| Steel, aluminum (Procl. 10895, 10896, 10947) | S232 | all; UK 25% | 25% → 50% | 2025-03-12 / 06-04 → 2026-04-06 | steel $31bn, aluminum $18bn |
+| Metal derivatives incl. inclusions (90 FR 40326) | S232 | all; UK 25% | 25% → 50% on metal content | 2025-03-12 / 06-23 / 08-18 → 2026-04-06 | steel $230bn, aluminum $155bn (overlapping) |
+| Copper (Procl. 10962) | S232 | all | 50% on copper content | 2025-08-01 → 2026-04-06 | $15bn |
+| Metals regime on full value (Procl. 11021, 11032) | S232 | all; UK, deal partners lower | 50% / 25% / 15% all-in | 2026-04-06 (deal floors 2026-06-08) | $93bn / $171bn / $61bn |
+| Autos and parts (Procl. 10908; EO 14309; deal notices) | S232 | all; UK 10%, EU/JP/KR 15% all-in, TW parts 15% | 25% | vehicles 2025-04-03, parts 2025-05-03 | vehicles $116bn + deals; parts $288bn |
+| Medium/heavy trucks, buses (Procl. 10984) | S232 | all | 25%; buses 10% | 2025-11-01 | trucks $23bn, parts $143bn |
+| Timber, lumber, furniture (Procl. 10976, 11000) | S232 | all; UK 10%, EU/JP 15% all-in | 10% / 25% (30%, 50% from 2027-01-01) | 2025-10-14 | $17bn |
+| Semiconductors (Procl. 11002) | S232 | all | 25% (subset) | 2026-01-15 | advanced chips only; HS scope $124bn |
+| Pharmaceuticals (Procl. 11020) | S232 | all; deal partners 15%, UK 0 | 100% (patented subset) | 2026-09-29 | HS scope $27bn |
+| Drones (Procl. 11055) | S232 | all | 25–100% (subset) | 2026-09-03 | small |
+| Section 122 surcharge (Procl. 11012) | S122 | all | 10% | 2026-02-24 → 2026-07-24 | all less Annex, S232, USMCA ($1,856bn) |
+| Brazil (91 FR 45619) | S301 | BR | 25% | 2026-07-22 | all less Annex I/II ($19bn) |
+| Forced labor, 60 economies (91 FR 47318) | S301 | 60 | 10% or 12.5% (EU, TW, JP, KR, CH net of MFN) | 2026-07-24 | all less exemptions (China $254bn, EU $323bn) |
+| Canada discrimination (Procl. 11046–48, 11064–65) | S338 | CA | 50% | 2026-08-22 | three lists ($21bn) |
+| De minimis suspension (EO 14256, 14324, 14388) | DE_MINIMIS | CN/HK, then all | event | 2025-05-02, 2025-08-29, 2026-02-24 | low-value shipments |
+
+Not encoded (no ad valorem duty, company-specific, or not yet in force): Section 232 critical
+minerals (Procl. 11001), commercial aircraft (11040) and wind turbines (11074) are negotiations;
+polysilicon minimum import prices from 2026-12-04 (11052); half-rate aluminum for approved onshoring
+plans (11045); Canadian import bans (11061–11063); the 2026-10-30 Section 338 list change (not yet
+in the HTSUS); the Section 301 ships and cranes fees and Nicaragua action; the one-day
+2025-04-09 country rates (suspended 2025-04-10); transshipment penalty rates (40%).
+
+**Stacking (as stated in the orders and HTSUS notes).** Reciprocal, Brazil, India, Section 122,
+Section 301 Brazil and forced-labor duties do not apply to goods under Section 232 duties. Canada
+and Mexico fentanyl duties do not apply to Section 232 goods (EO 14289; note 2 and the 232
+notes). Metals duties do not apply to goods under the autos, trucks or semiconductor duties; auto
+parts duties not to semiconductors or drones. Steel, aluminum and copper derivative duties stack
+on each other (2025, metal content); from 2026-04-06 the metals headings are mutually exclusive.
+China's Section 301 duties stack with IEEPA, Section 122 and forced-labor duties; the four-year
+review rates are modelled as replacing the 2018–19 list rates where products overlap (to check
+in P11). Section 338 list 2 is not applied to Section 232 goods; lists 1 and 3 are.
+
+**Approximations to check in P11.** Canada "energy" = HS chapter 27; potash = 3104.20/.30/.90.
+Annex II changes in 2025-09 (EO 14346) are not dated separately. Product exclusions, quotas (UK
+autos, Section 201), the 20% US-content reciprocal exemption, import adjustment offsets, the 15%
+metal-weight threshold after 2026-04-06, and country-specific Section 301 exemptions for framework
+partners are not modelled. The Section 338 lists are as of 2026-09-15 for the whole period.
+Brazil's 9903.01.81 list before 2025-11-13 is from 2025 HTS Rev 28 and may include additions made
+between 2025-08-06 and 2025-11-10.
 
 ## Known issues
 

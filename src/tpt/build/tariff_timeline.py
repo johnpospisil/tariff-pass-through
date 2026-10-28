@@ -17,14 +17,27 @@ Columns (see COLUMNS; empty cells mean "not applicable"):
   ch99_heading       HTSUS Chapter 99 heading(s) that carry the duty, e.g. 9903.88.03 (';'-sep.).
                      Duties are entered under these headings, which never appear in import
                      statistics, so hs_scope always lists the product codes themselves.
-  rate_type          ad_valorem | specific | ad_valorem_plus_specific
+  rate_type          ad_valorem | specific | ad_valorem_plus_specific | all_in_floor
+                     all_in_floor: the additional duty tops the column 1 (MFN) rate up to `rate`,
+                     i.e. max(0, rate - MFN) (e.g. the EU and Japan "15% all-in" deals)
   rate               additional ad valorem rate as a decimal (0.25 = 25%)
   specific_rate      additional specific duty, with specific_unit (e.g. "kg")
+  value_basis        value the rate applies to: empty/full | metal_content (S232 metals before
+                     2026-04-06, copper) | non_us_content | unidentified_subset (the duty applies
+                     only to a subset of the HS scope that trade data cannot identify, e.g.
+                     patented drugs or chips above a performance threshold; P10 reports these
+                     separately rather than applying them to the whole HS scope)
+  usmca              treatment of USMCA-qualifying goods of Canada/Mexico: empty (none) |
+                     exempt | non_us_content (rate applies to the non-US content only)
   effective_date     first day goods entered for consumption are subject to the rate
   end_date           first day they are no longer subject (exclusive); empty = in effect
   supersedes         action_id(s) this row replaces where they overlap (';'-separated)
-  stacking           "cumulative", or "not_with:<AUTH>[,<AUTH>...]": the rate does not apply to
-                     goods subject to the listed authorities (e.g. reciprocal not on S232 goods)
+  stacking           "cumulative", or "not_with:<X>[,<X>...]": the rate does not apply to goods
+                     subject to the listed authorities or action groups (e.g. reciprocal not on
+                     S232 goods; steel derivatives not on S232-AUTOS parts). May be followed by
+                     ";also_with:<GROUP>[,...]" to declare that it intentionally stacks with
+                     another action group of the same authority (e.g. steel and aluminum
+                     derivative duties on the same product).
   exclusions_ref     where product exclusions are listed (citation or file)
   legal_status       see LEGAL_STATUSES
   source_type        see SOURCE_TYPES
@@ -34,7 +47,8 @@ Columns (see COLUMNS; empty cells mean "not applicable"):
   notes              free text
 
 Overlap rule: two rows with the same authority whose countries, HS scopes and dates all overlap
-are an error unless one supersedes the other (directly or through a chain).
+are an error unless one supersedes the other (directly or through a chain), or their stacking
+declares them mutually exclusive (not_with) or intentionally cumulative (also_with).
 
 Run: make timeline-validate
 """
@@ -61,8 +75,9 @@ HS10_CODES = config.INTERIM_DIR / "hs10_codes.parquet"
 COLUMNS = [
     "action_id", "action_group", "authority", "country_iso", "cty_code", "exclude_cty_codes",
     "hs_scope", "hs_exclude", "ch99_heading", "rate_type", "rate", "specific_rate", "specific_unit",
-    "effective_date", "end_date", "supersedes", "stacking", "exclusions_ref", "legal_status",
-    "source_type", "source_citation", "source_url", "verified_on", "notes",
+    "value_basis", "usmca", "effective_date", "end_date", "supersedes", "stacking",
+    "exclusions_ref", "legal_status", "source_type", "source_citation", "source_url",
+    "verified_on", "notes",
 ]  # fmt: skip
 
 AUTHORITIES = (
@@ -70,6 +85,7 @@ AUTHORITIES = (
     "S301",  # Trade Act 1974 s.301 (unfair practices)
     "S201",  # Trade Act 1974 s.201 (safeguards)
     "S122",  # Trade Act 1974 s.122 (balance of payments surcharge)
+    "S338",  # Tariff Act 1930 s.338 (discrimination against US commerce)
     "IEEPA_FENTANYL",
     "IEEPA_RECIPROCAL",
     "IEEPA_OTHER",
@@ -78,7 +94,9 @@ AUTHORITIES = (
     "OTHER",
 )
 LEGAL_STATUSES = ("in_effect", "terminated", "expired", "superseded", "struck_down", "refunded",
-                  "stayed", "enjoined")  # fmt: skip
+                  "stayed", "enjoined", "scheduled")  # fmt: skip
+VALUE_BASES = ("full", "metal_content", "non_us_content", "unidentified_subset")
+USMCA = ("exempt", "non_us_content")
 SOURCE_TYPES = ("federal_register", "proclamation", "executive_order", "ustr_notice", "cbp_csms",
                 "hts", "court_ruling", "statute", "other_official")  # fmt: skip
 OFFICIAL_DOMAINS = (
@@ -87,7 +105,8 @@ OFFICIAL_DOMAINS = (
     "regulations.gov", "treasury.gov", "ecfr.gov", "archives.gov",
 )  # fmt: skip
 HS_TOKEN = re.compile(r"^(\d{2}|\d{4}|\d{6}|\d{8}|\d{10})$")
-STACKING = re.compile(r"^(cumulative|not_with:[A-Z0-9_]+(,[A-Z0-9_]+)*)$")
+_IDS = r"[A-Z0-9_-]+(,[A-Z0-9_-]+)*"
+STACKING = re.compile(rf"^(cumulative|not_with:{_IDS})(;also_with:{_IDS})?$")
 
 
 def _none_if_blank(v):
@@ -104,10 +123,12 @@ class TariffAction(BaseModel):
     hs_scope: str
     hs_exclude: str | None = None
     ch99_heading: str | None = None
-    rate_type: Literal["ad_valorem", "specific", "ad_valorem_plus_specific"]
+    rate_type: Literal["ad_valorem", "specific", "ad_valorem_plus_specific", "all_in_floor"]
     rate: float | None = None
     specific_rate: float | None = None
     specific_unit: str | None = None
+    value_basis: Literal[VALUE_BASES] | None = None  # type: ignore[valid-type]
+    usmca: Literal[USMCA] | None = None  # type: ignore[valid-type]
     effective_date: date
     end_date: date | None = None
     supersedes: str | None = None
@@ -150,11 +171,8 @@ class TariffAction(BaseModel):
     @classmethod
     def stacking_rule(cls, v: str) -> str:
         if not STACKING.fullmatch(v):
-            raise ValueError("must be 'cumulative' or 'not_with:AUTH[,AUTH...]'")
-        unknown = [a for a in v.removeprefix("not_with:").split(",")
-                   if v.startswith("not_with:") and a not in AUTHORITIES]  # fmt: skip
-        if unknown:
-            raise ValueError(f"unknown authorities in stacking: {unknown}")
+            raise ValueError("must be 'cumulative' or 'not_with:X[,X...]', optionally followed by "
+                             "';also_with:GROUP[,GROUP...]'")  # fmt: skip
         return v
 
     @field_validator("source_url")
@@ -178,7 +196,9 @@ class TariffAction(BaseModel):
     def consistent(self) -> "TariffAction":
         if self.end_date and self.end_date <= self.effective_date:
             raise ValueError("end_date must be after effective_date")
-        if self.rate_type in ("ad_valorem", "ad_valorem_plus_specific") and self.rate is None:
+        if self.rate_type in ("ad_valorem", "ad_valorem_plus_specific", "all_in_floor") and (
+            self.rate is None
+        ):
             raise ValueError(f"rate required for rate_type {self.rate_type}")
         if self.rate_type in ("specific", "ad_valorem_plus_specific") and (
             self.specific_rate is None or not self.specific_unit
@@ -199,6 +219,16 @@ class TariffAction(BaseModel):
     @property
     def end(self) -> date:
         return self.end_date or date.max
+
+    @property
+    def not_with(self) -> set[str]:
+        first = self.stacking.split(";")[0]
+        return set(first.removeprefix("not_with:").split(",")) if first != "cumulative" else set()
+
+    @property
+    def also_with(self) -> set[str]:
+        parts = self.stacking.split(";also_with:")
+        return set(parts[1].split(",")) if len(parts) > 1 else set()
 
 
 def _split(value: str | None) -> list[str]:
@@ -348,6 +378,11 @@ def resolve_hs10(scope: str | None, exclude: str | None, base: Path, codes: set[
     return covered(expand_scope(scope, base)) - covered(expand_scope(exclude, base))
 
 
+def _declared_apart(a: TariffAction, b: TariffAction) -> bool:
+    """a's stacking says it never applies with b (not_with) or knowingly stacks on b."""
+    return bool(a.not_with & {b.authority, b.action_group}) or b.action_group in a.also_with
+
+
 def overlap_errors(actions: list[TariffAction], base: Path, groups: dict[str, set[str]],
                    hs10: set[str] | None = None) -> list[str]:  # fmt: skip
     """Same-authority rows overlapping in countries, dates and products, not linked by
@@ -369,6 +404,8 @@ def overlap_errors(actions: list[TariffAction], base: Path, groups: dict[str, se
     for i, a in enumerate(actions):
         for b in actions[i + 1 :]:
             if a.authority != b.authority or (a.action_id, b.action_id) in linked:
+                continue
+            if _declared_apart(a, b) or _declared_apart(b, a):
                 continue
             if a.effective_date >= b.end or b.effective_date >= a.end:
                 continue
@@ -446,6 +483,9 @@ def validate_file(
 
     ids = [a.action_id for a in actions]
     errs += [f"duplicate action_id {i}" for i in sorted({i for i in ids if ids.count(i) > 1})]
+    names = set(AUTHORITIES) | {a.action_group for a in actions}
+    errs += [f"{a.action_id}: stacking names unknown authority or action group {x}"
+             for a in actions for x in sorted((a.not_with | a.also_with) - names)]  # fmt: skip
     known = set(ids)
     errs += [f"{a.action_id}: supersedes unknown action {sid}"
              for a in actions for sid in _split(a.supersedes) if sid not in known]  # fmt: skip

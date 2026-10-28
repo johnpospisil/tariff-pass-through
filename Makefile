@@ -1,4 +1,4 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-validate build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate build models figures report test lint format all
 
 UV := uv run
 
@@ -30,8 +30,12 @@ reconcile:  ## P04 gates: HS10 sums vs FT-900, duties vs Treasury (re-downloads 
 concordance:  ## P06 HS10 families, HS10->NAICS->BEA, Rauch, CPI<->PCE
 	$(UV) python -m tpt.build.concordance
 
-hs-lists:  ## P08 product lists and country groups from official HTSUS Chapter 99 notes
+hs-lists:  ## P08/P09 product lists and country groups from official HTSUS Chapter 99 notes
 	$(UV) python -m tpt.build.hs_lists
+	$(UV) python -m tpt.build.hs_lists_2025
+
+timeline-2025:  ## P09 regenerate the 2024-26 rows of tariff_actions.csv
+	$(UV) python -m tpt.build.actions_2025
 
 timeline-validate:  ## P07 check data/reference/tariff_actions.csv (citations, dates, HS codes, overlaps)
 	$(UV) python -m tpt.build.tariff_timeline

@@ -26,6 +26,8 @@ def row(**overrides) -> dict:
         "rate": "0.25",
         "specific_rate": "",
         "specific_unit": "",
+        "value_basis": "",
+        "usmca": "",
         "effective_date": "2018-03-23",
         "end_date": "",
         "supersedes": "",
@@ -132,6 +134,49 @@ def test_specific_rate_needs_unit(tmp_path):
 def test_stacking_not_with_names_known_authorities(tmp_path):
     assert errors(tmp_path, [row(stacking="not_with:S232,IEEPA_FENTANYL")]) == []
     assert errors(tmp_path, [row(stacking="not_with:S999")])
+
+
+def test_stacking_may_name_action_groups_and_also_with(tmp_path):
+    rows = [
+        row(action_id="AUTOS", action_group="S232-AUTOS", hs_scope="8471"),
+        row(stacking="not_with:S232-AUTOS,IEEPA_RECIPROCAL;also_with:S232-AUTOS"),
+    ]
+    assert errors(tmp_path, rows) == []
+    assert errors(tmp_path, [row(stacking="not_with:S232-NOPE")])
+    assert errors(tmp_path, [row(stacking="also_with:S232-AUTOS")])  # needs a base clause
+
+
+def test_mutually_exclusive_or_also_with_rows_may_overlap(tmp_path):
+    steel = row(action_id="STEELDER", action_group="S232-STEELDER", hs_scope="8471")
+    autos = row(action_id="AUTOS", action_group="S232-AUTOS", hs_scope="8471")
+    assert any("overlap" in e for e in errors(tmp_path, [steel, autos]))
+    excl = steel | {"stacking": "not_with:S232-AUTOS"}
+    assert errors(tmp_path, [excl, autos]) == []
+    both = steel | {"stacking": "cumulative;also_with:S232-AUTOS"}
+    assert errors(tmp_path, [both, autos]) == []
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "ok"),
+    [
+        ("authority", "S338", True),
+        ("legal_status", "scheduled", True),
+        ("value_basis", "metal_content", True),
+        ("value_basis", "non_us_content", True),
+        ("value_basis", "unidentified_subset", True),
+        ("value_basis", "most", False),
+        ("usmca", "exempt", True),
+        ("usmca", "non_us_content", True),
+        ("usmca", "sometimes", False),
+    ],
+)
+def test_new_enums(tmp_path, field, value, ok):
+    assert (errors(tmp_path, [row(**{field: value})]) == []) is ok
+
+
+def test_all_in_floor_needs_rate(tmp_path):
+    assert errors(tmp_path, [row(rate_type="all_in_floor", rate="0.15")]) == []
+    assert errors(tmp_path, [row(rate_type="all_in_floor", rate="")])
 
 
 # --- countries ---------------------------------------------------------------
