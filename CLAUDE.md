@@ -38,7 +38,8 @@ project rules and the prompt sequence; run the prompts in order, one per session
 4. **Gates block later work.** If a gate fails (e.g. totals don't reconcile), stop and diagnose; do not
    move to the next prompt or loosen a tolerance without saying so and why.
 5. Commit at the end of each prompt with a message `P##: <summary>`.
-6. Tick the prompt's box in the **Progress** list below.
+6. Mark the prompt `✅ DONE!` in the **Progress** list and on its heading in the prompt sequence; when
+   every prompt in a phase is done, mark the phase `✅ DONE!` in both places too.
 
 ### Econometric conventions
 - Tariff measure: `Δ ln(1 + τ)` where τ is the ad valorem additional duty rate.
@@ -76,13 +77,47 @@ project rules and the prompt sequence; run the prompts in order, one per session
 
 ## Progress
 
-- [x] P01 Scaffold · [x] P02 HTTP/cache layer
-- [ ] P03 Census ingest · [ ] P04 Reconciliation gates · [ ] P05 BLS ingest · [ ] P06 Reference concordances
-- [ ] P07 Timeline schema · [ ] P08 2018–19 actions · [ ] P09 2025–26 actions · [ ] P10 Rate panel · [ ] P11 Timeline validation
-- [ ] P12 Import panel · [ ] P13 Theme + effective rates · [ ] P14 Front-running + de minimis
-- [ ] P15 2018–19 replication · [ ] P16 2025–26 border pass-through · [ ] P17 Robustness
-- [ ] P18 HS→CPI exposure · [ ] P19 Retail DiD · [ ] P20 Trade diversion
-- [ ] P21 Hero chart + figures · [ ] P22 Report · [ ] P23 Product explorer · [ ] P24 Monthly refresh + deploy · [ ] P25 Review + launch
+Mark a finished prompt `✅ DONE!` here and on its heading below; mark a phase `✅ DONE!` when all its
+prompts are done.
+
+**Phase 0 — Setup ✅ DONE!**
+- ✅ DONE! P01 Scaffold
+- ✅ DONE! P02 HTTP/cache layer
+
+**Phase 1 — Ingest and reconcile**
+- [ ] P03 Census ingest
+- [ ] P04 Reconciliation gates
+- [ ] P05 BLS ingest
+- [ ] P06 Reference concordances
+
+**Phase 2 — Tariff timeline**
+- [ ] P07 Timeline schema
+- [ ] P08 2018–19 actions
+- [ ] P09 2025–26 actions
+- [ ] P10 Rate panel
+- [ ] P11 Timeline validation
+
+**Phase 3 — Panel and descriptives**
+- [ ] P12 Import panel
+- [ ] P13 Theme + effective rates
+- [ ] P14 Front-running + de minimis
+
+**Phase 4 — Border pass-through**
+- [ ] P15 2018–19 replication
+- [ ] P16 2025–26 border pass-through
+- [ ] P17 Robustness
+
+**Phase 5 — Retail and diversion**
+- [ ] P18 HS→CPI exposure
+- [ ] P19 Retail DiD
+- [ ] P20 Trade diversion
+
+**Phase 6 — Publish**
+- [ ] P21 Hero chart + figures
+- [ ] P22 Report
+- [ ] P23 Product explorer
+- [ ] P24 Monthly refresh + deploy
+- [ ] P25 Review + launch
 
 ---
 
@@ -90,9 +125,9 @@ project rules and the prompt sequence; run the prompts in order, one per session
 
 Copy each prompt into Claude Code as written. Prompts assume the earlier ones are done.
 
-### Phase 0 — Setup (Week 1)
+### Phase 0 — Setup (Week 1) ✅ DONE!
 
-**P01 — Scaffold the repo**
+**P01 — Scaffold the repo ✅ DONE!**
 > Read CLAUDE.md and 30-tariff-pass-through.md. Scaffold the repo per spec §7 and the rules in
 > CLAUDE.md: `git init`, `uv init` with Python 3.12, `pyproject.toml` (package `tpt` under `src/`),
 > dependencies (polars, duckdb, pyarrow, httpx, tenacity, python-dotenv, pyfixest, matplotlib, pytest,
@@ -102,7 +137,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > 2017-01 to latest). Add one smoke test that imports `tpt` and checks config paths. Then create a GitHub
 > repo `tariff-pass-through` with `gh repo create` (ask me public/private first) and push. Commit `P01`.
 
-**P02 — Shared HTTP, cache and manifest layer**
+**P02 — Shared HTTP, cache and manifest layer ✅ DONE!**
 > Build `src/tpt/ingest/_http.py`: an httpx client with tenacity retries (backoff on 429/5xx), per-source
 > rate limiting, an on-disk raw cache keyed by request hash under `data/raw/<source>/`, and a manifest
 > writer (`data/raw/manifest.parquet`: source, url, params without keys, retrieved_at, sha256, rows).
