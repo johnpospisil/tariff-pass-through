@@ -7,8 +7,8 @@ Every source, vintage, licence and known issue used in this project. Updated as 
 | Source | Used for | Access | Vintage / retrieved | Licence |
 |---|---|---|---|---|
 | Census International Trade API | HS10 × country × month imports, duties | api.census.gov | 2017-01 to 2026-08, retrieved 2026-10-27 (P03) | Public domain (US Gov) |
-| FT-900 | Reconciliation of monthly totals | census.gov | — (P04) | Public domain |
-| Monthly Treasury Statement | Reconciliation of customs duties | api.fiscaldata.treasury.gov | — (P04) | Public domain |
+| FT-900 country file | Reconciliation of monthly totals | census.gov/foreign-trade/balance/country.xlsx | through 2026-08, retrieved 2026-10-27 (P04) | Public domain |
+| Monthly Treasury Statement, table 4 | Reconciliation of customs duties | api.fiscaldata.treasury.gov | FY2017 to 2026-09, retrieved 2026-10-27 (P04) | Public domain |
 | BLS Import Price Indexes (MXP) | Pre-duty import prices | api.bls.gov | — (P05) | Public domain |
 | BLS CPI / PPI | Consumer and producer prices | api.bls.gov | — (P05) | Public domain |
 | BEA input-output tables, PCE bridge | HS → CPI concordance | bea.gov | — (P06) | Public domain |
@@ -31,6 +31,44 @@ verified. Legal status (including the Supreme Court IEEPA case) is recorded here
   USMCA, ...). The all-countries total, code `-`, is also `DET`; individual countries are `DET` and not
   `-`. See `data/reference/census_countries.csv`.
 - Outputs: `data/interim/census_imports/year=YYYY/data.parquet`, `data/interim/census_totals.parquet`.
+
+## Reconciliation (P04)
+
+Run `make reconcile`; reports and a chart are in `reports/qa/`.
+
+**Gate 1: HS10 sums vs the FT-900 total** (`country.xlsx`, code 0015 "World, Not Seasonally
+Adjusted", Census basis, $ millions). All 116 months within ±0.5%; exact to the dollar through
+2025-12, and within ±0.07% for 2026 months. The 2026 differences are small and likely reflect a
+different vintage of the preliminary 2026 data in the country file. The 15 largest partners also match
+the file's country rows.
+
+**Gate 2: calculated duties vs Treasury customs-duty receipts** (MTS table 4, "Customs Duties").
+- Timing: duties are assessed at entry and paid on a monthly statement, so receipts lag one month.
+  Month-to-month changes correlate 0.85 at lag 1 vs 0.61 at lag 0.
+- Level: Census calculated duties are a stable ~87.5% of Treasury gross receipts (3-month ratio,
+  2017–2024 median 0.875). The ~12% wedge is a coverage difference, not a data error; likely sources
+  (not yet verified) are antidumping/countervailing duty deposits, informal and postal entries, and
+  interest and penalties, which Treasury collects but Census does not count as calculated duty.
+- The gate tests that the 3-month ratio stays within ±10% of the baseline. Result: all months pass;
+  range -7.9% to +4.1%. The largest deviation is spring 2025, when assessed duties jumped ahead of
+  receipts during the tariff increases.
+- Net receipts are reported but not gated: refunds jump to $22bn (2026-05), $49bn (2026-06),
+  $33bn (2026-07) and $10.5bn (2026-08), making net receipts negative. These are IEEPA tariff refunds
+  (below).
+
+## IEEPA ruling and refunds (status as of 2026-10-27; verify in P09)
+
+From secondary sources (law-firm and trade-policy summaries; official CBP/Federal Register notices
+to be checked in P09):
+- The Supreme Court ruled on 2026-02-20 (6–3) that IEEPA does not authorize tariffs.
+- The Court of International Trade ordered CBP on 2026-03-04 to liquidate unliquidated entries without
+  IEEPA duties. CBP refunds run through its CAPE process in phases from 2026-04-20; about $166bn of
+  IEEPA duties were collected or estimated on about 53 million entries.
+- A replacement 10% surcharge under Section 122 was imposed, struck down by the Court of International
+  Trade on 2026-05-07 (stayed on appeal), and expired on 2026-07-24.
+- **Implication:** Census calculated duties record IEEPA duties as assessed at entry. Whether Census
+  revises them after refunds is unknown (check in P09). Effective-rate and pass-through work must state
+  whether it uses duties as assessed or net of refunds.
 
 ## Known issues
 

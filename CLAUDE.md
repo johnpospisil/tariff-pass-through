@@ -62,7 +62,8 @@ project rules and the prompt sequence; run the prompts in order, one per session
   include refunds/drawback. Expect timing gaps.
 - **IEEPA legal status**: the Supreme Court case on IEEPA tariffs may mean duties were struck down and/or
   refunded. Verify the current status by web search before any prompt that uses IEEPA rates, and note the
-  date checked.
+  date checked. Known so far (DATA.md, from P04): struck down 2026-02-20; refunds from 2026-05 show in
+  Treasury receipts (~$115bn by 2026-08); Census calculated duties are as assessed at entry.
 - **De minimis**: shipments under $800 were mostly absent from official trade statistics before its end,
   so a post-repeal "increase" in recorded small parcels can be a measurement change, not a real increase.
 - **Facts about tariffs must be cited**: no rate, date or HS scope goes into `tariff_actions.csv` without
@@ -112,7 +113,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > suppressed/blank values). Run a pilot for one month, report row count and runtime, estimate full-pull
 > time, then run the full pull. Add `make ingest-census`. Commit `P03`.
 
-**P04 — Reconciliation gates (FT-900 and Treasury)**
+**P04 — Reconciliation gates (FT-900 and Treasury) ✅ DONE!**
 > Build `tests/test_reconcile.py` and `src/tpt/build/reconcile.py`. Gate 1: monthly sum of HS10 ×
 > individual-country general imports vs the published FT-900 total imports of goods (Census basis, NSA);
 > pull the FT-900 values from the Census API country totals or the FT-900 exhibit files and store them in

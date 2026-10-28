@@ -1,4 +1,4 @@
-.PHONY: setup ingest ingest-census ingest-status build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-status reconcile build models figures report test lint format all
 
 UV := uv run
 
@@ -13,6 +13,9 @@ ingest-census:  ## HS10 x country x month imports; resumable (cached chunks are 
 
 ingest-status:  ## live progress bar for a running ingest: make ingest-status SOURCE=bls
 	@$(UV) python -m tpt.ingest.progress $(or $(SOURCE),census)
+
+reconcile:  ## P04 gates: HS10 sums vs FT-900, duties vs Treasury (re-downloads both checks)
+	$(UV) python -m tpt.build.reconcile
 
 build:
 	@echo "build: not implemented yet (P10, P12, P18)"
