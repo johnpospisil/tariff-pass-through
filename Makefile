@@ -1,4 +1,4 @@
-.PHONY: setup ingest build models figures report test lint format all
+.PHONY: setup ingest ingest-status build models figures report test lint format all
 
 UV := uv run
 
@@ -7,6 +7,9 @@ setup:
 
 ingest:
 	@echo "ingest: not implemented yet (P03, P05, P06)"
+
+ingest-status:  ## live progress bar for a running ingest: make ingest-status SOURCE=bls
+	@$(UV) python -m tpt.ingest.progress $(or $(SOURCE),census)
 
 build:
 	@echo "build: not implemented yet (P10, P12, P18)"
