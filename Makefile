@@ -1,4 +1,4 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates build models figures report test lint format all
 
 UV := uv run
 
@@ -49,20 +49,23 @@ validate-rates:  ## P11 statutory (P10 panel) vs implied rates from Census calcu
 import-panel:  ## P12 HS10-family x country x month panel: unit values, rates, 12-month changes
 	$(UV) python -m tpt.build.import_panel
 
+effective-rates:  ## P13 monthly effective vs statutory tariff rates by partner -> data/published/
+	$(UV) python -m tpt.build.effective_rates
+
 timeline-2025:  ## P09 regenerate the 2024-26 rows of tariff_actions.csv
 	$(UV) python -m tpt.build.actions_2025
 
 timeline-validate:  ## P07 check data/reference/tariff_actions.csv (citations, dates, HS codes, overlaps)
 	$(UV) python -m tpt.build.tariff_timeline
 
-build: concordance timeline-validate rates validate-rates import-panel
+build: concordance timeline-validate rates validate-rates import-panel effective-rates
 	@echo "build: not implemented yet (P10, P12, P18)"
 
 models:
 	@echo "models: not implemented yet (P15-P20)"
 
-figures:
-	@echo "figures: not implemented yet (P13, P21)"
+figures:  ## charts from data/published/ in light and dark -> report/figures/
+	$(UV) python -m tpt.viz.figures
 
 report:
 	@echo "report: not implemented yet (P22)"

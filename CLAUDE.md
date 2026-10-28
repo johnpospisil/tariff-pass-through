@@ -220,7 +220,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > [0, 5], cleaning drops reported by reason and value share. Report the cleaned panel size and the share
 > of import value retained. Commit `P12`.
 
-**P13 — Chart theme and effective tariff rates (chart 2)**
+**P13 — Chart theme and effective tariff rates (chart 2) ✅ DONE!**
 > Load the dataviz skill first. Create `src/tpt/viz/theme.py` (one palette, neutral framing, consistent
 > fonts, source footers) and `figures.py`. Compute monthly effective tariff rates 2017–present, overall and
 > for China, Canada, Mexico, EU, Japan, Vietnam, India, and plot them against the import-weighted

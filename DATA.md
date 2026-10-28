@@ -486,6 +486,35 @@ are over-quota tobacco and dairy shipments with specific duties; the one above 5
 **For P15**: about 14% of 2018–19 value has no quantity (unit "X" codes); unit-value
 regressions there cover the remaining 77%.
 
+## Effective tariff rates and chart 2 (P13)
+
+`make effective-rates` (`src/tpt/build/effective_rates.py`) → `data/published/effective_rates.csv`
+(month × group: imports_bn, effective_rate, statutory_rate, effective_additional,
+statutory_additional; 928 rows). **Effective** = Census calculated duties ÷ imports for
+consumption (all duties incl. MFN; the definition Penn Wharton uses). **Statutory** = P10
+statutory additional rate + the P11 MFN term, weighted by same-month imports, so both are on the
+same basis. Groups: all individual countries, China, Canada, Mexico, EU (27 current members
+throughout), Japan, Vietnam, India. `make figures` → `report/figures/chart2_effective_rates.svg/.png`
+and `_dark` versions (theme in `src/tpt/viz/theme.py`: the dataviz skill's reference palette,
+slots 1–2, validated in both modes).
+
+Effective / statutory, % of import value:
+
+| Group | 2017-06 | 2019-12 | 2024-12 | 2025-04 | 2025-09 | 2026-01 | 2026-08 |
+|---|---|---|---|---|---|---|---|
+| All countries | 1.4 / 1.4 | 2.9 / 3.4 | 2.3 / 2.5 | 7.2 / 16.5 | 10.5 / 16.8 | 9.9 / 15.6 | 6.9 / 8.7 |
+| China | 2.7 / 2.6 | 11.5 / 14.3 | 11.2 / 12.6 | 38.7 / 108.6 | 37.6 / 47.4 | 31.8 / 42.5 | 22.8 / 26.2 |
+| Canada | 0.1 / 0.0 | 0.1 / 0.0 | 0.1 / 0.0 | 3.0 / 5.4 | 3.8 / 11.2 | 3.1 / 10.6 | 3.2 / 5.9 |
+| Mexico | 0.1 / 0.1 | 0.1 / 0.1 | 0.3 / 0.1 | 4.2 / 5.7 | 4.4 / 12.6 | 4.0 / 12.1 | 3.2 / 5.6 |
+| EU | 1.4 / 1.3 | 1.4 / 1.5 | 1.3 / 1.3 | 4.1 / 7.7 | 6.7 / 11.4 | 9.1 / 16.3 | 7.0 / 8.9 |
+| Japan | 1.7 / 1.7 | 1.7 / 1.9 | 1.6 / 1.6 | 9.3 / 13.0 | 16.5 / 20.9 | 13.6 / 19.9 | 10.8 / 12.8 |
+| Vietnam | 7.4 / 7.4 | 6.3 / 6.9 | 3.7 / 3.8 | 4.6 / 8.6 | 13.1 / 17.3 | 12.3 / 15.4 | 7.1 / 8.0 |
+| India | 2.3 / 2.2 | 2.7 / 2.4 | 2.4 / 2.1 | 3.8 / 7.6 | 18.2 / 30.8 | 20.6 / 24.2 | 8.2 / 8.9 |
+
+Gaps follow the P11 bridge: in-transit exemptions (2025-04 China: 108.6% statutory vs 38.7%
+assessed), USMCA claims and metal-content duties (Canada, Mexico), metal-content duties (EU 2026-01).
+Penn Wharton's China effective rate for 2026-08 is 24.3% (ours 22.8%).
+
 ## Known issues
 
 - **Census API quantity units (found in P12)**: `UNIT_QY1` in the API is the current unit for all
