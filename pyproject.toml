@@ -13,6 +13,7 @@ dependencies = [
     "matplotlib>=3.11.2",
     "polars>=2.1.0",
     "pyarrow>=26.0.0",
+    "pydantic>=2.14.1",
     "pyfixest>=0.60.0",
     "pyreadr>=0.5.8",
     "python-dotenv>=1.2.4",

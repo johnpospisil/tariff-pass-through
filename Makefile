@@ -1,4 +1,4 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance timeline-validate build models figures report test lint format all
 
 UV := uv run
 
@@ -30,7 +30,10 @@ reconcile:  ## P04 gates: HS10 sums vs FT-900, duties vs Treasury (re-downloads 
 concordance:  ## P06 HS10 families, HS10->NAICS->BEA, Rauch, CPI<->PCE
 	$(UV) python -m tpt.build.concordance
 
-build: concordance
+timeline-validate:  ## P07 check data/reference/tariff_actions.csv (citations, dates, HS codes, overlaps)
+	$(UV) python -m tpt.build.tariff_timeline
+
+build: concordance timeline-validate
 	@echo "build: not implemented yet (P10, P12, P18)"
 
 models:

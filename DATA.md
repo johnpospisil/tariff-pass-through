@@ -20,8 +20,27 @@ Every source, vintage, licence and known issue used in this project. Updated as 
 
 ## Tariff timeline
 
-Built in `data/reference/tariff_actions.csv`. Every row cites an official source and the date it was
-verified. Legal status (including the Supreme Court IEEPA case) is recorded here with the date checked.
+Built in `data/reference/tariff_actions.csv` (schema and validator in
+`src/tpt/build/tariff_timeline.py`; check with `make timeline-validate`). Every row cites an official
+source and the date it was verified. Legal status (including the Supreme Court IEEPA case) is
+recorded here with the date checked.
+
+- **One row per action component**: an authority applying a rate to a set of HS codes from a set of
+  countries over a date range. `effective_date` is the first day goods entered for consumption are
+  subject; `end_date` is the first day they are not (exclusive; empty = in effect).
+- **Products**: `hs_scope` lists product HS prefixes (2–10 digits) or `file:hs_lists/<name>.csv`
+  for annexes; `hs_exclude` carves out exemptions. The HTSUS Chapter 99 heading that carries the
+  duty (e.g. 9903.88.03) goes in `ch99_heading`; it never appears in import statistics.
+- **Countries**: Census `cty_code` and ISO `country_iso`, `ALL` (with `exclude_cty_codes`), or a
+  group defined in `data/reference/country_groups.csv`.
+- **Stacking**: `cumulative`, or `not_with:<authorities>` when the rate does not apply to goods
+  subject to another authority (e.g. reciprocal tariffs not on Section 232 goods).
+- **Citations**: `source_type`, `source_citation`, an https `source_url` on an official domain
+  (federalregister.gov, whitehouse.gov, ustr.gov, cbp.gov, usitc.gov, courts, ...), `verified_on`.
+- **Validation**: required fields and enums, dates, decimals (no % signs), official URLs,
+  Census country codes, every HS token (including list files) matching at least one HS10 code in the
+  2017–present Census lists, unique ids, and no overlapping rows (same authority, countries, HS
+  scope and dates) unless linked by `supersedes`.
 
 ## Census International Trade API (P03)
 

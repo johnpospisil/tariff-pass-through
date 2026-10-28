@@ -149,7 +149,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 
 ### Phase 2 — Tariff timeline (Weeks 2–3; the hard part)
 
-**P07 — Timeline schema and validator**
+**P07 — Timeline schema and validator ✅ DONE!**
 > Design `data/reference/tariff_actions.csv` and `src/tpt/build/tariff_timeline.py`. One row per action
 > component: action_id, authority (S232/S301/S201/IEEPA-fentanyl/IEEPA-reciprocal/de-minimis/other),
 > country (ISO + Census code, or ALL), hs_scope (HS chapter/heading/HS8/HS10 list or a file reference in
