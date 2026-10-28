@@ -282,6 +282,61 @@ partners are not modelled. The Section 338 lists are as of 2026-09-15 for the wh
 Brazil's 9903.01.81 list before 2025-11-13 is from 2025 HTS Rev 28 and may include additions made
 between 2025-08-06 and 2025-11-10.
 
+## Tariff rate panel (P10)
+
+`make rates` → `data/processed/tariff_rates.parquet` (18,440,016 rows: every HS10 × individual
+country × month with imports, 2017-01 to 2026-08). Columns: `rate_<authority>` (S232, S301,
+S201, S122, S338, IEEPA fentanyl, reciprocal, other), `rate_total` (their sum), `rate_metal_content`
+(part of `rate_s232` that legally applies to metal content only), `rate_unidentified` (duties on
+subsets trade data cannot identify; **not** in `rate_total`), `mfn_rate`, `usmca_share`.
+Monthly rates are day-weighted averages of daily rates (`src/tpt/build/tariff_rates.py`).
+
+Rules (hand-worked cases in `tests/test_tariff_rates.py`):
+- **Coverage**: hs_scope less hs_exclude on HS prefixes; list files extended to HS10 codes that
+  replaced listed codes (P06 families: a code absent from the list's vintage year is added when
+  every vintage-year member of its family is listed; adds 584 codes to List 3, 185 to List 1,
+  144 to List 4A).
+- **Supersedes** (transitive) removes the replaced row while both are in force; **not_with**
+  removes a row when another in-force row has the named authority or action group
+  (`unidentified_subset` rows never trigger exclusions). DE_MINIMIS rows carry no rate.
+- **All-in floors**: max(0, floor − MFN). **MFN** (`make mfn`, `data/processed/mfn_rates.parquet`):
+  general rate from the current HTSUS export (hts.usitc.gov `reststop/exportList`), ad valorem
+  equivalents for specific/compound rates from 2024 duties on EU27/UK/Swiss/Norwegian imports;
+  1.2% of 2025 import value has no MFN source (set to 0).
+- **USMCA** (Canada, Mexico): `exempt` rows scale by (1 − s), `non_us_content` by
+  (1 − s × 0.30); s = share of the HS10 × month import value under Census rate provisions 18
+  (free, special program) and 19 (free, Chapter 99 USMCA exemption), from `make usmca-share`
+  (`data/processed/usmca_share.parquet`, Census API `RP`, 2025-01 to 2026-08). Aggregate s: Canada
+  34% (2025-01/02) → 72% (2025-03) → 76–78%; Mexico 73–78%. Contemporaneous (after importers
+  responded by claiming USMCA). US content of USMCA vehicles (30%) is an assumption for P11.
+- **Use-restricted lists** (found in P10): the auto and truck parts lists name general headings
+  (e.g. all of 8471, computers, $139bn in 2024) but the duty applies to parts *of vehicles*; lines
+  whose HTSUS description does not tie them to vehicles are separate `-GEN` rows with
+  `unidentified_subset`. Civil aircraft exemptions name ~540 provisions (batteries, fasteners,
+  electronics) but exempt only goods certified for civil aircraft; only ~120 lines identifiable as
+  aircraft goods are treated as exempt. See `hs_lists/README.md`.
+
+**Import-weighted statutory additional duty** (weights: same-month imports for consumption;
+`reports/qa/statutory_rate_by_month.csv`), with the Census implied total duty rate
+(calculated duties ÷ imports for consumption, which includes MFN):
+
+| Month | Statutory additional | of which S232 (metal-content part) | S301 | IEEPA (fent./recip./other) | S122 | Unidentified (not in total) | Implied total |
+|---|---|---|---|---|---|---|---|
+| 2018-12 | 1.50% | 0.27% | 1.19% | — | — | — | 2.62% |
+| 2019-07 | 1.78% | 0.15% | 1.56% | — | — | — | 2.84% |
+| 2024-07 | 1.39% | 0.07% | 1.26% | — | — | — | 2.48% |
+| 2025-04 | 15.49% | 1.93% (0.39%) | 1.06% | 2.71 / 9.78 / 0 | — | 0 | 7.18% |
+| 2025-09 | 15.94% | 7.62% (5.47%) | 0.76% | 2.39 / 4.70 / 0.45 | — | 1.20% | 10.53% |
+| 2026-01 | 14.76% | 7.69% (5.52%) | 0.92% | 1.53 / 4.27 / 0.35 | — | 3.48% | 9.87% |
+| 2026-03 | 11.43% | 7.82% (5.49%) | 0.78% | — | 2.83% | 5.13% | 6.85% |
+| 2026-05 | 7.70% | 3.96% | 0.82% | — | 2.92% | 4.86% | 6.89% |
+| 2026-08 | 7.76% | 3.62% | 4.04% | — | — | 5.07% | 6.87% |
+
+Before 2025 the statutory rate plus the effective MFN rate (~1.1%) matches the implied rate
+within ~0.1 pp. In 2025–26 statutory exceeds implied mainly because Section 232 derivative
+duties are applied at full value here but legally apply to metal content (`rate_metal_content`,
+up to 5.6 pp), plus product exclusions, quotas and Annex II details; P11 reconciles line by line.
+
 ## Known issues
 
 - **October 2025 (federal shutdown)**: BLS did not collect most October 2025 prices ("Data unavailable

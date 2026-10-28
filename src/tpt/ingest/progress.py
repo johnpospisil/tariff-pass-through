@@ -66,10 +66,11 @@ class ProgressFile:
             self._snap = Snapshot(label, total, 0, 0, 0, 0, now, now, "running")
             self._write()
 
-    def advance(self, rows: int = 0, cached: bool = False, failed: bool = False) -> None:
+    def advance(self, rows: int = 0, cached: bool = False, failed: bool = False,
+                steps: int = 1) -> None:  # fmt: skip
         with self._lock:
             s = self._snap
-            s.done += 1
+            s.done += steps
             s.rows += rows
             s.cached += cached
             s.failed += failed

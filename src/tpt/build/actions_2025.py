@@ -644,12 +644,12 @@ def s122() -> list[dict]:
 def s301_2026() -> list[dict]:
     rows = [row(
         "S301-BR-25", "S301-BRAZIL", "S301", cty("Brazil"), "ALL", 0.25, "2026-07-22", "S301-BR",
-        hs_exclude=lst("s301_brazil_exempt", "s301_brazil_aircraft_pharma"),
+        hs_exclude=lst("s301_brazil_exempt", "s301_brazil_aircraft", "s301_brazil_pharma"),
         ch99_heading="9903.05.01", stacking="not_with:S232",
         notes="Brazil digital trade and payments investigation (91 FR 33854). Exemptions: "
               "note 50(a)(ii)-(vi).")]  # fmt: skip
     fl = "S301-FL"
-    exempt = lst("s301_fl_exempt")
+    exempt = lst("s301_fl_exempt", "s301_fl_aircraft", "s301_fl_pharma")
     stack = (
         "not_with:S232;also_with:S301-BRAZIL,S301-CN-L1,S301-CN-L2,S301-CN-L3,S301-CN-L4A,"
         "S301-CN-4YR"
@@ -733,10 +733,33 @@ CLOSE_P08 = {"S232-STEEL-6": "2025-03-12", "S232-ALUM-6": "2025-03-12",
 RU200 = {"S232-ALUM-RU200", "S232-ALUMDER-RU200"}  # Russia 200% continues (9903.85.67/68)
 
 
+PARTS_LISTS = ("s232_autos_parts", "s232_trucks_parts")
+
+
+def split_parts_rows(rows: list[dict]) -> list[dict]:
+    """Parts duties apply to parts *of vehicles* in the listed provisions. Rows keep the lines
+    identifiable as vehicle parts; a -GEN copy carries the general-purpose lines (computers,
+    bearings, motors, batteries...) as unidentified_subset (hs_lists_2025.classify_parts)."""
+    out = []
+    for r in rows:
+        name = next((n for n in PARTS_LISTS if r["hs_scope"] == lst(n)), None)
+        if not name:
+            out.append(r)
+            continue
+        gen = dict(r, action_id=r["action_id"] + "-GEN", hs_scope=lst(f"{name}_general"),
+                   value_basis="unidentified_subset",
+                   supersedes=";".join(f"{x}-GEN" for x in tt._split(r["supersedes"])),
+                   notes=(r["notes"] + " " if r["notes"] else "") + "General-purpose lines of "
+                   "the parts list: duty applies only to those used as vehicle parts.")  # fmt: skip
+        r["hs_scope"] = lst(f"{name}_vehicle")
+        out += [r, gen]
+    return out
+
+
 def rows() -> list[dict]:
     out = (fentanyl() + reciprocal() + ieepa_other() + de_minimis() + s232_metals()
            + s232_sectors() + s122() + s301_2026() + s301_china_review() + s338())  # fmt: skip
-    return out
+    return split_parts_rows(out)
 
 
 def main() -> None:

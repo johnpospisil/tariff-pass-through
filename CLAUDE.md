@@ -186,7 +186,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > mutually exclusive). Produce a dated summary table of actions in DATA.md. Flag anything uncertain with
 > `legal_status` and `notes` rather than guessing. Commit `P09`.
 
-**P10 — Expand to an HS10 × country × month rate panel**
+**P10 — Expand to an HS10 × country × month rate panel ✅ DONE!**
 > Implement the expansion in `tariff_timeline.py`: actions → daily HS10 × country additional duty rates
 > applying stacking rules, exclusions, and USMCA treatment → monthly rates (day-weighted average within
 > the month) → `data/processed/tariff_rates.parquet` with columns for each authority and the total. Use the

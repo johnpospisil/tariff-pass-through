@@ -84,10 +84,23 @@ implement them are the machine-readable official source.
 | `s301_cn_4yr_50_2026.csv` | 5 | 50% from 2026-01-01 (9903.91.07, medical gloves, respirators) | 2026 Rev 21 |
 | `s301_cn_4yr_100_2026.csv` | 1 | 100% from 2026-01-01 (9903.91.08, rubber medical gloves) | 2026 Rev 21 |
 | `s301_brazil_exempt.csv` | 870 | Section 301 Brazil exemptions (9903.05.03-.04) | 2026 Rev 21 |
-| `s301_brazil_aircraft_pharma.csv` | 1,245 | Section 301 Brazil aircraft and pharmaceuticals (9903.05.05-.06) | 2026 Rev 21 |
-| `s301_fl_exempt.csv` | 2,109 | Forced-labor exemptions, all economies (note 52(b)-(f)) | 2026 Rev 21 |
+| `s301_fl_exempt.csv` | 874 | Forced-labor exemptions: annex products and particular articles (note 52(b)-(c)) | 2026 Rev 21 |
+| `s301_fl_aircraft.csv` | 124 | Forced-labor civil aircraft exemption (52(d)), aircraft lines only | 2026 Rev 21 |
+| `s301_fl_pharma.csv` | 700 | Forced-labor pharmaceutical-use exemption (52(e)) | 2026 Rev 21 |
+| `s301_brazil_aircraft.csv` | 124 | Section 301 Brazil civil aircraft (9903.05.05), aircraft lines only | 2026 Rev 21 |
+| `s301_brazil_pharma.csv` | 705 | Section 301 Brazil pharmaceuticals (9903.05.06) | 2026 Rev 21 |
 | `s338_ca_list1.csv` | 101 | Section 338 Canada list (b)(1) (9903.03.12) | 2026 Rev 21 |
 | `s338_ca_list2.csv` | 52 | Section 338 Canada list (b)(2) (9903.03.13; not on S232 goods) | 2026 Rev 21 |
 | `s338_ca_list3.csv` | 513 | Section 338 Canada list (b)(3) (9903.03.14) | 2026 Rev 21 |
 
 Lists run together in the PDF text are split by `hs_lists_2025.note_codes`, which keeps a reading only if every piece is a real HS prefix in the 2017+ import statistics.
+
+### Derived splits (P10)
+
+| File | Lines | Contents |
+|---|---|---|
+| `s232_autos_parts_vehicle.csv` / `_general.csv` | 241 / 96 | Auto parts list expanded to current HTS10 lines and split by description: lines that name motor vehicles, engines, tractors, buses or trucks (or chapter 87) vs general-purpose lines (computers, bearings, motors, batteries). The duty applies to parts *of vehicles*, so general lines are `unidentified_subset` rows. |
+| `s232_trucks_parts_vehicle.csv` / `_general.csv` | 194 / 48 | Same for medium/heavy-duty vehicle parts. |
+| `*_aircraft.csv` (with `*_aircraft_full.csv`) | ~113–124 | Civil aircraft exemptions restricted to lines identifiable as aircraft goods (chapter 88 or "aircraft" in the description); the `_full` files are the official lists (~540 provisions, many general such as batteries and fasteners, exempt only when certified for civil aircraft). |
+
+The description test is `hs_lists_2025.VEHICLE` / `AIRCRAFT` against the current HTSUS export (article description plus superior texts).

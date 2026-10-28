@@ -20,12 +20,14 @@ split by `note_codes`, which keeps a reading only if each piece is a real HS pre
 Run: make hs-lists   (after the P08 lists)
 """
 
+import json
 import re
 from functools import cache
 
 import polars as pl
 
-from tpt.build.hs_lists import HS10_CODES, LISTS_DIR, chapter99_text
+from tpt.build.hs_lists import HS10_CODES, LISTS_DIR, SOURCE, chapter99_text
+from tpt.ingest._http import CachedClient
 
 RELEASE_PRE_NOV25 = "2025HTSRev28"
 RELEASE_PRE_COURT = "2026HTSRev3"
@@ -230,10 +232,16 @@ SPECS: list[tuple[str, str, str, str | None]] = [
     # Section 301 Brazil (note 50) and forced labor (note 52), Rev 21
     ("s301_brazil_exempt.csv", R21, "(ii) As provided in heading 9903.05.03",
      "(iv) As provided in heading 9903.05.05"),
-    ("s301_brazil_aircraft_pharma.csv", R21, "(iv) As provided in heading 9903.05.05",
+    ("s301_brazil_aircraft.csv", R21, "(iv) As provided in heading 9903.05.05",
+     "(v) As provided in heading 9903.05.06"),
+    ("s301_brazil_pharma.csv", R21, "(v) As provided in heading 9903.05.06",
      "(vi) As provided in heading 9903.05.07"),
     ("s301_fl_exempt.csv", R21, f"(b) As provided in heading 9903.05.86, {_N52}",
-     "(g) As provided in heading 9903.05.93"),
+     "(d) As provided in heading 9903.05.88"),
+    ("s301_fl_aircraft.csv", R21, "(d) As provided in heading 9903.05.88",
+     "(e) As provided in heading 9903.05.89"),
+    ("s301_fl_pharma.csv", R21, "(e) As provided in heading 9903.05.89",
+     "(f) As provided in heading 9903.05.90"),
     # Section 338 Canada (note 51), Rev 21
     ("s338_ca_list1.csv", R21, "(1) Heading 9903.03.12 applies", "(2) Heading 9903.03.13"),
     ("s338_ca_list2.csv", R21, "(2) Heading 9903.03.13 applies", "(3) Heading 9903.03.14"),
@@ -260,6 +268,8 @@ def run() -> None:
         print(f"{name}: {len(codes):,} codes" + (f" ({len(unmatched)} unmatched)" if unmatched
                                                   else ""))  # fmt: skip
     split_aluminum_derivatives()
+    split_vehicle_parts()
+    restrict_aircraft_lists()
 
 
 def split_aluminum_derivatives() -> None:
@@ -273,6 +283,85 @@ def split_aluminum_derivatives() -> None:
         pl.DataFrame({"hs": codes}).write_csv(LISTS_DIR / name)
         print(f"{name}: {len(codes):,} codes")
     (LISTS_DIR / "s232_alum_deriv_2025_0608.csv").unlink()
+
+
+# --- vehicle parts: identifiable vs general-purpose lines --------------------
+
+HTS_EXPORT = "https://hts.usitc.gov/reststop/exportList"
+# Article descriptions (with their superior texts) that tie a line to motor vehicles
+VEHICLE = re.compile(
+    r"vehicle|motor car|tractor|automobile|buses|trucks|internal combustion|piston engine|"
+    r"wheel hub|leaf spring|retreaded tires|headings? 870[1-5]",
+    re.I,
+)
+
+
+def hts_lines() -> dict[str, str]:
+    """Current HTSUS HTS8/HTS10 lines -> description path (superior texts joined by ' | ')."""
+    resp = CachedClient(SOURCE).get(HTS_EXPORT, {"from": "0100", "to": "9999", "format": "JSON",
+                                                 "styles": "false"})  # fmt: skip
+    path: list[str] = []
+    out = {}
+    for r in json.loads(resp.content):
+        ind = int(r.get("indent") or 0)
+        path = path[:ind] + [r.get("description") or ""]
+        no = (r.get("htsno") or "").replace(".", "")
+        if len(no) in (8, 10):
+            out[no] = " | ".join(path)
+    return out
+
+
+def classify_parts(codes: list[str], lines: dict[str, str]) -> tuple[list[str], list[str]]:
+    """Split a parts list (the duty applies to parts *of vehicles* in these provisions) into
+    lines identifiable as vehicle parts from their description, and general-purpose lines
+    (computers, bearings, electric motors, batteries, ...) where vehicle use is not observable.
+    Each listed code is expanded to its current statistical lines; chapter 87 is always
+    vehicle-specific."""
+    tens = [n for n in lines if len(n) == 10]
+    veh, gen = [], []
+    for c in codes:
+        kids = [n for n in tens if n.startswith(c)] or [c]
+        for n in kids:
+            (veh if c.startswith("87") or VEHICLE.search(lines.get(n, "")) else gen).append(n)
+    return list(dict.fromkeys(veh)), list(dict.fromkeys(gen))
+
+
+def split_vehicle_parts() -> None:
+    lines = hts_lines()
+    for name in ("s232_autos_parts", "s232_trucks_parts"):
+        codes = pl.read_csv(LISTS_DIR / f"{name}.csv", infer_schema=False)["hs"].to_list()
+        veh, gen = classify_parts(codes, lines)
+        for suffix, part in (("vehicle", veh), ("general", gen)):
+            pl.DataFrame({"hs": part}).write_csv(LISTS_DIR / f"{name}_{suffix}.csv")
+        print(f"{name}: {len(veh):,} vehicle-specific, {len(gen):,} general-purpose lines")
+
+
+# --- civil aircraft exemptions: lines identifiable as aircraft goods ----------
+
+AIRCRAFT_LISTS = ("ieepa_recip_eu_aircraft", "ieepa_recip_kr_aircraft", "ieepa_recip_ch_aircraft",
+                  "ieepa_recip_jp_aircraft", "ieepa_brazil_aircraft", "s232_uk_aircraft",
+                  "s122_exempt_aircraft", "s301_brazil_aircraft", "s301_fl_aircraft")  # fmt: skip
+AIRCRAFT = re.compile(r"aircraft|aeroplane|airplane|helicopter|spacecraft|flight|aviation", re.I)
+
+
+def restrict_aircraft_lists() -> None:
+    """Civil aircraft exemptions cover goods certified for civil aircraft (General Note 6) in
+    the listed provisions, many of them general (batteries, electronics, fasteners). Only lines
+    identifiable as aircraft goods (chapter 88 or 'aircraft' in the description) are treated as
+    exempt; the official list is kept as <name>_full.csv."""
+    lines = hts_lines()
+    tens = [n for n in lines if len(n) == 10]
+    for name in AIRCRAFT_LISTS:
+        full = pl.read_csv(LISTS_DIR / f"{name}.csv", infer_schema=False)["hs"].to_list()
+        if (LISTS_DIR / f"{name}_full.csv").exists() and not full:
+            continue
+        pl.DataFrame({"hs": full}).write_csv(LISTS_DIR / f"{name}_full.csv")
+        keep = []
+        for c in full:
+            kids = [n for n in tens if n.startswith(c)] or [c]
+            keep += [n for n in kids if c.startswith("88") or AIRCRAFT.search(lines.get(n, ""))]
+        pl.DataFrame({"hs": list(dict.fromkeys(keep))}).write_csv(LISTS_DIR / f"{name}.csv")
+        print(f"{name}: {len(full):,} listed provisions -> {len(keep):,} aircraft lines")
 
 
 if __name__ == "__main__":

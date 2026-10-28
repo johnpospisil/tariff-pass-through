@@ -58,3 +58,16 @@ def test_country_rate_rows():
     )
     rows = h25.country_rate_rows(text, r"9903\.02\.")
     assert rows == [("9903.02.03", "Algeria", 0.30), ("9903.02.53", "Philippines", 0.19)]
+
+
+def test_parts_split_by_description():
+    lines = {
+        "8471300100": "Automatic data processing machines | Portable",
+        "8708100000": "Parts of the motor vehicles of headings 8701 to 8705 | Bumpers",
+        "8413309030": "Pumps | Fuel pumps for internal combustion piston engines | Fuel pumps",
+        "8482101080": "Ball or roller bearings | Ball bearings | Other",
+        "4011101070": "New pneumatic tires | Of a kind used on motor cars | Radial",
+    }
+    veh, gen = h25.classify_parts(["8471", "870810", "84133090", "848210", "40111010"], lines)
+    assert veh == ["8708100000", "8413309030", "4011101070"]
+    assert gen == ["8471300100", "8482101080"]

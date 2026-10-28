@@ -1,4 +1,4 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share build models figures report test lint format all
 
 UV := uv run
 
@@ -34,13 +34,22 @@ hs-lists:  ## P08/P09 product lists and country groups from official HTSUS Chapt
 	$(UV) python -m tpt.build.hs_lists
 	$(UV) python -m tpt.build.hs_lists_2025
 
+mfn:  ## P10 MFN (column 1 general) rates by HS10 from the HTSUS export
+	$(UV) python -m tpt.build.mfn
+
+usmca-share:  ## P10 USMCA-claimed import shares for Canada/Mexico from Census rate provisions
+	$(UV) python -m tpt.ingest.census_rp
+
+rates: mfn usmca-share  ## P10 HS10 x country x month additional-duty panel
+	$(UV) python -m tpt.build.tariff_rates
+
 timeline-2025:  ## P09 regenerate the 2024-26 rows of tariff_actions.csv
 	$(UV) python -m tpt.build.actions_2025
 
 timeline-validate:  ## P07 check data/reference/tariff_actions.csv (citations, dates, HS codes, overlaps)
 	$(UV) python -m tpt.build.tariff_timeline
 
-build: concordance timeline-validate
+build: concordance timeline-validate rates
 	@echo "build: not implemented yet (P10, P12, P18)"
 
 models:
