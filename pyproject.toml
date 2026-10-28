@@ -3,7 +3,7 @@ name = "tpt"
 version = "0.1.0"
 description = "Who pays the tariffs? Tariff pass-through to US import and consumer prices, 2025-26"
 authors = [
-    { name = "johnpospisil", email = "audiofreak7@gmail.com" }
+    { name = "johnpospisil" }
 ]
 requires-python = ">=3.12"
 dependencies = [
