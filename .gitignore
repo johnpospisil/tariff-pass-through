@@ -25,3 +25,6 @@ report/*_files/
 .DS_Store
 .vscode/
 .idea/
+
+# Claude Code personal settings
+.claude/settings.local.json
