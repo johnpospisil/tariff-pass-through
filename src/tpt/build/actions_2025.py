@@ -756,10 +756,22 @@ def split_parts_rows(rows: list[dict]) -> list[dict]:
     return out
 
 
+INFORMATIONAL = lst("ieepa_1702b_informational")
+
+
+def informational_materials(rows: list[dict]) -> list[dict]:
+    """IEEPA rows exclude articles encompassed by 50 U.S.C. 1702(b) (publications, artworks):
+    EO 14193 s.2(j), EO 14194 s.2(i), EO 14195 s.2(i), EO 14257 s.3(b)(i) (added in P11)."""
+    for r in rows:
+        if r["authority"].startswith("IEEPA") and r["rate"] not in ("", "0"):
+            r["hs_exclude"] = ";".join(x for x in (r["hs_exclude"], INFORMATIONAL) if x)
+    return rows
+
+
 def rows() -> list[dict]:
     out = (fentanyl() + reciprocal() + ieepa_other() + de_minimis() + s232_metals()
            + s232_sectors() + s122() + s301_2026() + s301_china_review() + s338())  # fmt: skip
-    return split_parts_rows(out)
+    return split_parts_rows(informational_materials(out))
 
 
 def main() -> None:

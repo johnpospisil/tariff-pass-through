@@ -4,7 +4,8 @@ Source: Harmonized Tariff Schedule of the United States, Chapter 99 (official PD
 hts.usitc.gov). The Federal Register annexes for these actions are published as images, so the
 HTSUS notes that implement them are used instead:
 
-- Section 301 (China), subchapter III U.S. note 20, 2020 Basic Edition:
+- Section 301 (China), subchapter III U.S. note 20, 2020 Basic Edition, plus codes created after
+  2020 (HS2022 renumbering) as listed in note 20 of 2026 HTS Revision 21:
     20(b) heading 9903.88.01 (List 1), 20(d) 9903.88.02 (List 2), 20(f) 9903.88.03 (List 3),
     20(g) 9903.88.04 (List 3 products defined as an HTS8 except named 10-digit lines),
     20(s) 9903.88.15 (List 4A: (i) HTS8 table, (ii) partial products).
@@ -31,6 +32,13 @@ COUNTRIES_CSV = config.REFERENCE_DIR / "census_countries.csv"
 HS10_CODES = config.INTERIM_DIR / "hs10_codes.parquet"
 
 RELEASE_2020 = "2020HTSABasicB"
+# The 2020 notes predate the HS2022 renumbering; codes created later are taken from the current
+# notes (P11: e.g. 8543.40.00 e-cigarettes, split from List 2's 8543.70.99, pays 25% in the data).
+RELEASE_CURRENT = "2026HTSRev21"
+BASE_YEAR = 2020
+# 20(s)(ii) names 8517.62.00 except .0010/.0020 (2020 numbering); 8517.62.0050 was discontinued at
+# the end of 2018, before List 4A (2019-09-01), and is covered by List 3 only.
+L4A_EXTRA_EXCLUDE = ["8517620050"]
 
 # Section 232 scopes (HS prefixes), from the notes cited in the module docstring. Note 16(b) names
 # subheading 7302.90.00; the statistics split it into 10-digit lines under 7302.90, hence "730290".
@@ -89,11 +97,12 @@ def table_hts8(text: str) -> list[str]:
 
 def partial_items(text: str) -> tuple[list[str], list[str]]:
     """'... provided for in [subheading] 8517.62.00, except ... 8517.62.0090' items ->
-    (HTS8 included, HTS10 excluded)."""
+    (HTS8 included, HTS10 excluded). The PDF text can break lines inside 'provided for in'."""
     include, exclude = [], []
     for item in re.split(r"\n\s*\d+\.\s", text)[1:]:
         m = re.search(
-            r"provided for in (?:\[subheading\] |subheading )?(\d{4})\.(\d{2})\.(\d{2})", item
+            r"provided\s+for\s+in\s+(?:\[subheading\]\s+|subheading\s+)?(\d{4})\.(\d{2})\.(\d{2})",
+            item,
         )
         if not m:
             continue
@@ -131,7 +140,7 @@ def section_301_lists(text: str) -> dict[str, list[str]]:
         "s301_cn_list3.csv": table_hts8(list3) + l3_inc,
         "s301_cn_list3_exclude.csv": l3_exc,
         "s301_cn_list4a.csv": table_hts8(l4a_table) + l4_inc,
-        "s301_cn_list4a_exclude.csv": l4_exc,
+        "s301_cn_list4a_exclude.csv": l4_exc + L4A_EXTRA_EXCLUDE,
     }  # fmt: skip
 
 
@@ -183,6 +192,21 @@ def country_groups(text: str) -> pl.DataFrame:
 # --- run ---------------------------------------------------------------------
 
 
+def later_codes(codes: list[str], code_years: dict[str, set[int]], base_year: int) -> list[str]:
+    """Codes none of whose HS10 lines existed in or before base_year (created by later
+    renumberings), in input order."""
+    old = {c[:n] for c, ys in code_years.items() if min(ys) <= base_year for n in (4, 6, 8, 10)}
+    new = {c[:n] for c, ys in code_years.items() if min(ys) > base_year for n in (4, 6, 8, 10)}
+    return [c for c in codes if c in new and c not in old]
+
+
+def section_301_hs2022(base: dict[str, list[str]], current: dict[str, list[str]],
+                       code_years: dict[str, set[int]]) -> dict[str, list[str]]:  # fmt: skip
+    """2020 lists extended with the codes in the current notes created after BASE_YEAR."""
+    return {name: codes + later_codes(current[name], code_years, BASE_YEAR)
+            for name, codes in base.items()}  # fmt: skip
+
+
 def write_list(name: str, codes: list[str], hs10: set[str]) -> None:
     """Write a list; codes matching no HS10 in the 2017+ statistics (e.g. monetary gold, which is
     outside trade statistics) go to <name>_unmatched.csv so the legal list stays visible."""
@@ -205,7 +229,12 @@ def write_list(name: str, codes: list[str], hs10: set[str]) -> None:
 
 def run() -> None:
     text = chapter99_text(RELEASE_2020)
-    lists = section_301_lists(text) | {
+    years = pl.read_parquet(HS10_CODES, columns=["year", "hs10"]).group_by("hs10").agg("year")
+    code_years = {h: set(y) for h, y in years.iter_rows()}
+    s301 = section_301_hs2022(
+        section_301_lists(text), section_301_lists(chapter99_text(RELEASE_CURRENT)), code_years
+    )
+    lists = s301 | {
         "s232_steel.csv": S232_STEEL,
         "s232_steel_exclude.csv": S232_STEEL_EXCLUDE,
         "s232_aluminum.csv": S232_ALUMINUM,

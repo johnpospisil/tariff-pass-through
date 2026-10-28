@@ -68,6 +68,10 @@ project rules and the prompt sequence; run the prompts in order, one per session
   (10%, 2026-02-24 to 2026-07-24, expired), then Section 301 forced-labor (10/12.5%, from 2026-07-24),
   Section 301 Brazil and Section 338 Canada. Rows with `value_basis = unidentified_subset` (patented
   drugs, advanced chips, drones) must not be applied to their whole HS scope.
+- **Statutory ≠ assessed** (P11, DATA.md "Statutory vs collected duties"): Census records no duty
+  on low-value estimates (9999.95), Chapter 98 lines and USMCA-claimed (rate provision 19)
+  entries; Section 232 derivative duties fall on metal content only; in-transit exemptions delay
+  each 2025 increase by 1–2 months. Drop 9999/98 lines from product panels.
 - **De minimis**: shipments under $800 were mostly absent from official trade statistics before its end,
   so a post-repeal "increase" in recorded small parcels can be a measurement change, not a real increase.
 - **October 2025 BLS gap**: the 2025 shutdown left most CPI (21 of ~700 series) and about half of
@@ -151,7 +155,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > is many-to-one onto family IDs, no HS10 in the panel is unmapped (report coverage by import value).
 > Commit `P06`.
 
-### Phase 2 — Tariff timeline (Weeks 2–3; the hard part)
+### Phase 2 — Tariff timeline (Weeks 2–3; the hard part) ✅ DONE!
 
 **P07 — Timeline schema and validator ✅ DONE!**
 > Design `data/reference/tariff_actions.csv` and `src/tpt/build/tariff_timeline.py`. One row per action
@@ -196,7 +200,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > provision data if available); a steel product where S232 replaces the reciprocal rate; a mid-month
 > effective date. Report the import-weighted statutory rate by month. Commit `P10`.
 
-**P11 — Validate timeline against duties actually collected**
+**P11 — Validate timeline against duties actually collected ✅ DONE!**
 > Compare statutory rates from P10 with implied rates (calculated duties ÷ dutiable/consumption value)
 > at HS10 × country × month. Report: correlation, the share of import value where statutory and implied
 > differ by more than 5 pp, and the top 30 discrepancies by value with likely causes (exclusions,

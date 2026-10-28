@@ -12,10 +12,12 @@ authority, as the day-weighted average over the month of the daily rate. On each
    action drops out (e.g. reciprocal on Section 232 goods). Actions with value_basis
    unidentified_subset (patented drugs, advanced chips, drones) do not trigger exclusions.
 4. Rates: ad valorem as stated; all_in_floor as max(0, floor - MFN) with the HS10 MFN rate.
-   USMCA (Canada, Mexico only): "exempt" scales the rate by (1 - s), "non_us_content" by
-   (1 - s * US_CONTENT_SHARE), where s is the share of the HS10 x country x month import value
-   entered duty-free under a special program or the Chapter 99 USMCA exemption (Census rate
-   provisions 18 and 19; see census_rp.py).
+   USMCA (Canada, Mexico only): "exempt" and "non_us_content" both scale the rate by (1 - s),
+   where s is the share of the HS10 x country x month import value entered duty-free under a
+   special program or the Chapter 99 USMCA exemption (Census rate provisions 18 and 19; see
+   census_rp.py). For vehicles the US content is entered as a separate duty-free line, so s
+   already measures it (P11: Mexican cars 8703.23.0140 2025-09, 14% under code 19 with no duty,
+   86% under code 69 paying 25%).
 
 Columns: rate_<authority> per authority, rate_total (their sum), rate_metal_content (the part of
 rate_s232 that legally applies to metal content only; P11 compares), rate_unidentified (duties on
@@ -47,9 +49,6 @@ USMCA_SHARE = config.PROCESSED_DIR / "usmca_share.parquet"
 IMPORTS = config.INTERIM_DIR / "census_imports"
 
 USMCA_COUNTRIES = {"1220", "2010"}
-# Assumed US content of USMCA-qualifying vehicles (the Section 232 autos duty applies to non-US
-# content only). Not observed in trade data; P11 checks it against implied rates.
-US_CONTENT_SHARE = 0.30
 RATE_AUTHORITIES = [a for a in tt.AUTHORITIES if a not in ("DE_MINIMIS", "AD_CVD", "OTHER")]
 RATE_COLS = [f"rate_{a.lower()}" for a in RATE_AUTHORITIES]
 
@@ -264,11 +263,7 @@ def _apply(keys: pl.DataFrame, comps: pl.DataFrame, mfn: pl.DataFrame,
     )
     long = k.join(comps, on=["sig", "month"], how="inner")
     s = pl.col("usmca_share").fill_null(0.0)
-    factor = (
-        pl.when(pl.col("usmca") == "exempt").then(1 - s)
-        .when(pl.col("usmca") == "non_us_content").then(1 - s * US_CONTENT_SHARE)
-        .otherwise(1.0)
-    )  # fmt: skip
+    factor = pl.when(pl.col("usmca").is_in(["exempt", "non_us_content"])).then(1 - s).otherwise(1.0)
     amount = (
         pl.when(pl.col("kind") == "floor")
         .then(pl.col("value") * (pl.col("floor") - pl.col("mfn_rate")).clip(lower_bound=0))

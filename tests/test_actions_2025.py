@@ -84,3 +84,18 @@ def test_every_2025_row_cites_the_federal_register():
     for a in ACTIONS.values():
         if a.effective_date >= date(2024, 9, 1):
             assert a.source_url.startswith("https://www.federalregister.gov/d/"), a.action_id
+
+
+def test_ieepa_rows_exclude_informational_materials():
+    # 50 U.S.C. 1702(b): EO 14193 s.2(j), EO 14195 s.2(i), EO 14257 s.3(b)(i) (P11: artworks and
+    # books paid ~0 in Census duties while the panel applied the full IEEPA rates)
+    ieepa = [a for a in ACTIONS.values()
+             if a.authority.startswith("IEEPA") and a.rate
+             and a.effective_date.year >= 2025]  # fmt: skip
+    assert ieepa
+    for a in ieepa:
+        assert "ieepa_1702b_informational.csv" in (a.hs_exclude or ""), a.action_id
+    sample = {"9701910000", "4901990093", "6110200010"}
+    scope = "file:hs_lists/ieepa_1702b_informational.csv"
+    codes = tt.resolve_hs10(scope, None, tt.ACTIONS_CSV.parent, sample)
+    assert codes == {"9701910000", "4901990093"}

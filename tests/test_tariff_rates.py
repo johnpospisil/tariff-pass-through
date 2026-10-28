@@ -114,9 +114,10 @@ def test_usmca_vehicles_pay_on_non_us_content(tmp_path):
     rows = [act("AUT", "S232", "ALL", "8703", 0.25, "2025-04-03", usmca="non_us_content")]
     k = keys((CAR, MX, "2025-05"), (CAR, DE, "2025-05"))
     share = pl.DataFrame({"hs10": [CAR], "cty_code": [MX], "month": [date(2025, 5, 1)],
-                          "usmca_share": [1.0]})  # fmt: skip
+                          "usmca_share": [0.6]})  # fmt: skip
     df = rates(tmp_path, rows, k, usmca=share)
-    assert value(df, CAR, MX, "2025-05") == pytest.approx(0.25 * (1 - tr.US_CONTENT_SHARE))
+    # the US-content line is entered duty-free (rate provision 19), so it is in the share
+    assert value(df, CAR, MX, "2025-05") == pytest.approx(0.25 * (1 - 0.6))
     assert value(df, CAR, DE, "2025-05") == pytest.approx(0.25)  # USMCA rule only for CA, MX
 
 

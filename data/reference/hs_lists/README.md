@@ -12,15 +12,17 @@ One CSV per product list referenced from `tariff_actions.csv` as `file:hs_lists/
 
 ## Files (built by `make hs-lists` from HTSUS Chapter 99, hts.usitc.gov)
 
+**P11 fixes.** The 20(g)/20(s)(ii) parser missed items broken across PDF lines ("provided\nfor in"), which dropped 8517.62.00 (routers, modems: $10–20bn a year from China); codes created by the HS2022 renumbering (not in the 2020 notes) are added from the 2026 Rev 21 notes, only where no line of the code existed by 2020.
+
 | File | Contents | Source |
 |---|---|---|
-| `s301_cn_list1.csv` | 818 HTS8, Section 301 List 1 (heading 9903.88.01) | note 20(b), 2020 Basic Edition |
-| `s301_cn_list2.csv` | 279 HTS8, List 2 (9903.88.02) | note 20(d), 2020 Basic |
-| `s301_cn_list3.csv` | 5,769 HTS8, List 3 (9903.88.03 table + 9903.88.04 partial products) | notes 20(f), 20(g), 2020 Basic |
-| `s301_cn_list3_exclude.csv` | 16 HTS10 lines excluded from the 9903.88.04 partial products | note 20(g) |
+| `s301_cn_list1.csv` | 818 HTS8, Section 301 List 1 (heading 9903.88.01), + 109 codes created after 2020 | note 20(b), 2020 Basic Edition; later codes from 2026 Rev 21 |
+| `s301_cn_list2.csv` | 279 HTS8, List 2 (9903.88.02), + 20 later codes | note 20(d), 2020 Basic; 2026 Rev 21 |
+| `s301_cn_list3.csv` | 5,770 HTS8, List 3 (9903.88.03 table + 9903.88.04 partial products), + 379 later codes | notes 20(f), 20(g), 2020 Basic; 2026 Rev 21 |
+| `s301_cn_list3_exclude.csv` | 18 HTS10 lines excluded from the 9903.88.04 partial products | note 20(g) |
 | `s301_cn_list3_unmatched.csv` | 7108.20.00 (monetary gold): legally on List 3, outside trade statistics | note 20(f) |
-| `s301_cn_list4a.csv` | 3,232 HTS8, List 4A (9903.88.15) | note 20(s)(i) table + 20(s)(ii) |
-| `s301_cn_list4a_exclude.csv` | 9 HTS10 lines excluded from 20(s)(ii) partial products | note 20(s)(ii) |
+| `s301_cn_list4a.csv` | 3,233 HTS8, List 4A (9903.88.15), + 171 later codes | note 20(s)(i) table + 20(s)(ii); 2026 Rev 21 |
+| `s301_cn_list4a_exclude.csv` | 16 HTS10 lines excluded from 20(s)(ii) partial products (incl. 5 later codes), + 8517.62.0050 (discontinued 2018, List 3 only) | note 20(s)(ii) |
 | `s232_steel.csv`, `s232_steel_exclude.csv` | steel scope (headings 7206–7229 except 7216.61/.69/.91; 7301.10, 7302.10/.40/.90, 7304–7306) | note 16(b), 2020 Basic |
 | `s232_aluminum.csv` | aluminum scope (7601, 7604–7609, 7616.99.51) | note 19(b), 2020 Basic |
 | `s232_steel_derivatives.csv`, `s232_aluminum_derivatives.csv` | Proclamation 9980 derivatives (nails, stranded wire, bumper/body stampings) | headings 9903.80.03 / 9903.85.03, 2021 Basic |
@@ -74,6 +76,7 @@ implement them are the machine-readable official source.
 | `s122_exempt_annex.csv` | 1,093 | Section 122 Annex exemptions (9903.03.03) | 2026 Rev 21 |
 | `s122_exempt_particular.csv` | 11 | Section 122 particular articles (9903.03.04) | 2026 Rev 21 |
 | `s122_exempt_aircraft.csv` | 540 | Section 122 civil aircraft (9903.03.05) | 2026 Rev 21 |
+| `ieepa_1702b_informational.csv` | 8 | Publications (4901–4905) and artworks (9701–9703), excluded from all IEEPA rows: 50 U.S.C. 1702(b)(3) as applied by EO 14193 s.2(j), EO 14195 s.2(i), EO 14257 s.3(b)(i) (P11) | statute; HS headings by hand |
 | `s301_cn_4yr_25_2024.csv` | 348 | Four-year review 25% from 2024-09-27 (9903.91.01) | 2026 Rev 21 |
 | `s301_cn_4yr_50_2024.csv` | 2 | 50% from 2024-09-27 (9903.91.02, solar cells) | 2026 Rev 21 |
 | `s301_cn_4yr_100_2024.csv` | 10 | 100% from 2024-09-27 (9903.91.03, EVs, syringes) | 2026 Rev 21 |

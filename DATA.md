@@ -303,12 +303,13 @@ Rules (hand-worked cases in `tests/test_tariff_rates.py`):
   general rate from the current HTSUS export (hts.usitc.gov `reststop/exportList`), ad valorem
   equivalents for specific/compound rates from 2024 duties on EU27/UK/Swiss/Norwegian imports;
   1.2% of 2025 import value has no MFN source (set to 0).
-- **USMCA** (Canada, Mexico): `exempt` rows scale by (1 − s), `non_us_content` by
-  (1 − s × 0.30); s = share of the HS10 × month import value under Census rate provisions 18
+- **USMCA** (Canada, Mexico): `exempt` and `non_us_content` rows scale by (1 − s); s = share of the HS10 × month import value under Census rate provisions 18
   (free, special program) and 19 (free, Chapter 99 USMCA exemption), from `make usmca-share`
   (`data/processed/usmca_share.parquet`, Census API `RP`, 2025-01 to 2026-08). Aggregate s: Canada
   34% (2025-01/02) → 72% (2025-03) → 76–78%; Mexico 73–78%. Contemporaneous (after importers
-  responded by claiming USMCA). US content of USMCA vehicles (30%) is an assumption for P11.
+  responded by claiming USMCA). For vehicles, the US content is entered as a separate duty-free
+  line (code 19), so s already measures it; P10's extra 30% US-content assumption was dropped
+  in P11 (see "Statutory vs collected duties").
 - **Use-restricted lists** (found in P10): the auto and truck parts lists name general headings
   (e.g. all of 8471, computers, $139bn in 2024) but the duty applies to parts *of vehicles*; lines
   whose HTSUS description does not tie them to vehicles are separate `-GEN` rows with
@@ -322,20 +323,122 @@ Rules (hand-worked cases in `tests/test_tariff_rates.py`):
 
 | Month | Statutory additional | of which S232 (metal-content part) | S301 | IEEPA (fent./recip./other) | S122 | Unidentified (not in total) | Implied total |
 |---|---|---|---|---|---|---|---|
-| 2018-12 | 1.50% | 0.27% | 1.19% | — | — | — | 2.62% |
-| 2019-07 | 1.78% | 0.15% | 1.56% | — | — | — | 2.84% |
-| 2024-07 | 1.39% | 0.07% | 1.26% | — | — | — | 2.48% |
-| 2025-04 | 15.49% | 1.93% (0.39%) | 1.06% | 2.71 / 9.78 / 0 | — | 0 | 7.18% |
-| 2025-09 | 15.94% | 7.62% (5.47%) | 0.76% | 2.39 / 4.70 / 0.45 | — | 1.20% | 10.53% |
-| 2026-01 | 14.76% | 7.69% (5.52%) | 0.92% | 1.53 / 4.27 / 0.35 | — | 3.48% | 9.87% |
-| 2026-03 | 11.43% | 7.82% (5.49%) | 0.78% | — | 2.83% | 5.13% | 6.85% |
-| 2026-05 | 7.70% | 3.96% | 0.82% | — | 2.92% | 4.86% | 6.89% |
-| 2026-08 | 7.76% | 3.62% | 4.04% | — | — | 5.07% | 6.87% |
+| 2018-12 | 1.53% | 0.27% | 1.22% | — | — | — | 2.62% |
+| 2019-07 | 1.80% | 0.15% | 1.58% | — | — | — | 2.84% |
+| 2024-07 | 1.45% | 0.07% | 1.33% | — | — | — | 2.48% |
+| 2025-04 | 15.31% | 1.75% (0.39%) | 1.10% | 2.70 / 9.73 / 0 | — | 0 | 7.18% |
+| 2025-09 | 15.74% | 7.43% (5.47%) | 0.80% | 2.38 / 4.67 / 0.45 | — | 1.20% | 10.53% |
+| 2026-01 | 14.61% | 7.53% (5.52%) | 0.96% | 1.53 / 4.25 / 0.35 | — | 3.48% | 9.87% |
+| 2026-03 | 11.22% | 7.58% (5.49%) | 0.81% | — | 2.83% | 5.13% | 6.85% |
+| 2026-05 | 7.48% | 3.71% | 0.85% | — | 2.92% | 4.86% | 6.89% |
+| 2026-08 | 7.75% | 3.57% | 4.08% | — | — | 5.07% | 6.87% |
 
-Before 2025 the statutory rate plus the effective MFN rate (~1.1%) matches the implied rate
-within ~0.1 pp. In 2025–26 statutory exceeds implied mainly because Section 232 derivative
-duties are applied at full value here but legally apply to metal content (`rate_metal_content`,
-up to 5.6 pp), plus product exclusions, quotas and Annex II details; P11 reconciles line by line.
+(Updated in P11 after the timeline fixes below.) The comparison with duties actually assessed is
+in the next section.
+
+## Statutory vs collected duties (P11)
+
+`make validate-rates` (`src/tpt/build/validate_rates.py`) → `reports/qa/rate_validation_*.csv`;
+gate in `tests/test_rate_validation_gate.py`. For each HS10 × country × month the **implied
+additional rate** is (Census calculated duties − MFN rate × MFN base) ÷ consumption value. The MFN
+base is dutiable value, capped at the pair's dutiable share in a reference year (2017 for
+2018–24, 2024 for 2025–26) because a Chapter 99 duty makes FTA/USMCA goods "dutiable" without
+MFN being paid (USMCA pickups: 25% MFN, not paid). Check: in 2017, MFN × dutiable value is 1.38%
+of value against 1.40% calculated duties. Census calculated duties are as assessed at entry:
+no refunds or drawback (those are in Treasury receipts, P04).
+
+**Fit, pair-month level** (comparable pairs; `rate_validation_metrics.csv`):
+
+| Period | Pair-months | Import value | Correlation (unweighted / value-weighted) | Value with \|stat − implied\| > 5 pp | Statutory | Implied |
+|---|---|---|---|---|---|---|
+| 2018-07 to 2019-12 | 2.71m | $3.63tn | 0.84 / 0.90 | 2.9% | 1.58% | 1.21% |
+| 2020–24 | 9.38m | $14.04tn | 0.85 / 0.92 | 2.5% | 1.77% | 1.49% |
+| 2025-02 to 2026-08 | 3.21m | $5.19tn | 0.75 / 0.78 | 16.3% | 10.49% | 7.13% |
+
+**Bridge** (`rate_validation_bridge.csv`): every pair-month is assigned one line (first match);
+lines sum to the gap. Percentage points of import value:
+
+| Month | Statutory | Implied | Gap | Not compar. | Metal content | In transit | USMCA | S301 China excl. | Medical | Aircraft | Precious metals | S201 | Residual |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2019-07 | 1.80 | 1.41 | 0.38 | 0 | — | — | — | 0.33 | — | — | — | 0.04 | 0.02 |
+| 2024-07 | 1.45 | 1.29 | 0.16 | 0 | — | — | — | 0.16 | — | — | — | 0.04 | −0.04 |
+| 2025-02 | 2.26 | 1.30 | 0.96 | 0.03 | 0 | 0.92 | −0.01 | 0 | 0 | 0 | 0 | 0.02 | 0 |
+| 2025-04 | 15.32 | 6.01 | 9.30 | 1.02 | 0.10 | 8.22 | 0 | 0 | 0 | 0 | 0 | 0 | −0.03 |
+| 2025-07 | 10.67 | 8.38 | 2.29 | 0.70 | 0.51 | 0 | 0.27 | 0.22 | 0.08 | 0.04 | 0.02 | 0.01 | 0.42 |
+| 2025-09 | 15.74 | 9.52 | 6.22 | 1.05 | 3.72 | 1.07 | 0.13 | 0.12 | 0.02 | 0.02 | 0 | 0 | 0.09 |
+| 2026-01 | 14.61 | 8.84 | 5.77 | 1.07 | 3.86 | 0 | 0.26 | 0.12 | 0.12 | 0.09 | 0.01 | 0 | 0.24 |
+| 2026-03 | 11.22 | 5.84 | 5.38 | 0.46 | 4.21 | 0 | 0.17 | 0.09 | 0.08 | 0 | 0.02 | 0 | 0.36 |
+| 2026-08 | 7.75 | 5.88 | 1.87 | 0.46 | 0 | 0 | 0.65 | 0.21 | 0.08 | 0 | 0.13 | 0 | 0.36 |
+
+The lines, and the evidence for each:
+- **Not comparable** (excluded from the fit metrics): Census estimates of low-value shipments
+  (9999.95, no duty recorded), Chapter 98 lines (US goods returned 9801, agricultural machinery
+  9817; Census records no duty on them), and Canadian/Mexican pipeline gas (2711.21) and
+  electricity (2716), entered under rate provision 10 (free) with no duty even in 2025-04, when
+  the 10% energy duty applied.
+- **Metal content**: Section 232 steel/aluminum/copper derivative duties apply to the metal
+  content only; the panel applies them to full value (`rate_metal_content`). Ends with the
+  2026-04-06 full-value regime. Includes USMCA-claimed derivatives (code 19), which carry no duty.
+- **In transit**: goods loaded before the effective date entered at the old rate: EO 14195
+  §2 (China fentanyl, loaded before 2025-02-01; 90 FR 9121), EO 14257 §2–3 (reciprocal, loaded
+  before 2025-04-05 / 04-09; 90 FR 15041), EO 14326 (country rates, loaded before 2025-08-07 and
+  entered before 2025-10-05; 90 FR 37963, HTSUS 9903.02.01). Assigned to pair-months in
+  2025-02/03, 04/05 and 08/09 whose rate rose that month or the month before.
+- **USMCA**: Census rate-provision detail shows code-19 (USMCA-claimed) entries carry no duty,
+  including Section 232 metals duties after 2026-04-06, while the panel applies those to
+  non-auto goods at full rate; code-69 USMCA vehicles pay on non-US content (e.g. Mexican cars
+  8703.23.0140, 2025-09: 14% of value under code 19 at 0, 86% under code 69 at 25.1%).
+- **S301 China exclusions**: USTR product exclusions (2018–20, and the 178/164 extended into
+  2025–26) are described by product, not HS10, and are not modelled. Largest: computer parts
+  8473.30.1180, vacuums 8508.11, vinyl tile 3918.10, motorcycles 8711.60.
+- **S201**: solar-cell tariff-rate quota (2.5–5 GW duty-free) and the bifacial-module exclusion.
+- **Medical, aircraft, precious metals** (2025–26 only): implied ≈ 0 against 11–13% (medical
+  devices 9018–9022: Nairobi Protocol 9817.00.92–.96, use-based), 5.7% (civil aircraft and
+  engines; deal exemptions and certification-based exemptions beyond the ~120 lines treated as
+  exempt) and 3.1% (gold, platinum; bullion added to Annex II by EO 14346 in 2025-09 and
+  exempt from Section 122/forced-labor duties), none identifiable by HS10.
+- **Residual** (gate: ≤ 0.6 pp of value every month; max 0.56 pp, 2025-07 to 2026-08):
+  Section 232 product exclusions and temporary imports under bond (steel lines with statutory 50%
+  and implied 0), undated Annex II changes, classification, undervaluation.
+
+**Top 30 discrepancies** (2025-01 to 2026-08, by absolute duty gap: `rate_validation_top30_2025.csv`;
+2018–24: `rate_validation_top30_2018.csv`): 15 metal content (Mexican/Canadian auto body parts
+8708.29.5160 and 8708.99.8180, beer 2203 in aluminum cans, cables 8544.42, refrigerators 8418.10,
+European perfume 3303), 13 not comparable (low-value estimates, Ch. 98, Canadian natural gas),
+1 in transit (Chinese lithium-ion batteries 8507.60.0020, 2025-04/05) and 1 USMCA (Mexican pickups
+8704.31.0140). None is an unexplained timeline error.
+
+**Timeline errors found and fixed in P11** (implied > statutory or statutory ≫ implied with a
+legal cause):
+1. Section 301 List 3 / 4A partial products dropped by the parser where the PDF text breaks
+   "provided\nfor in": 8517.62.00 (routers, modems; $10–20bn/yr from China) is List 3 except
+   .0090 (note 20(g)) and List 4A except .0010/.0020 (note 20(s)(ii)). After the fix, 2023
+   statutory 25.0% vs implied 24.9% (.0020) and 7.5% vs 7.3% (.0090).
+2. HS2022 renumbering: codes created after 2020 (e.g. 8543.40 e-cigarettes, List 2) were missing
+   from the 2020-edition lists; added from note 20 of 2026 HTS Rev 21 (679 codes), only where no
+   line of the code existed by 2020.
+3. 50 U.S.C. 1702(b) informational materials (publications 4901–4905, artworks 9701–9703)
+   excluded from all IEEPA rows (EO 14193 §2(j), EO 14194 §2(i), EO 14195 §2(i), EO 14257
+   §3(b)(i)).
+4. USMCA vehicles: the 30% US-content assumption double-counted; US content is in the code-19
+   share (above).
+
+**Cross-check with published estimates** (checked 2026-10-28):
+- Penn Wharton Budget Model, [Effective Tariff Rates and Revenues, 2026-10-14](https://budgetmodel.wharton.upenn.edu/p/2026-10-14-effective-tariff-rates-and-revenues-updated-october-14-2026/)
+  (customs duties ÷ import value, USITC DataWeb): 2.3% (2025-01), 6.7% (2026-07), 7.1% (2026-08).
+  Ours (Census calculated duties ÷ consumption value): 2.22%, 6.45%, 6.87%, about 0.25 pp lower
+  throughout (denominator: consumption value includes low-value estimates with no duty). PWBM's
+  China rate, 24.3% (2026-08), and the USMCA-claimed share, 81.4% (2026-08), compare with our China
+  implied additional rate of about 20% plus MFN (about 3%), and our 76–81% USMCA shares.
+- Yale Budget Lab, [The State of U.S. Tariffs, 2026-07-24](https://budgetlab.yale.edu/research/state-us-tariffs):
+  average statutory rate 11.1% (including MFN, pre-substitution weights). Ours on 2024 import
+  weights for 2026-08: 10.3% additional + 2.4% (2024 duty rate) = 12.7%. The 1.6 pp difference is
+  close to our documented statutory overstatement for 2026-08 (not comparable 0.46, USMCA 0.65,
+  S301 exclusions 0.21, medical 0.08, residual 0.36 = 1.8 pp on current weights).
+
+**For the models**: use `rate_total` as the statutory measure, but drop not-comparable lines
+(9999, Ch. 98) from product panels, treat 2025-02 to 2025-05 and 2025-08/09 as in-transit months,
+and use the implied rate as the alternative measure (P16).
 
 ## Known issues
 
