@@ -88,3 +88,13 @@ def test_eta_unknown_before_any_network_chunk():
 
 def test_read_snapshot_missing_file(tmp_path):
     assert read_snapshot(tmp_path / "nope.json") is None
+
+
+def test_restart_for_new_stage_resets_counts_and_label(tmp_path):
+    path = tmp_path / "progress.json"
+    prog = ProgressFile(path, label="totals")
+    prog.start(total=2)
+    prog.advance(rows=5)
+    prog.start(total=10, label="hs10")
+    snap = read_snapshot(path)
+    assert (snap.label, snap.total, snap.done, snap.rows) == ("hs10", 10, 0, 0)

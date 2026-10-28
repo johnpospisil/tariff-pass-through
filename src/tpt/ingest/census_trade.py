@@ -190,20 +190,29 @@ def plan_chunks(totals: pl.DataFrame, start: str, end: str) -> list[Chunk]:
 
 
 def fetch_totals(
-    client: CachedClient, start: str, end: str | None, workers: int = 4
+    client: CachedClient,
+    start: str,
+    end: str | None,
+    workers: int = 4,
+    progress: ProgressFile | None = None,
 ) -> pl.DataFrame:
     """Country x month totals (all commodities). The latest year is always re-fetched."""
     last_year = int(end[:4]) if end else date.today().year
+    years = range(int(start[:4]), last_year + 1)
+    if progress:
+        progress.start(total=len(years), label="census totals")
 
     def one_year(year: int) -> pl.DataFrame:
         params = {"get": ",".join(TOTAL_VARS), "time": f"from {year}-01 to {year}-12"}
         resp = client.get(URL, params, refresh=year == last_year, validate=validate_response)
         df = parse_response(resp.content)
         client.record_rows(resp, df.height)
+        if progress:
+            progress.advance(rows=df.height, cached=resp.from_cache)
         return df
 
     with ThreadPoolExecutor(workers) as pool:
-        frames = list(pool.map(one_year, range(int(start[:4]), last_year + 1)))
+        frames = list(pool.map(one_year, years))
     totals = pl.concat([df for df in frames if df.height])
     lo = _month(start)
     hi = _month(end) if end else totals["month"].max()
@@ -301,7 +310,8 @@ def run(
     client = CachedClient("census")
     t0 = time.time()
 
-    totals = fetch_totals(client, start, end, workers)
+    progress = ProgressFile(progress_path("census"), label="census totals")
+    totals = fetch_totals(client, start, end, workers, progress)
     INTERIM_TOTALS.parent.mkdir(parents=True, exist_ok=True)
     totals.write_parquet(INTERIM_TOTALS)
     country_reference(totals).write_csv(COUNTRIES_CSV)
@@ -313,8 +323,7 @@ def run(
         chunks = [c for c in chunks if c.year in years]
     random.Random(0).shuffle(chunks)  # mix big and small countries so the ETA is stable
 
-    progress = ProgressFile(progress_path("census"), label="census HS10")
-    progress.start(total=len(chunks))
+    progress.start(total=len(chunks), label="census HS10")
     failed: list[Chunk] = []
     with ThreadPoolExecutor(workers) as pool:
         futures = [pool.submit(fetch_chunk, client, c, refresh) for c in chunks]

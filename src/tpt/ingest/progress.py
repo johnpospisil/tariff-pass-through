@@ -58,10 +58,12 @@ class ProgressFile:
         self._lock = threading.Lock()
         self._snap = Snapshot(label, 0, 0, 0, 0, 0, clock(), clock(), "running")
 
-    def start(self, total: int) -> None:
+    def start(self, total: int, label: str | None = None) -> None:
+        """Begin (or restart, for a new stage) counting; resets all counters."""
         with self._lock:
             now = self._clock()
-            self._snap = Snapshot(self._snap.label, total, 0, 0, 0, 0, now, now, "running")
+            label = label or self._snap.label
+            self._snap = Snapshot(label, total, 0, 0, 0, 0, now, now, "running")
             self._write()
 
     def advance(self, rows: int = 0, cached: bool = False, failed: bool = False) -> None:
