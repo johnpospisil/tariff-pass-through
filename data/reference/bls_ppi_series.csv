@@ -1,0 +1,416 @@
+series_id,group_code,group_name,item_code,seasonal,base_date,series_title,begin_year,begin_period,end_year,end_period
+WPU00000000,00,All commodities,000000,U,198200,"PPI Commodity data for All commodities, not seasonally adjusted",1913,M01,2026,M09
+WPU01,01,Farm products,-,U,198200,"PPI Commodity data for Farm products, not seasonally adjusted",1913,M01,2026,M09
+WPU011,01,Farm products,1,U,198200,"PPI Commodity data for Farm products-Fruits & melons, fresh/dry vegs. & nuts, not seasonally adjusted",1926,M01,2026,M09
+WPU0111,01,Farm products,11,U,198200,"PPI Commodity data for Farm products-Fresh fruits and melons, not seasonally adjusted",1947,M01,2026,M09
+WPU0113,01,Farm products,13,U,198200,"PPI Commodity data for Farm products-Fresh and dry vegetables, not seasonally adjusted",1947,M01,2026,M09
+WPU0119,01,Farm products,19,U,198200,"PPI Commodity data for Farm products-Tree nuts, not seasonally adjusted",1971,M11,2026,M09
+WPU012,01,Farm products,2,U,198200,"PPI Commodity data for Farm products-Grains, not seasonally adjusted",1926,M01,2026,M09
+WPU0121,01,Farm products,21,U,198200,"PPI Commodity data for Farm products-Wheat, not seasonally adjusted",1947,M01,2026,M09
+WPU0122,01,Farm products,22,U,198200,"PPI Commodity data for Farm products-Other grains, not seasonally adjusted",1947,M01,2026,M09
+WPU0123,01,Farm products,23,U,199112,"PPI Commodity data for Farm products-Rough rice, not seasonally adjusted",1991,M12,2026,M09
+WPU013,01,Farm products,3,U,198200,"PPI Commodity data for Farm products-Livestock, not seasonally adjusted",1926,M13,2026,M09
+WPU0131,01,Farm products,31,U,198200,"PPI Commodity data for Farm products-Slaughter cattle, not seasonally adjusted",1947,M01,2026,M09
+WPU0132,01,Farm products,32,U,198200,"PPI Commodity data for Farm products-Slaughter hogs, not seasonally adjusted",1947,M01,2026,M09
+WPU0133,01,Farm products,33,U,198200,"PPI Commodity data for Farm products-Slaughter lambs, not seasonally adjusted",1971,M01,2026,M09
+WPU0134,01,Farm products,34,U,202109,"PPI Commodity data for Farm products-Feeder and replacement cattle, not seasonally adjusted",2021,M09,2026,M09
+WPU014,01,Farm products,4,U,198200,"PPI Commodity data for Farm products-Slaughter poultry, not seasonally adjusted",1926,M13,2026,M09
+WPU0141,01,Farm products,41,U,198200,"PPI Commodity data for Farm products-Slaughter chickens, not seasonally adjusted",1947,M01,2026,M09
+WPU0142,01,Farm products,42,U,198200,"PPI Commodity data for Farm products-Slaughter turkeys, not seasonally adjusted",1954,M12,2026,M09
+WPU0143,01,Farm products,43,U,199112,"PPI Commodity data for Farm products-Slaughter ducks, not seasonally adjusted",1991,M12,2026,M09
+WPU015,01,Farm products,5,U,198200,"PPI Commodity data for Farm products-Raw cotton, not seasonally adjusted",1926,M01,2026,M09
+WPU0151,01,Farm products,51,U,198200,"PPI Commodity data for Farm products-Raw cotton, not seasonally adjusted",1971,M01,2026,M09
+WPU016,01,Farm products,6,U,198200,"PPI Commodity data for Farm products-Raw milk, not seasonally adjusted",1926,M01,2026,M09
+WPU0161,01,Farm products,61,U,198200,"PPI Commodity data for Farm products-Raw milk, not seasonally adjusted",1947,M01,2026,M09
+WPU017,01,Farm products,7,U,198200,"PPI Commodity data for Farm products-Chicken eggs, not seasonally adjusted",1926,M13,2026,M09
+WPU0171,01,Farm products,71,U,198200,"PPI Commodity data for Farm products-Chicken eggs, not seasonally adjusted",1971,M01,2026,M09
+WPU018,01,Farm products,8,U,198200,"PPI Commodity data for Farm products-Hay, hayseeds, and oilseeds, not seasonally adjusted",1926,M01,2026,M09
+WPU0181,01,Farm products,81,U,198200,"PPI Commodity data for Farm products-Hay and hayseeds, not seasonally adjusted",1947,M01,2026,M09
+WPU0183,01,Farm products,83,U,198200,"PPI Commodity data for Farm products-Oilseeds, not seasonally adjusted",1947,M01,2026,M09
+WPU02,02,Processed foods and feeds,-,U,198200,"PPI Commodity data for Processed foods and feeds, not seasonally adjusted",1947,M01,2026,M09
+WPU021,02,Processed foods and feeds,1,U,198200,"PPI Commodity data for Processed foods and feeds-Cereal and bakery products, not seasonally adjusted",1926,M01,2026,M09
+WPU0211,02,Processed foods and feeds,11,U,198200,"PPI Commodity data for Processed foods and feeds-Bakery products, not seasonally adjusted",1947,M01,2026,M09
+WPU0212,02,Processed foods and feeds,12,U,198200,"PPI Commodity data for Processed foods and feeds-Flour and flour base mixes and doughs, not seasonally adjusted",1947,M01,2026,M09
+WPU0213,02,Processed foods and feeds,13,U,198200,"PPI Commodity data for Processed foods and feeds-Milled rice and byproducts, not seasonally adjusted",1947,M01,2026,M09
+WPU0214,02,Processed foods and feeds,14,U,198200,"PPI Commodity data for Processed foods and feeds-Cereal and pasta products, not seasonally adjusted",1947,M01,2026,M09
+WPU022,02,Processed foods and feeds,2,U,198200,"PPI Commodity data for Processed foods and feeds-Meats, poultry, and fish, not seasonally adjusted",1926,M01,2026,M09
+WPU0221,02,Processed foods and feeds,21,U,198200,"PPI Commodity data for Processed foods and feeds-Meats, not seasonally adjusted",1926,M13,2026,M09
+WPU0222,02,Processed foods and feeds,22,U,198200,"PPI Commodity data for Processed foods and feeds-Processed poultry, not seasonally adjusted",1926,M13,2026,M09
+WPU0223,02,Processed foods and feeds,23,U,198200,"PPI Commodity data for Processed foods and feeds-Unprocessed and prepared seafood, not seasonally adjusted",1947,M01,2026,M09
+WPU023,02,Processed foods and feeds,3,U,198200,"PPI Commodity data for Processed foods and feeds-Dairy products, not seasonally adjusted",1926,M01,2026,M09
+WPU0231,02,Processed foods and feeds,31,U,198200,"PPI Commodity data for Processed foods and feeds-Fluid milk products, not seasonally adjusted",1947,M01,2026,M09
+WPU0232,02,Processed foods and feeds,32,U,198200,"PPI Commodity data for Processed foods and feeds-Butter, not seasonally adjusted",1947,M01,2026,M09
+WPU0233,02,Processed foods and feeds,33,U,198200,"PPI Commodity data for Processed foods and feeds-Natural, processed, and imitation cheese, not seasonally adjusted",1947,M01,2026,M09
+WPU0234,02,Processed foods and feeds,34,U,198200,"PPI Commodity data for Processed foods and feeds-Ice cream and frozen desserts, not seasonally adjusted",1947,M01,2026,M09
+WPU0235,02,Processed foods and feeds,35,U,198200,"PPI Commodity data for Processed foods and feeds-Dry, condensed, and evaporated milk products, not seasonally adjusted",1947,M01,2026,M09
+WPU024,02,Processed foods and feeds,4,U,198200,"PPI Commodity data for Processed foods and feeds-Processed fruits and vegetables, not seasonally adjusted",1926,M01,2026,M09
+WPU0241,02,Processed foods and feeds,41,U,198200,"PPI Commodity data for Processed foods and feeds-Canned fruits and juices, not seasonally adjusted",1947,M01,2026,M09
+WPU0242,02,Processed foods and feeds,42,U,198200,"PPI Commodity data for Processed foods and feeds-Frozen fruits, juices and ades, not seasonally adjusted",1947,M01,2026,M09
+WPU0244,02,Processed foods and feeds,44,U,198200,"PPI Commodity data for Processed foods and feeds-Canned vegetables and juices, not seasonally adjusted",1947,M01,2026,M09
+WPU0245,02,Processed foods and feeds,45,U,198200,"PPI Commodity data for Processed foods and feeds-Frozen vegetables, not seasonally adjusted",1947,M01,2026,M09
+WPU0248,02,Processed foods and feeds,48,U,200312,"PPI Commodity data for Processed foods and feeds-Dried and dehydrated food, not seasonally adjusted",2003,M12,2026,M09
+WPU025,02,Processed foods and feeds,5,U,198200,"PPI Commodity data for Processed foods and feeds-Sugar and confectionery, not seasonally adjusted",1926,M01,2026,M09
+WPU0252,02,Processed foods and feeds,52,U,198200,"PPI Commodity data for Processed foods and feeds-Raw cane sugar and sugar cane mill products and byproducts, not seasonally adjusted",1977,M12,2026,M09
+WPU0253,02,Processed foods and feeds,53,U,198200,"PPI Commodity data for Processed foods and feeds-Refined sugar products and byproducts, not seasonally adjusted",1977,M12,2026,M09
+WPU0254,02,Processed foods and feeds,54,U,198200,"PPI Commodity data for Processed foods and feeds-Confectionery materials, not seasonally adjusted",1977,M12,2026,M09
+WPU0255,02,Processed foods and feeds,55,U,198200,"PPI Commodity data for Processed foods and feeds-Confectionery end products, not seasonally adjusted",1977,M12,2026,M09
+WPU026,02,Processed foods and feeds,6,U,198200,"PPI Commodity data for Processed foods and feeds-Beverages and beverage materials, not seasonally adjusted",1947,M01,2026,M09
+WPU0261,02,Processed foods and feeds,61,U,198200,"PPI Commodity data for Processed foods and feeds-Alcoholic beverages, not seasonally adjusted",1947,M01,2026,M09
+WPU0262,02,Processed foods and feeds,62,U,198200,"PPI Commodity data for Processed foods and feeds-Soft drinks, not seasonally adjusted",1926,M01,2026,M09
+WPU0263,02,Processed foods and feeds,63,U,198200,"PPI Commodity data for Processed foods and feeds-Packaged beverage materials, not seasonally adjusted",1947,M01,2026,M09
+WPU0264,02,Processed foods and feeds,64,U,198200,"PPI Commodity data for Processed foods and feeds-Other beverage materials, not seasonally adjusted",1971,M01,2026,M09
+WPU027,02,Processed foods and feeds,7,U,198200,"PPI Commodity data for Processed foods and feeds-Fats and oils, not seasonally adjusted",1967,M01,2026,M09
+WPU0271,02,Processed foods and feeds,71,U,198200,"PPI Commodity data for Processed foods and feeds-Animal fats and oils, made in slaughtering plants, not seasonally adjusted",1947,M01,2026,M09
+WPU0278,02,Processed foods and feeds,78,U,198200,"PPI Commodity data for Processed foods and feeds-Shortening, cooking oil, and margarine, not seasonally adjusted",1947,M01,2026,M09
+WPU027A,02,Processed foods and feeds,7A,U,200412,"PPI Commodity data for Processed foods and feeds-Other oilseed processing, not seasonally adjusted",2004,M12,2026,M09
+WPU027B,02,Processed foods and feeds,7B,U,201601,"PPI Commodity data for Processed foods and feeds-Corn oil, crude and refined, not seasonally adjusted",2016,M01,2025,M01
+WPU028,02,Processed foods and feeds,8,U,198200,"PPI Commodity data for Processed foods and feeds-Miscellaneous processed foods, not seasonally adjusted",1947,M01,2026,M09
+WPU0281,02,Processed foods and feeds,81,U,198200,"PPI Commodity data for Processed foods and feeds-Canned jams, jellies, and preserves, not seasonally adjusted",1947,M01,2026,M09
+WPU0282,02,Processed foods and feeds,82,U,198200,"PPI Commodity data for Processed foods and feeds-Pickles and other pickled products, including horseradish, not seasonally adjusted",1947,M01,2026,M09
+WPU0283,02,Processed foods and feeds,83,U,198200,"PPI Commodity data for Processed foods and feeds-Processed eggs, liquid, dried, or frozen, not seasonally adjusted",1947,M01,2022,M01
+WPU0284,02,Processed foods and feeds,84,U,198200,"PPI Commodity data for Processed foods and feeds-Specialty canning, not seasonally adjusted",1947,M01,2026,M09
+WPU0285,02,Processed foods and feeds,85,U,198200,"PPI Commodity data for Processed foods and feeds-Frozen specialty food, not seasonally adjusted",1967,M01,2026,M09
+WPU0286,02,Processed foods and feeds,86,U,198200,"PPI Commodity data for Processed foods and feeds-Prepared sauces, except tomato, not seasonally adjusted",1981,M06,2026,M09
+WPU0289,02,Processed foods and feeds,89,U,198200,"PPI Commodity data for Processed foods and feeds-Other miscellaneous processed foods, not seasonally adjusted",1947,M01,2026,M09
+WPU029,02,Processed foods and feeds,9,U,198200,"PPI Commodity data for Processed foods and feeds-Prepared animal feeds, not seasonally adjusted",1947,M01,2026,M09
+WPU0292,02,Processed foods and feeds,92,U,198200,"PPI Commodity data for Processed foods and feeds-Soybean cake, meal, and other byproducts, not seasonally adjusted",1947,M01,2026,M09
+WPU0293,02,Processed foods and feeds,93,U,198200,"PPI Commodity data for Processed foods and feeds-Formula feeds, not seasonally adjusted",1962,M01,2026,M09
+WPU0294,02,Processed foods and feeds,94,U,198200,"PPI Commodity data for Processed foods and feeds-Miscellaneous feedstuffs, not seasonally adjusted",1947,M01,2026,M09
+WPU03,03,Textile products and apparel,-,U,198200,"PPI Commodity data for Textile products and apparel, not seasonally adjusted",1947,M01,2026,M09
+WPU031,03,Textile products and apparel,1,U,198200,"PPI Commodity data for Textile products and apparel-Synthetic fibers, not seasonally adjusted",1975,M12,2026,M09
+WPU0315,03,Textile products and apparel,15,U,198200,"PPI Commodity data for Textile products and apparel-Unprocessed filament yarns, not seasonally adjusted",1975,M12,2026,M09
+WPU032,03,Textile products and apparel,2,U,198200,"PPI Commodity data for Textile products and apparel-Processed yarns and threads, not seasonally adjusted",1975,M12,2026,M09
+WPU0326,03,Textile products and apparel,26,U,198200,"PPI Commodity data for Textile products and apparel-Yarns, not seasonally adjusted",1975,M12,2026,M09
+WPU0327,03,Textile products and apparel,27,U,198200,"PPI Commodity data for Textile products and apparel-Thread, not seasonally adjusted",1975,M12,2022,M04
+WPU033,03,Textile products and apparel,3,U,198200,"PPI Commodity data for Textile products and apparel-Greige fabrics, not seasonally adjusted",1975,M12,2026,M09
+WPU0337,03,Textile products and apparel,37,U,198200,"PPI Commodity data for Textile products and apparel-Greige broadwoven fabrics, not seasonally adjusted",1975,M12,2026,M09
+WPU0338,03,Textile products and apparel,38,U,198200,"PPI Commodity data for Textile products and apparel-Greige knit fabrics, not seasonally adjusted",1975,M12,2026,M09
+WPU0339,03,Textile products and apparel,39,U,198406,"PPI Commodity data for Textile products and apparel-Tire cord and tire fabric, not seasonally adjusted",1984,M06,2026,M06
+WPU034,03,Textile products and apparel,4,U,198200,"PPI Commodity data for Textile products and apparel-Finished fabrics, not seasonally adjusted",1975,M12,2026,M09
+WPU0342,03,Textile products and apparel,42,U,198200,"PPI Commodity data for Textile products and apparel-Finished broadwoven fabrics, not seasonally adjusted",1975,M12,2026,M09
+WPU0345,03,Textile products and apparel,45,U,198200,"PPI Commodity data for Textile products and apparel-Nonwoven fabrics and felts, not seasonally adjusted",1976,M06,2026,M09
+WPU0346,03,Textile products and apparel,46,U,198506,"PPI Commodity data for Textile products and apparel-Coated fabrics, not rubberized, not seasonally adjusted",1985,M06,2026,M09
+WPU0347,03,Textile products and apparel,47,U,198506,"PPI Commodity data for Textile products and apparel-Screen printed textile materials, embroideries, and lace goods, not seasonally adjusted",1985,M06,2026,M09
+WPU0348,03,Textile products and apparel,48,U,200312,"PPI Commodity data for Textile products and apparel-Knit fabrics, finished in knitting mills, not seasonally adjusted",2003,M12,2026,M09
+WPU038,03,Textile products and apparel,8,U,198200,"PPI Commodity data for Textile products and apparel-Apparel & other fabricated textile prods, not seasonally adjusted",1977,M12,2026,M09
+WPU0381,03,Textile products and apparel,81,U,198200,"PPI Commodity data for Textile products and apparel-Apparel, not seasonally adjusted",1947,M01,2026,M09
+WPU0382,03,Textile products and apparel,82,U,198200,"PPI Commodity data for Textile products and apparel-Textile house furnishings, not seasonally adjusted",1947,M01,2026,M09
+WPU0383,03,Textile products and apparel,83,U,198200,"PPI Commodity data for Textile products and apparel-Industrial and other fabricated products, not seasonally adjusted",1977,M12,2026,M09
+WPU039,03,Textile products and apparel,9,U,198506,"PPI Commodity data for Textile products and apparel-Miscellaneous textile products/services, not seasonally adjusted",1985,M06,2026,M09
+WPU0394,03,Textile products and apparel,94,U,201809,"PPI Commodity data for Textile products and apparel-Miscellaneous textile products/services, not seasonally adjusted",2018,M09,2026,M09
+WPU05,05,Fuels and related products and power,-,U,198200,"PPI Commodity data for Fuels and related products and power, not seasonally adjusted",1926,M01,2026,M09
+WPU051,05,Fuels and related products and power,1,U,198200,"PPI Commodity data for Fuels and related products and power-Coal, not seasonally adjusted",1926,M01,2026,M09
+WPU0513,05,Fuels and related products and power,13,U,198200,"PPI Commodity data for Fuels and related products and power-Coal, not seasonally adjusted",1926,M01,2026,M09
+WPU053,05,Fuels and related products and power,3,U,198200,"PPI Commodity data for Fuels and related products and power-Gas fuels, not seasonally adjusted",1958,M01,2026,M09
+WPU0531,05,Fuels and related products and power,31,U,198200,"PPI Commodity data for Fuels and related products and power-Natural gas, not seasonally adjusted",1967,M01,2026,M09
+WPU0532,05,Fuels and related products and power,32,U,198200,"PPI Commodity data for Fuels and related products and power-Natural gas liquids, not seasonally adjusted",1971,M01,2026,M09
+WPU054,05,Fuels and related products and power,4,U,198200,"PPI Commodity data for Fuels and related products and power-Electric power, not seasonally adjusted",1958,M01,2026,M09
+WPU0541,05,Fuels and related products and power,41,U,199012,"PPI Commodity data for Fuels and related products and power-Residential electric power, not seasonally adjusted",1990,M12,2026,M09
+WPU0542,05,Fuels and related products and power,42,U,198200,"PPI Commodity data for Fuels and related products and power-Commercial electric power, not seasonally adjusted",1958,M01,2026,M09
+WPU0543,05,Fuels and related products and power,43,U,198200,"PPI Commodity data for Fuels and related products and power-Industrial electric power, not seasonally adjusted",1958,M01,2026,M09
+WPU0546,05,Fuels and related products and power,46,U,201012,"PPI Commodity data for Fuels and related products and power-Transportation electric power, not seasonally adjusted",2010,M12,2026,M09
+WPU055,05,Fuels and related products and power,5,U,199012,"PPI Commodity data for Fuels and related products and power-Utility natural gas, not seasonally adjusted",1990,M12,2026,M09
+WPU0551,05,Fuels and related products and power,51,U,199012,"PPI Commodity data for Fuels and related products and power-Residential natural gas, not seasonally adjusted",1990,M12,2026,M09
+WPU0552,05,Fuels and related products and power,52,U,199012,"PPI Commodity data for Fuels and related products and power-Commercial natural gas, not seasonally adjusted",1990,M12,2026,M09
+WPU0553,05,Fuels and related products and power,53,U,199012,"PPI Commodity data for Fuels and related products and power-Industrial natural gas, not seasonally adjusted",1990,M12,2026,M09
+WPU0554,05,Fuels and related products and power,54,U,199012,"PPI Commodity data for Fuels and related products and power-Natural gas to electric power, not seasonally adjusted",1990,M12,2026,M09
+WPU056,05,Fuels and related products and power,6,U,198200,"PPI Commodity data for Fuels and related products and power-Crude petroleum (domestic production), not seasonally adjusted",1991,M07,2026,M09
+WPU0561,05,Fuels and related products and power,61,U,198200,"PPI Commodity data for Fuels and related products and power-Crude petroleum (domestic production), not seasonally adjusted",1947,M01,2026,M09
+WPU057,05,Fuels and related products and power,7,U,198200,"PPI Commodity data for Fuels and related products and power-Petroleum products, refined, not seasonally adjusted",1947,M01,2026,M09
+WPU0571,05,Fuels and related products and power,71,U,198200,"PPI Commodity data for Fuels and related products and power-Gasoline, not seasonally adjusted",1947,M01,2026,M09
+WPU0572,05,Fuels and related products and power,72,U,198200,"PPI Commodity data for Fuels and related products and power-Kerosene and jet fuels, not seasonally adjusted",1947,M01,2026,M09
+WPU0573,05,Fuels and related products and power,73,U,198200,"PPI Commodity data for Fuels and related products and power-Light fuel oils, not seasonally adjusted",1947,M01,2026,M09
+WPU0574,05,Fuels and related products and power,74,U,198200,"PPI Commodity data for Fuels and related products and power-Residual fuels (heavy fuel oils, incl. #5, #6, & other residual fuels), not seasonally adjusted",1947,M01,2026,M09
+WPU0576,05,Fuels and related products and power,76,U,198200,"PPI Commodity data for Fuels and related products and power-Finished lubricants, not seasonally adjusted",1974,M04,2026,M09
+WPU0578,05,Fuels and related products and power,78,U,200906,"PPI Commodity data for Fuels and related products and power-Lubricating oil base stocks, not seasonally adjusted",2009,M06,2026,M09
+WPU058,05,Fuels and related products and power,8,U,198412,"PPI Commodity data for Fuels and related products and power-Asphalt and other petroleum and coal products, n.e.c., not seasonally adjusted",1984,M12,2026,M09
+WPU0581,05,Fuels and related products and power,81,U,198412,"PPI Commodity data for Fuels and related products and power-Asphalt and other petroleum and coal products, n.e.c., not seasonally adjusted",1984,M12,2026,M09
+WPU06,06,Chemicals and allied products,-,U,198200,"PPI Commodity data for Chemicals and allied products, not seasonally adjusted",1933,M01,2026,M09
+WPU061,06,Chemicals and allied products,1,U,198200,"PPI Commodity data for Chemicals and allied products-Industrial chemicals, not seasonally adjusted",1926,M13,2026,M09
+WPU0613,06,Chemicals and allied products,13,U,198200,"PPI Commodity data for Chemicals and allied products-Basic inorganic chemicals, not seasonally adjusted",1973,M12,2026,M09
+WPU0614,06,Chemicals and allied products,14,U,198200,"PPI Commodity data for Chemicals and allied products-Basic organic chemicals, not seasonally adjusted",1973,M12,2026,M09
+WPU062,06,Chemicals and allied products,2,U,198200,"PPI Commodity data for Chemicals and allied products-Paints and allied products, not seasonally adjusted",1971,M01,2026,M09
+WPU0621,06,Chemicals and allied products,21,U,198200,"PPI Commodity data for Chemicals and allied products-Prepared paint, not seasonally adjusted",1926,M13,2026,M09
+WPU0622,06,Chemicals and allied products,22,U,198200,"PPI Commodity data for Chemicals and allied products-Paint materials, not seasonally adjusted",1926,M13,2026,M09
+WPU0623,06,Chemicals and allied products,23,U,198306,"PPI Commodity data for Chemicals and allied products-Allied and miscellaneous paint products, not seasonally adjusted",1983,M06,2026,M09
+WPU063,06,Chemicals and allied products,3,U,198200,"PPI Commodity data for Chemicals and allied products-Drugs and pharmaceuticals, not seasonally adjusted",1947,M01,2026,M09
+WPU0631,06,Chemicals and allied products,31,U,198200,"PPI Commodity data for Chemicals and allied products-Medicinal and botanical chemicals, drugs, and other products, not seasonally adjusted",1947,M01,2026,M09
+WPU0634,06,Chemicals and allied products,34,U,198200,"PPI Commodity data for Chemicals and allied products-Veterinary pharmaceutical preparations, not seasonally adjusted",1981,M06,2026,M05
+WPU0637,06,Chemicals and allied products,37,U,198200,"PPI Commodity data for Chemicals and allied products-Biological products, including diagnostics, not seasonally adjusted",1980,M06,2026,M09
+WPU0638,06,Chemicals and allied products,38,U,200106,"PPI Commodity data for Chemicals and allied products-Pharmaceutical preparations, not seasonally adjusted",2001,M06,2026,M09
+WPU064,06,Chemicals and allied products,4,U,198200,"PPI Commodity data for Chemicals and allied products-Fats and oils, inedible, not seasonally adjusted",1926,M13,2026,M09
+WPU0641,06,Chemicals and allied products,41,U,198200,"PPI Commodity data for Chemicals and allied products-Fats and oils, inedible, not seasonally adjusted",1971,M01,2026,M09
+WPU065,06,Chemicals and allied products,5,U,198200,"PPI Commodity data for Chemicals and allied products-Agricultural chemicals and chemical products, not seasonally adjusted",1947,M01,2026,M09
+WPU0651,06,Chemicals and allied products,51,U,198200,"PPI Commodity data for Chemicals and allied products-Mixed fertilizers, not seasonally adjusted",1926,M13,2026,M09
+WPU0652,06,Chemicals and allied products,52,U,198200,"PPI Commodity data for Chemicals and allied products-Fertilizer materials, not seasonally adjusted",1926,M13,2026,M09
+WPU0653,06,Chemicals and allied products,53,U,198200,"PPI Commodity data for Chemicals and allied products-Other agricultural chemicals, not seasonally adjusted",1967,M01,2026,M09
+WPU066,06,Chemicals and allied products,6,U,198200,"PPI Commodity data for Chemicals and allied products-Plastic resins and materials, not seasonally adjusted",1947,M01,2026,M09
+WPU0662,06,Chemicals and allied products,62,U,198200,"PPI Commodity data for Chemicals and allied products-Thermoplastic resins and plastics materials, not seasonally adjusted",1980,M12,2026,M09
+WPU0663,06,Chemicals and allied products,63,U,198200,"PPI Commodity data for Chemicals and allied products-Thermosetting resins and plastics materials, not seasonally adjusted",1980,M12,2026,M09
+WPU067,06,Chemicals and allied products,7,U,198200,"PPI Commodity data for Chemicals and allied products-Other chemicals and allied products, not seasonally adjusted",1947,M01,2026,M09
+WPU0671,06,Chemicals and allied products,71,U,198200,"PPI Commodity data for Chemicals and allied products-Soaps and detergents, not seasonally adjusted",1926,M13,2026,M09
+WPU0672,06,Chemicals and allied products,72,U,198306,"PPI Commodity data for Chemicals and allied products-Polish and other sanitation goods, not seasonally adjusted",1983,M06,2026,M09
+WPU0675,06,Chemicals and allied products,75,U,198200,"PPI Commodity data for Chemicals and allied products-Cosmetics and other toilet preparations, not seasonally adjusted",1947,M01,2026,M09
+WPU0679,06,Chemicals and allied products,79,U,198200,"PPI Commodity data for Chemicals and allied products-Misc. chemical prod. and preparations, not seasonally adjusted",1947,M01,2026,M09
+WPU07,07,Rubber and plastic products,-,U,198200,"PPI Commodity data for Rubber and plastic products, not seasonally adjusted",1926,M01,2026,M09
+WPU071,07,Rubber and plastic products,1,U,198200,"PPI Commodity data for Rubber and plastic products-Rubber and rubber products, not seasonally adjusted",1967,M01,2026,M09
+WPU0711,07,Rubber and plastic products,11,U,198200,"PPI Commodity data for Rubber and plastic products-Synthetic rubber, inc. styrene-butadiene rubber (SBR) and ethylene propylene, not seasonally adjusted",1926,M01,2026,M09
+WPU0712,07,Rubber and plastic products,12,U,198200,"PPI Commodity data for Rubber and plastic products-Tires, tubes, tread, & repair materials, not seasonally adjusted",1926,M01,2026,M09
+WPU0713,07,Rubber and plastic products,13,U,198200,"PPI Commodity data for Rubber and plastic products-Miscellaneous rubber products, not seasonally adjusted",1947,M01,2026,M09
+WPU072,07,Rubber and plastic products,2,U,198200,"PPI Commodity data for Rubber and plastic products-Plastic products, not seasonally adjusted",1971,M01,2026,M09
+WPU0721,07,Rubber and plastic products,21,U,198200,"PPI Commodity data for Rubber and plastic products-Plastic construction products, not seasonally adjusted",1970,M01,2026,M09
+WPU0722,07,Rubber and plastic products,22,U,198200,"PPI Commodity data for Rubber and plastic products-Unsupported plastic film, sheet and other shapes, not seasonally adjusted",1971,M01,2026,M09
+WPU0723,07,Rubber and plastic products,23,U,198200,"PPI Commodity data for Rubber and plastic products-Laminated plastic sheets, rods, and tubes, not seasonally adjusted",1971,M01,2026,M09
+WPU0726,07,Rubber and plastic products,26,U,198200,"PPI Commodity data for Rubber and plastic products-Parts for manufacturing from plastics, not seasonally adjusted",1978,M06,2026,M09
+WPU0729,07,Rubber and plastic products,29,U,198212,"PPI Commodity data for Rubber and plastic products-Other plastic products, not seasonally adjusted",1982,M12,2026,M09
+WPU072A,07,Rubber and plastic products,2A,U,200612,"PPI Commodity data for Rubber and plastic products-Plastic packaging products, not seasonally adjusted",2006,M12,2026,M09
+WPU072B,07,Rubber and plastic products,2B,U,200612,"PPI Commodity data for Rubber and plastic products-Consumer, institutional, and commercial products, n.e.c., not seasonally adjusted",2006,M12,2026,M09
+WPU072C,07,Rubber and plastic products,2C,U,201112,"PPI Commodity data for Rubber and plastic products-Recyclable plastics, not seasonally adjusted",2011,M12,2025,M05
+WPU08,08,Lumber and wood products,-,U,198200,"PPI Commodity data for Lumber and wood products, not seasonally adjusted",1926,M01,2026,M09
+WPU081,08,Lumber and wood products,1,U,198200,"PPI Commodity data for Lumber and wood products-Lumber, not seasonally adjusted",1926,M01,2026,M09
+WPU0811,08,Lumber and wood products,11,U,198200,"PPI Commodity data for Lumber and wood products-Softwood lumber, not seasonally adjusted",1947,M01,2026,M09
+WPU0812,08,Lumber and wood products,12,U,198200,"PPI Commodity data for Lumber and wood products-Hardwood lumber, not seasonally adjusted",1947,M01,2026,M09
+WPU082,08,Lumber and wood products,2,U,198200,"PPI Commodity data for Lumber and wood products-Millwork, not seasonally adjusted",1926,M01,2026,M09
+WPU0821,08,Lumber and wood products,21,U,198200,"PPI Commodity data for Lumber and wood products-General millwork, not seasonally adjusted",1964,M01,2026,M09
+WPU0822,08,Lumber and wood products,22,U,198200,"PPI Commodity data for Lumber and wood products-Prefabricated structural members, not seasonally adjusted",1963,M12,2026,M09
+WPU083,08,Lumber and wood products,3,U,198200,"PPI Commodity data for Lumber and wood products-Plywood, not seasonally adjusted",1947,M01,2026,M09
+WPU0831,08,Lumber and wood products,31,U,198200,"PPI Commodity data for Lumber and wood products-Softwood veneer and plywood, not seasonally adjusted",1947,M01,2026,M09
+WPU0835,08,Lumber and wood products,35,U,200512,"PPI Commodity data for Lumber and wood products-Hardwood veneer and plywood, not seasonally adjusted",2005,M12,2026,M09
+WPU084,08,Lumber and wood products,4,U,198200,"PPI Commodity data for Lumber and wood products-Other wood products, not seasonally adjusted",1966,M12,2026,M09
+WPU0841,08,Lumber and wood products,41,U,198200,"PPI Commodity data for Lumber and wood products-Wood pallets and pallet containers, wood and metal combination, not seasonally adjusted",1971,M01,2026,M09
+WPU0842,08,Lumber and wood products,42,U,198200,"PPI Commodity data for Lumber and wood products-Wood boxes, not seasonally adjusted",1967,M01,2026,M09
+WPU0849,08,Lumber and wood products,49,U,198200,"PPI Commodity data for Lumber and wood products-Miscellaneous wood products, not seasonally adjusted",1980,M12,2026,M09
+WPU085,08,Lumber and wood products,5,U,198200,"PPI Commodity data for Lumber and wood products-Logs, bolts, timber, pulpwood and wood chips, not seasonally adjusted",1981,M12,2026,M09
+WPU0851,08,Lumber and wood products,51,U,198200,"PPI Commodity data for Lumber and wood products-Logs, bolts, timber, pulpwood and wood chips, not seasonally adjusted",1981,M12,2026,M09
+WPU086,08,Lumber and wood products,6,U,198412,"PPI Commodity data for Lumber and wood products-Prefabricated wood buildings & components, not seasonally adjusted",1984,M12,2026,M09
+WPU0861,08,Lumber and wood products,61,U,198412,"PPI Commodity data for Lumber and wood products-Prefabricated wood buildings & components, not seasonally adjusted",1984,M12,2026,M09
+WPU087,08,Lumber and wood products,7,U,198506,"PPI Commodity data for Lumber and wood products-Treated wood and contract wood preserving, not seasonally adjusted",1985,M06,2026,M09
+WPU0871,08,Lumber and wood products,71,U,198506,"PPI Commodity data for Lumber and wood products-Treated wood and contract wood preserving, not seasonally adjusted",1985,M06,2026,M09
+WPU09,09,"Pulp, paper, and allied products",-,U,198200,"PPI Commodity data for Pulp, paper, and allied products, not seasonally adjusted",1947,M01,2026,M09
+WPU091,09,"Pulp, paper, and allied products",1,U,198200,"PPI Commodity data for Pulp, paper, and allied products-Pulp, paper, and prod., ex. bldg. paper, not seasonally adjusted",1947,M01,2026,M09
+WPU0911,09,"Pulp, paper, and allied products",11,U,198200,"PPI Commodity data for Pulp, paper, and allied products-Wood pulp, not seasonally adjusted",1926,M01,2026,M09
+WPU0912,09,"Pulp, paper, and allied products",12,U,198200,"PPI Commodity data for Pulp, paper, and allied products-Recyclable paper, not seasonally adjusted",1947,M01,2026,M09
+WPU0913,09,"Pulp, paper, and allied products",13,U,198200,"PPI Commodity data for Pulp, paper, and allied products-Paper, not seasonally adjusted",1926,M01,2026,M09
+WPU0914,09,"Pulp, paper, and allied products",14,U,198200,"PPI Commodity data for Pulp, paper, and allied products-Paperboard, not seasonally adjusted",1926,M01,2026,M09
+WPU0915,09,"Pulp, paper, and allied products",15,U,198200,"PPI Commodity data for Pulp, paper, and allied products-Converted paper and paperboard products, not seasonally adjusted",1947,M01,2026,M09
+WPU0916,09,"Pulp, paper, and allied products",16,U,198212,"PPI Commodity data for Pulp, paper, and allied products-Pressure-sensitive products, not seasonally adjusted",1982,M12,2026,M09
+WPU092,09,"Pulp, paper, and allied products",2,U,198200,"PPI Commodity data for Pulp, paper, and allied products-Building paper & building board mill prods., not seasonally adjusted",1947,M01,2026,M09
+WPU0922,09,"Pulp, paper, and allied products",22,U,198200,"PPI Commodity data for Pulp, paper, and allied products-Hardboard, particleboard & fiberboard prods., not seasonally adjusted",1958,M01,2026,M09
+WPU094,09,"Pulp, paper, and allied products",4,U,200906,"PPI Commodity data for Pulp, paper, and allied products-Publications, printed matter and printing material, not seasonally adjusted",2009,M06,2026,M09
+WPU0944,09,"Pulp, paper, and allied products",44,U,198312,"PPI Commodity data for Pulp, paper, and allied products-Books printing, not seasonally adjusted",1983,M12,2026,M09
+WPU0945,09,"Pulp, paper, and allied products",45,U,198312,"PPI Commodity data for Pulp, paper, and allied products-Manifold business forms printing, not seasonally adjusted",1983,M12,2024,M11
+WPU0947,09,"Pulp, paper, and allied products",47,U,198206,"PPI Commodity data for Pulp, paper, and allied products-Commercial printing, not seasonally adjusted",1982,M06,2026,M09
+WPU10,10,Metals and metal products,-,U,198200,"PPI Commodity data for Metals and metal products, not seasonally adjusted",1926,M01,2026,M09
+WPU101,10,Metals and metal products,1,U,198200,"PPI Commodity data for Metals and metal products-Iron and steel, not seasonally adjusted",1926,M01,2026,M09
+WPU1011,10,Metals and metal products,11,U,198200,"PPI Commodity data for Metals and metal products-Iron ores, not seasonally adjusted",1947,M01,2026,M09
+WPU1012,10,Metals and metal products,12,U,198200,"PPI Commodity data for Metals and metal products-Iron and steel scrap, not seasonally adjusted",1947,M01,2026,M09
+WPU1015,10,Metals and metal products,15,U,198200,"PPI Commodity data for Metals and metal products-Foundry and forge shop products, not seasonally adjusted",1947,M01,2026,M09
+WPU1017,10,Metals and metal products,17,U,198200,"PPI Commodity data for Metals and metal products-Steel mill products, not seasonally adjusted",1939,M01,2026,M09
+WPU102,10,Metals and metal products,2,U,198200,"PPI Commodity data for Metals and metal products-Nonferrous metals, not seasonally adjusted",1926,M01,2026,M09
+WPU1021,10,Metals and metal products,21,U,198312,"PPI Commodity data for Metals and metal products-Nonferrous metal ores, not seasonally adjusted",1984,M02,2026,M09
+WPU1022,10,Metals and metal products,22,U,198200,"PPI Commodity data for Metals and metal products-Primary nonferrous metals, not seasonally adjusted",1947,M01,2026,M09
+WPU1023,10,Metals and metal products,23,U,198200,"PPI Commodity data for Metals and metal products-Nonferrous scrap, not seasonally adjusted",1947,M01,2026,M09
+WPU1024,10,Metals and metal products,24,U,198200,"PPI Commodity data for Metals and metal products-Secondary nonferrous metals, not seasonally adjusted",1947,M01,2026,M09
+WPU1025,10,Metals and metal products,25,U,198200,"PPI Commodity data for Metals and metal products-Nonferrous mill shapes, not seasonally adjusted",1947,M01,2026,M09
+WPU1026,10,Metals and metal products,26,U,198200,"PPI Commodity data for Metals and metal products-Nonferrous wire and cable, not seasonally adjusted",1947,M01,2026,M09
+WPU1027,10,Metals and metal products,27,U,198312,"PPI Commodity data for Metals and metal products-Nonferrous forge shop products, not seasonally adjusted",1983,M12,2026,M09
+WPU1028,10,Metals and metal products,28,U,198200,"PPI Commodity data for Metals and metal products-Nonferrous foundry shop products, not seasonally adjusted",1977,M06,2026,M09
+WPU103,10,Metals and metal products,3,U,198200,"PPI Commodity data for Metals and metal products-Metal containers, not seasonally adjusted",1926,M01,2026,M09
+WPU1031,10,Metals and metal products,31,U,198200,"PPI Commodity data for Metals and metal products-Metal cans and can components, not seasonally adjusted",1947,M01,2026,M09
+WPU1032,10,Metals and metal products,32,U,198200,"PPI Commodity data for Metals and metal products-Barrels, drums, pails and other metal containers, not seasonally adjusted",1947,M01,2026,M09
+WPU104,10,Metals and metal products,4,U,198200,"PPI Commodity data for Metals and metal products-Hardware, not seasonally adjusted",1947,M01,2026,M09
+WPU1041,10,Metals and metal products,41,U,198200,"PPI Commodity data for Metals and metal products-Hardware, n.e.c., not seasonally adjusted",1947,M01,2026,M09
+WPU1042,10,Metals and metal products,42,U,198200,"PPI Commodity data for Metals and metal products-Hand and edge tools, not seasonally adjusted",1947,M01,2026,M09
+WPU105,10,Metals and metal products,5,U,198200,"PPI Commodity data for Metals and metal products-Plumbing fixtures and fittings, not seasonally adjusted",1926,M01,2026,M09
+WPU1054,10,Metals and metal products,54,U,198200,"PPI Commodity data for Metals and metal products-Plumbing fixture fittings and trim, not seasonally adjusted",1947,M01,2026,M09
+WPU1056,10,Metals and metal products,56,U,198612,"PPI Commodity data for Metals and metal products-Enameled iron & metal sanitary ware, not seasonally adjusted",1986,M12,2024,M01
+WPU106,10,Metals and metal products,6,U,198200,"PPI Commodity data for Metals and metal products-Heating equipment, not seasonally adjusted",1947,M01,2026,M09
+WPU1061,10,Metals and metal products,61,U,198200,"PPI Commodity data for Metals and metal products-Steam and hot water equipment, not seasonally adjusted",1947,M01,2026,M09
+WPU1062,10,Metals and metal products,62,U,198200,"PPI Commodity data for Metals and metal products-Furnaces and heaters, including parts, not seasonally adjusted",1947,M01,2026,M09
+WPU1063,10,Metals and metal products,63,U,198200,"PPI Commodity data for Metals and metal products-Other heating equipment, non-electric, including parts, not seasonally adjusted",1947,M01,2026,M09
+WPU1064,10,Metals and metal products,64,U,198200,"PPI Commodity data for Metals and metal products-Domestic heating stoves, not seasonally adjusted",1947,M01,2026,M09
+WPU1066,10,Metals and metal products,66,U,198200,"PPI Commodity data for Metals and metal products-Domestic water heaters, not seasonally adjusted",1947,M01,2026,M05
+WPU107,10,Metals and metal products,7,U,198200,"PPI Commodity data for Metals and metal products-Fabricated structural metal products, not seasonally adjusted",1947,M01,2026,M09
+WPU1071,10,Metals and metal products,71,U,198200,"PPI Commodity data for Metals and metal products-Metal doors, sash, and trim, not seasonally adjusted",1947,M01,2026,M09
+WPU1072,10,Metals and metal products,72,U,198200,"PPI Commodity data for Metals and metal products-Metal tanks, not seasonally adjusted",1947,M01,2026,M09
+WPU1073,10,Metals and metal products,73,U,198200,"PPI Commodity data for Metals and metal products-Sheet metal products, not seasonally adjusted",1961,M01,2026,M09
+WPU1074,10,Metals and metal products,74,U,198200,"PPI Commodity data for Metals and metal products-Structural, architectural, and pre-engineered metal products, not seasonally adjusted",1961,M01,2026,M09
+WPU1075,10,Metals and metal products,75,U,198200,"PPI Commodity data for Metals and metal products-Heat exchangers and steam condensers, not seasonally adjusted",1980,M06,2026,M09
+WPU1076,10,Metals and metal products,76,U,198200,"PPI Commodity data for Metals and metal products-Fabricated steel plate, not seasonally adjusted",1980,M06,2026,M08
+WPU1079,10,Metals and metal products,79,U,198200,"PPI Commodity data for Metals and metal products-Prefabricated metal buildings, not seasonally adjusted",1981,M06,2026,M09
+WPU108,10,Metals and metal products,8,U,198200,"PPI Commodity data for Metals and metal products-Miscellaneous metal products, not seasonally adjusted",1947,M01,2026,M09
+WPU1081,10,Metals and metal products,81,U,198200,"PPI Commodity data for Metals and metal products-Bolts, nuts, screws, rivets, and washers, not seasonally adjusted",1947,M01,2026,M09
+WPU1083,10,Metals and metal products,83,U,198200,"PPI Commodity data for Metals and metal products-Lighting fixtures, not seasonally adjusted",1960,M12,2026,M09
+WPU1086,10,Metals and metal products,86,U,198512,"PPI Commodity data for Metals and metal products-Ordnance and ordnance accessories, n.e.c., not seasonally adjusted",1985,M12,2026,M03
+WPU1088,10,Metals and metal products,88,U,198206,"PPI Commodity data for Metals and metal products-Fabricated ferrous wire products, not seasonally adjusted",1982,M06,2026,M09
+WPU1089,10,Metals and metal products,89,U,198200,"PPI Commodity data for Metals and metal products-Other miscellaneous metal products, not seasonally adjusted",1947,M01,2026,M09
+WPU11,11,Machinery and equipment,-,U,198200,"PPI Commodity data for Machinery and equipment, not seasonally adjusted",1939,M01,2026,M09
+WPU111,11,Machinery and equipment,1,U,198200,"PPI Commodity data for Machinery and equipment-Agricultural machinery and equipment, not seasonally adjusted",1926,M01,2026,M09
+WPU1114,11,Machinery and equipment,14,U,200212,"PPI Commodity data for Machinery and equipment-Agricultural machinery and equipment, not seasonally adjusted",2002,M12,2026,M09
+WPU112,11,Machinery and equipment,2,U,198200,"PPI Commodity data for Machinery and equipment-Construction machinery and equipment, not seasonally adjusted",1939,M08,2026,M09
+WPU112A,11,Machinery and equipment,2A,U,199912,"PPI Commodity data for Machinery and equipment-Tractors and attachments, ex. parts, not seasonally adjusted",1999,M12,2026,M09
+WPU112B,11,Machinery and equipment,2B,U,199912,"PPI Commodity data for Machinery and equipment-Power cranes, draglines, & shovels (excavators) (incl. surface mining equipment) (excl. parts), not seasonally adjusted",1999,M12,2026,M09
+WPU112C,11,Machinery and equipment,2C,U,198200,"PPI Commodity data for Machinery and equipment-Mixers, pavers, and related equipment (excluding parts), not seasonally adjusted",1947,M01,2026,M09
+WPU112D,11,Machinery and equipment,2D,U,199912,"PPI Commodity data for Machinery and equipment-Off-highway, equipment, ex. parts, not seasonally adjusted",1999,M12,2026,M09
+WPU112J,11,Machinery and equipment,2J,U,200512,"PPI Commodity data for Machinery and equipment-Misc. construction machinery and equipment, not seasonally adjusted",2005,M12,2026,M09
+WPU112K,11,Machinery and equipment,2K,U,199912,"PPI Commodity data for Machinery and equipment-Parts for construction machinery and equipment, sold separately, not seasonally adjusted",1999,M12,2026,M09
+WPU113,11,Machinery and equipment,3,U,198200,"PPI Commodity data for Machinery and equipment-Metalworking machinery and equipment, not seasonally adjusted",1947,M01,2026,M09
+WPU1133,11,Machinery and equipment,33,U,198200,"PPI Commodity data for Machinery and equipment-Welding machines and equipment, not seasonally adjusted",1947,M01,2026,M09
+WPU1134,11,Machinery and equipment,34,U,198200,"PPI Commodity data for Machinery and equipment-Industrial process furnaces and ovens, not seasonally adjusted",1947,M01,2026,M09
+WPU1135,11,Machinery and equipment,35,U,198200,"PPI Commodity data for Machinery and equipment-Cutting tools and accessories, not seasonally adjusted",1947,M01,2026,M09
+WPU1136,11,Machinery and equipment,36,U,198200,"PPI Commodity data for Machinery and equipment-Abrasive products, not seasonally adjusted",1947,M01,2026,M09
+WPU1137,11,Machinery and equipment,37,U,198200,"PPI Commodity data for Machinery and equipment-Metal cutting machine tools, not seasonally adjusted",1970,M01,2026,M09
+WPU1138,11,Machinery and equipment,38,U,198200,"PPI Commodity data for Machinery and equipment-Metal forming machine tools, not seasonally adjusted",1970,M01,2026,M09
+WPU1139,11,Machinery and equipment,39,U,198200,"PPI Commodity data for Machinery and equipment-Tools, dies, jigs, fixtures & ind. molds, not seasonally adjusted",1981,M06,2026,M09
+WPU113A,11,Machinery and equipment,3A,U,198306,"PPI Commodity data for Machinery and equipment-Metalworking machinery n. e. c., not seasonally adjusted",1983,M06,2026,M09
+WPU114,11,Machinery and equipment,4,U,198200,"PPI Commodity data for Machinery and equipment-General purpose machinery and equipment, not seasonally adjusted",1939,M01,2026,M09
+WPU1141,11,Machinery and equipment,41,U,198200,"PPI Commodity data for Machinery and equipment-Pumps, compressors, and equipment, not seasonally adjusted",1947,M01,2026,M09
+WPU1142,11,Machinery and equipment,42,U,198200,"PPI Commodity data for Machinery and equipment-Elevators, escalators, and other lifts, not seasonally adjusted",1947,M01,2026,M09
+WPU1143,11,Machinery and equipment,43,U,198200,"PPI Commodity data for Machinery and equipment-Fluid power equipment, not seasonally adjusted",1971,M01,2026,M09
+WPU1144,11,Machinery and equipment,44,U,198200,"PPI Commodity data for Machinery and equipment-Industrial material handling equipment, not seasonally adjusted",1947,M01,2026,M09
+WPU1145,11,Machinery and equipment,45,U,198200,"PPI Commodity data for Machinery and equipment-Mechanical power transmission equipment, not seasonally adjusted",1947,M01,2026,M09
+WPU1146,11,Machinery and equipment,46,U,198200,"PPI Commodity data for Machinery and equipment-Scales and balances, not seasonally adjusted",1947,M01,2026,M09
+WPU1147,11,Machinery and equipment,47,U,198200,"PPI Commodity data for Machinery and equipment-Air purification equipment and industrial and commercial fans and blowers, not seasonally adjusted",1947,M01,2026,M09
+WPU1148,11,Machinery and equipment,48,U,198200,"PPI Commodity data for Machinery and equipment-Air conditioning and refrigeration equip, not seasonally adjusted",1977,M12,2026,M09
+WPU1149,11,Machinery and equipment,49,U,198200,"PPI Commodity data for Machinery and equipment-Miscellaneous general purpose equipment, not seasonally adjusted",1947,M01,2026,M09
+WPU115,11,Machinery and equipment,5,U,202302,"PPI Commodity data for Machinery and equipment-Electronic computers and computer equipment, not seasonally adjusted",1990,M12,2026,M09
+WPU1151,11,Machinery and equipment,51,U,202302,"PPI Commodity data for Machinery and equipment-Electronic computers, not seasonally adjusted",1990,M12,2026,M09
+WPU1152,11,Machinery and equipment,52,U,200412,"PPI Commodity data for Machinery and equipment-Computer storage devices, not seasonally adjusted",1992,M12,2026,M09
+WPU1154,11,Machinery and equipment,54,U,199812,"PPI Commodity data for Machinery and equipment-Computer peripheral equipment and parts, not seasonally adjusted",1993,M12,2026,M09
+WPU116,11,Machinery and equipment,6,U,198200,"PPI Commodity data for Machinery and equipment-Special industry machinery and equipment, not seasonally adjusted",1961,M01,2026,M09
+WPU1161,11,Machinery and equipment,61,U,198200,"PPI Commodity data for Machinery and equipment-Food products machinery, not seasonally adjusted",1960,M12,2026,M09
+WPU1163,11,Machinery and equipment,63,U,198200,"PPI Commodity data for Machinery and equipment-Sawmill and woodworking machinery, not seasonally adjusted",1960,M12,2026,M09
+WPU1164,11,Machinery and equipment,64,U,198206,"PPI Commodity data for Machinery and equipment-Paper industries machinery, not seasonally adjusted",1982,M06,2026,M09
+WPU1165,11,Machinery and equipment,65,U,198200,"PPI Commodity data for Machinery and equipment-Printing trades machinery and equipment, not seasonally adjusted",1960,M12,2026,M09
+WPU1166,11,Machinery and equipment,66,U,198200,"PPI Commodity data for Machinery and equipment-Other special industry machinery, not seasonally adjusted",1960,M12,2026,M09
+WPU1167,11,Machinery and equipment,67,U,198200,"PPI Commodity data for Machinery and equipment-Packing, packaging, and bottling machinery and parts, not seasonally adjusted",1976,M12,2026,M09
+WPU1168,11,Machinery and equipment,68,U,198206,"PPI Commodity data for Machinery and equipment-Service industry machinery and parts, not seasonally adjusted",1982,M06,2026,M09
+WPU117,11,Machinery and equipment,7,U,198200,"PPI Commodity data for Machinery and equipment-Electrical machinery and equipment, not seasonally adjusted",1939,M01,2026,M09
+WPU1171,11,Machinery and equipment,71,U,198200,"PPI Commodity data for Machinery and equipment-Wiring devices, not seasonally adjusted",1961,M01,2026,M09
+WPU1172,11,Machinery and equipment,72,U,198200,"PPI Commodity data for Machinery and equipment-Integrating and measuring instruments, not seasonally adjusted",1967,M01,2026,M09
+WPU1173,11,Machinery and equipment,73,U,198200,"PPI Commodity data for Machinery and equipment-Motors, generators, motor generator sets, not seasonally adjusted",1947,M01,2026,M09
+WPU1174,11,Machinery and equipment,74,U,198200,"PPI Commodity data for Machinery and equipment-Transformers and power regulators, not seasonally adjusted",1947,M01,2026,M09
+WPU1175,11,Machinery and equipment,75,U,198200,"PPI Commodity data for Machinery and equipment-Switchgear, switchboard, industrial controls equipment, not seasonally adjusted",1947,M01,2026,M09
+WPU1176,11,Machinery and equipment,76,U,198512,"PPI Commodity data for Machinery and equipment-Communications and related equipment and miscellaneous electronic systems & equipment, not seasonally adjusted",1985,M12,2026,M09
+WPU1177,11,Machinery and equipment,77,U,198200,"PPI Commodity data for Machinery and equipment-Electric lamp bulbs, tubes, and components, not seasonally adjusted",1947,M01,2026,M09
+WPU1178,11,Machinery and equipment,78,U,198200,"PPI Commodity data for Machinery and equipment-Electronic components and accessories, not seasonally adjusted",1965,M12,2026,M09
+WPU1179,11,Machinery and equipment,79,U,198200,"PPI Commodity data for Machinery and equipment-Miscellaneous electrical machinery and equipment, not seasonally adjusted",1960,M12,2026,M09
+WPU118,11,Machinery and equipment,8,U,198200,"PPI Commodity data for Machinery and equipment-Miscellaneous instruments, not seasonally adjusted",1980,M06,2026,M09
+WPU1181,11,Machinery and equipment,81,U,198200,"PPI Commodity data for Machinery and equipment-Automatic environmental controls for monitoring residential, commercial, and appliance use, not seasonally adjusted",1980,M06,2026,M09
+WPU1182,11,Machinery and equipment,82,U,198306,"PPI Commodity data for Machinery and equipment-Industrial process control instruments, not seasonally adjusted",1983,M06,2026,M09
+WPU1184,11,Machinery and equipment,84,U,198512,"PPI Commodity data for Machinery and equipment-Fluid meters and counting devices, not seasonally adjusted",1985,M12,2026,M09
+WPU1185,11,Machinery and equipment,85,U,198512,"PPI Commodity data for Machinery and equipment-Engineering and scientific instruments, not seasonally adjusted",1985,M12,2026,M09
+WPU1186,11,Machinery and equipment,86,U,198512,"PPI Commodity data for Machinery and equipment-Measuring instruments and lenses, not seasonally adjusted",1985,M12,2026,M09
+WPU1189,11,Machinery and equipment,89,U,198506,"PPI Commodity data for Machinery and equipment-Measuring & controlling devices, n.e.c., not seasonally adjusted",1985,M06,2026,M09
+WPU119,11,Machinery and equipment,9,U,198200,"PPI Commodity data for Machinery and equipment-Miscellaneous machinery, not seasonally adjusted",1947,M01,2026,M09
+WPU1191,11,Machinery and equipment,91,U,198200,"PPI Commodity data for Machinery and equipment-Oil field and gas field machinery, not seasonally adjusted",1947,M01,2026,M09
+WPU1192,11,Machinery and equipment,92,U,198200,"PPI Commodity data for Machinery and equipment-Mining machinery and equipment, not seasonally adjusted",1947,M01,2026,M09
+WPU1194,11,Machinery and equipment,94,U,198200,"PPI Commodity data for Machinery and equipment-Internal combustion engines, not seasonally adjusted",1947,M01,2026,M09
+WPU1195,11,Machinery and equipment,95,U,198200,"PPI Commodity data for Machinery and equipment-Machine shop products, not seasonally adjusted",1967,M01,2026,M09
+WPU1197,11,Machinery and equipment,97,U,198706,"PPI Commodity data for Machinery and equipment-Turbines and turbine generator sets, not seasonally adjusted",1987,M06,2026,M09
+WPU1198,11,Machinery and equipment,98,U,201509,"PPI Commodity data for Machinery and equipment-Parts & accesories for turbines, turbine generators, and turbine generator sets, not seasonally adjusted",2015,M09,2026,M09
+WPU12,12,Furniture and household durables,-,U,198200,"PPI Commodity data for Furniture and household durables, not seasonally adjusted",1926,M01,2026,M09
+WPU121,12,Furniture and household durables,1,U,198200,"PPI Commodity data for Furniture and household durables-Household furniture, not seasonally adjusted",1926,M01,2026,M09
+WPU1212,12,Furniture and household durables,12,U,198200,"PPI Commodity data for Furniture and household durables-Wood household furniture (nonupholstered), not seasonally adjusted",1947,M01,2026,M09
+WPU1213,12,Furniture and household durables,13,U,198200,"PPI Commodity data for Furniture and household durables-Upholstered household furniture, not seasonally adjusted",1947,M01,2026,M09
+WPU1214,12,Furniture and household durables,14,U,198200,"PPI Commodity data for Furniture and household durables-Bedding, not seasonally adjusted",1947,M01,2026,M09
+WPU122,12,Furniture and household durables,2,U,198200,"PPI Commodity data for Furniture and household durables-Commercial furniture, not seasonally adjusted",1947,M01,2026,M09
+WPU1221,12,Furniture and household durables,21,U,198200,"PPI Commodity data for Furniture and household durables-Wood office furniture and store fixtures, not seasonally adjusted",1947,M01,2026,M09
+WPU1222,12,Furniture and household durables,22,U,198200,"PPI Commodity data for Furniture and household durables-Nonwood furniture and store fixtures, not seasonally adjusted",1947,M01,2026,M09
+WPU1223,12,Furniture and household durables,23,U,198412,"PPI Commodity data for Furniture and household durables-Public building furniture, not seasonally adjusted",1984,M12,2026,M09
+WPU1224,12,Furniture and household durables,24,U,198512,"PPI Commodity data for Furniture and household durables-Commercial furniture and fixtures, n.e.c., not seasonally adjusted",1985,M12,2026,M09
+WPU123,12,Furniture and household durables,3,U,198200,"PPI Commodity data for Furniture and household durables-Floor coverings, not seasonally adjusted",1926,M01,2026,M09
+WPU1231,12,Furniture and household durables,31,U,198200,"PPI Commodity data for Furniture and household durables-Carpets and rugs, not seasonally adjusted",1947,M01,2026,M09
+WPU1232,12,Furniture and household durables,32,U,198200,"PPI Commodity data for Furniture and household durables-Resilient floor coverings, not seasonally adjusted",1947,M01,2026,M09
+WPU124,12,Furniture and household durables,4,U,198200,"PPI Commodity data for Furniture and household durables-Household appliances, not seasonally adjusted",1947,M01,2026,M09
+WPU1241,12,Furniture and household durables,41,U,198200,"PPI Commodity data for Furniture and household durables-Major appliances, not seasonally adjusted",1947,M01,2026,M09
+WPU1243,12,Furniture and household durables,43,U,198200,"PPI Commodity data for Furniture and household durables-Household vacuum cleaners, including parts and attachments, not seasonally adjusted",1971,M01,2026,M09
+WPU1244,12,Furniture and household durables,44,U,198200,"PPI Commodity data for Furniture and household durables-Electric housewares and fans, not seasonally adjusted",1947,M01,2026,M09
+WPU125,12,Furniture and household durables,5,U,198200,"PPI Commodity data for Furniture and household durables-Home electronic equipment, not seasonally adjusted",1947,M01,2026,M09
+WPU1257,12,Furniture and household durables,57,U,200312,"PPI Commodity data for Furniture and household durables-Speakers and commercial sound equipment, not seasonally adjusted",2003,M12,2026,M09
+WPU1258,12,Furniture and household durables,58,U,200406,"PPI Commodity data for Furniture and household durables-Other home electronic equipment, not seasonally adjusted",2004,M06,2026,M09
+WPU126,12,Furniture and household durables,6,U,198200,"PPI Commodity data for Furniture and household durables-Other household durable goods, not seasonally adjusted",1947,M01,2026,M09
+WPU1261,12,Furniture and household durables,61,U,198200,"PPI Commodity data for Furniture and household durables-Vitreous china, fine earthenware, and other pottery products, not seasonally adjusted",1947,M01,2026,M09
+WPU1265,12,Furniture and household durables,65,U,198200,"PPI Commodity data for Furniture and household durables-Mirrors (decorated and undecorated), not seasonally adjusted",1971,M10,2026,M09
+WPU1266,12,Furniture and household durables,66,U,198200,"PPI Commodity data for Furniture and household durables-Lawn/garden equipment, not seasonally adjusted",1947,M01,2026,M09
+WPU13,13,Nonmetallic mineral products,-,U,198200,"PPI Commodity data for Nonmetallic mineral products, not seasonally adjusted",1926,M01,2026,M09
+WPU131,13,Nonmetallic mineral products,1,U,198200,"PPI Commodity data for Nonmetallic mineral products-Glass, not seasonally adjusted",1947,M01,2026,M09
+WPU1311,13,Nonmetallic mineral products,11,U,198200,"PPI Commodity data for Nonmetallic mineral products-Flat glass, not seasonally adjusted",1967,M01,2026,M09
+WPU1313,13,Nonmetallic mineral products,13,U,198306,"PPI Commodity data for Nonmetallic mineral products-Pressed and blown glassware, not seasonally adjusted",1983,M06,2026,M09
+WPU1317,13,Nonmetallic mineral products,17,U,202605,"PPI Commodity data for Nonmetallic mineral products-Recyclable glass, not seasonally adjusted",2026,M05,2026,M07
+WPU132,13,Nonmetallic mineral products,2,U,198200,"PPI Commodity data for Nonmetallic mineral products-Concrete ingredients and related products, not seasonally adjusted",1926,M01,2026,M09
+WPU1321,13,Nonmetallic mineral products,21,U,198200,"PPI Commodity data for Nonmetallic mineral products-Construction sand, gravel and crushed stone, not seasonally adjusted",1947,M01,2026,M09
+WPU1322,13,Nonmetallic mineral products,22,U,198200,"PPI Commodity data for Nonmetallic mineral products-Cement, hydraulic, not seasonally adjusted",1971,M01,2026,M09
+WPU133,13,Nonmetallic mineral products,3,U,198200,"PPI Commodity data for Nonmetallic mineral products-Concrete products, not seasonally adjusted",1926,M01,2026,M09
+WPU1331,13,Nonmetallic mineral products,31,U,198200,"PPI Commodity data for Nonmetallic mineral products-Concrete block and brick, not seasonally adjusted",1947,M01,2026,M09
+WPU1332,13,Nonmetallic mineral products,32,U,198200,"PPI Commodity data for Nonmetallic mineral products-Concrete pipe, not seasonally adjusted",1971,M01,2026,M09
+WPU1333,13,Nonmetallic mineral products,33,U,198200,"PPI Commodity data for Nonmetallic mineral products-Ready-mix concrete, not seasonally adjusted",1971,M01,2026,M09
+WPU1334,13,Nonmetallic mineral products,34,U,198200,"PPI Commodity data for Nonmetallic mineral products-Precast concrete products, not seasonally adjusted",1980,M06,2026,M09
+WPU1335,13,Nonmetallic mineral products,35,U,198200,"PPI Commodity data for Nonmetallic mineral products-Prestressed concrete products, not seasonally adjusted",1980,M06,2026,M09
+WPU134,13,Nonmetallic mineral products,4,U,198200,"PPI Commodity data for Nonmetallic mineral products-Clay construction products ex. refractories, not seasonally adjusted",1947,M01,2026,M09
+WPU1342,13,Nonmetallic mineral products,42,U,198412,"PPI Commodity data for Nonmetallic mineral products-Brick and structural clay tile, not seasonally adjusted",1984,M12,2026,M09
+WPU1344,13,Nonmetallic mineral products,44,U,198200,"PPI Commodity data for Nonmetallic mineral products-Clay floor and wall tile, glazed and unglazed (including quarry tile and ceramic mosaic tile), not seasonally adjusted",1947,M01,2026,M09
+WPU1345,13,Nonmetallic mineral products,45,U,198200,"PPI Commodity data for Nonmetallic mineral products-Structural clay products, n.e.c., not seasonally adjusted",1971,M01,2026,M09
+WPU135,13,Nonmetallic mineral products,5,U,198200,"PPI Commodity data for Nonmetallic mineral products-Refractories, not seasonally adjusted",1947,M01,2026,M09
+WPU1352,13,Nonmetallic mineral products,52,U,198200,"PPI Commodity data for Nonmetallic mineral products-Clay refractories, not seasonally adjusted",1971,M01,2026,M09
+WPU1353,13,Nonmetallic mineral products,53,U,198200,"PPI Commodity data for Nonmetallic mineral products-Nonclay refractories (excluding dead-burned magnesia), not seasonally adjusted",1974,M12,2026,M09
+WPU136,13,Nonmetallic mineral products,6,U,198200,"PPI Commodity data for Nonmetallic mineral products-Asphalt felts and coatings, not seasonally adjusted",1926,M01,2026,M09
+WPU1361,13,Nonmetallic mineral products,61,U,198200,"PPI Commodity data for Nonmetallic mineral products-Prepared asphalt and tar roofing and siding products, not seasonally adjusted",1926,M01,2026,M09
+WPU1362,13,Nonmetallic mineral products,62,U,198200,"PPI Commodity data for Nonmetallic mineral products-Roofing asphalts, pitches, coatings, and cement, not seasonally adjusted",1964,M12,2026,M09
+WPU137,13,Nonmetallic mineral products,7,U,198200,"PPI Commodity data for Nonmetallic mineral products-Gypsum products, not seasonally adjusted",1947,M01,2026,M09
+WPU1371,13,Nonmetallic mineral products,71,U,198200,"PPI Commodity data for Nonmetallic mineral products-Gypsum products, not seasonally adjusted",1971,M01,2026,M09
+WPU138,13,Nonmetallic mineral products,8,U,198200,"PPI Commodity data for Nonmetallic mineral products-Glass containers (including value of packaging), not seasonally adjusted",1947,M01,2026,M09
+WPU1381,13,Nonmetallic mineral products,81,U,198200,"PPI Commodity data for Nonmetallic mineral products-Glass containers (including value of packaging), not seasonally adjusted",1971,M01,2026,M09
+WPU139,13,Nonmetallic mineral products,9,U,198200,"PPI Commodity data for Nonmetallic mineral products-Other nonmetallic minerals, not seasonally adjusted",1947,M01,2026,M09
+WPU1392,13,Nonmetallic mineral products,92,U,198200,"PPI Commodity data for Nonmetallic mineral products-Insulation materials, not seasonally adjusted",1947,M01,2026,M09
+WPU1394,13,Nonmetallic mineral products,94,U,198200,"PPI Commodity data for Nonmetallic mineral products-Paving mixtures and blocks, not seasonally adjusted",1958,M01,2026,M09
+WPU1395,13,Nonmetallic mineral products,95,U,198412,"PPI Commodity data for Nonmetallic mineral products-Cut stone and stone products, not seasonally adjusted",1984,M12,2026,M09
+WPU1398,13,Nonmetallic mineral products,98,U,198512,"PPI Commodity data for Nonmetallic mineral products-Gaskets, packing, and sealing devices, not seasonally adjusted",1985,M12,2026,M09
+WPU1399,13,Nonmetallic mineral products,99,U,198206,"PPI Commodity data for Nonmetallic mineral products-Nonmetallic minerals and products, n.e.c., not seasonally adjusted",1982,M06,2026,M09
+WPU14,14,Transportation equipment,-,U,198200,"PPI Commodity data for Transportation equipment, not seasonally adjusted",1969,M01,2026,M09
+WPU141,14,Transportation equipment,1,U,198200,"PPI Commodity data for Transportation equipment-Motor vehicles and equipment, not seasonally adjusted",1926,M13,2026,M09
+WPU1411,14,Transportation equipment,11,U,198200,"PPI Commodity data for Transportation equipment-Motor vehicles, not seasonally adjusted",1947,M01,2026,M09
+WPU1412,14,Transportation equipment,12,U,198200,"PPI Commodity data for Transportation equipment-Motor vehicles parts, not seasonally adjusted",1967,M01,2026,M09
+WPU1413,14,Transportation equipment,13,U,198212,"PPI Commodity data for Transportation equipment-Truck and bus bodies, not seasonally adjusted",1982,M12,2026,M09
+WPU1414,14,Transportation equipment,14,U,198200,"PPI Commodity data for Transportation equipment-Truck trailers, not seasonally adjusted",1980,M06,2026,M09
+WPU1415,14,Transportation equipment,15,U,198406,"PPI Commodity data for Transportation equipment-Motor homes, built on purchased chassis, not seasonally adjusted",1984,M06,2026,M09
+WPU1416,14,Transportation equipment,16,U,198406,"PPI Commodity data for Transportation equipment-Travel trailers and campers, not seasonally adjusted",1984,M06,2026,M09
+WPU142,14,Transportation equipment,2,U,198200,"PPI Commodity data for Transportation equipment-Aircraft and aircraft equipment, not seasonally adjusted",1971,M01,2026,M09
+WPU1421,14,Transportation equipment,21,U,198200,"PPI Commodity data for Transportation equipment-Aircraft, not seasonally adjusted",1971,M01,2026,M09
+WPU1423,14,Transportation equipment,23,U,198512,"PPI Commodity data for Transportation equipment-Aircraft engine and engine parts, not seasonally adjusted",1985,M12,2026,M09
+WPU1425,14,Transportation equipment,25,U,198506,"PPI Commodity data for Transportation equipment-Other aircraft parts and equipment, not seasonally adjusted",1985,M06,2026,M09
+WPU143,14,Transportation equipment,3,U,198200,"PPI Commodity data for Transportation equipment-Ships and boats, not seasonally adjusted",1981,M12,2026,M09
+WPU1431,14,Transportation equipment,31,U,198512,"PPI Commodity data for Transportation equipment-Ships, not seasonally adjusted",1985,M12,2026,M09
+WPU1432,14,Transportation equipment,32,U,198200,"PPI Commodity data for Transportation equipment-Boats, not seasonally adjusted",1981,M12,2026,M09
+WPU144,14,Transportation equipment,4,U,198200,"PPI Commodity data for Transportation equipment-Railroad equipment, not seasonally adjusted",1961,M01,2026,M09
+WPU1444,14,Transportation equipment,44,U,202205,"PPI Commodity data for Transportation equipment-Railroad cars and locomotives, not seasonally adjusted",2022,M05,2026,M09
+WPU1445,14,Transportation equipment,45,U,202205,"PPI Commodity data for Transportation equipment-Railway maintenance of way equipment and parts, not seasonally adjusted",2022,M05,2026,M09
+WPU149,14,Transportation equipment,9,U,198506,"PPI Commodity data for Transportation equipment-Transportation equipment, n.e.c., not seasonally adjusted",1985,M06,2026,M09
+WPU1491,14,Transportation equipment,91,U,198506,"PPI Commodity data for Transportation equipment-Transportation equipment, n.e.c., not seasonally adjusted",1985,M06,2026,M09
+WPU15,15,Miscellaneous products,-,U,198200,"PPI Commodity data for Miscellaneous products, not seasonally adjusted",1947,M01,2026,M09
+WPU151,15,Miscellaneous products,1,U,198200,"PPI Commodity data for Miscellaneous products-Sporting goods and small arms, not seasonally adjusted",1947,M01,2026,M09
+WPU1512,15,Miscellaneous products,12,U,198200,"PPI Commodity data for Miscellaneous products-Sporting and athletic goods, not seasonally adjusted",1947,M01,2026,M09
+WPU1514,15,Miscellaneous products,14,U,198200,"PPI Commodity data for Miscellaneous products-Small arms, not seasonally adjusted",1947,M01,2026,M09
+WPU152,15,Miscellaneous products,2,U,198200,"PPI Commodity data for Miscellaneous products-Tobacco products, incl. stemmed & redried, not seasonally adjusted",1947,M01,2026,M09
+WPU1521,15,Miscellaneous products,21,U,198200,"PPI Commodity data for Miscellaneous products-Cigarettes, excluding electronic, not seasonally adjusted",1926,M01,2026,M09
+WPU1524,15,Miscellaneous products,24,U,198406,"PPI Commodity data for Miscellaneous products-Stemmed and redried tobacco, not seasonally adjusted",1984,M06,2026,M09
+WPU1525,15,Miscellaneous products,25,U,200512,"PPI Commodity data for Miscellaneous products-Other tobacco products, not seasonally adjusted",2005,M12,2026,M09
+WPU154,15,Miscellaneous products,4,U,198200,"PPI Commodity data for Miscellaneous products-Photographic equipment and supplies, not seasonally adjusted",1947,M01,2026,M09
+WPU1541,15,Miscellaneous products,41,U,198200,"PPI Commodity data for Miscellaneous products-Photographic and photocopying equipment, not seasonally adjusted",1947,M01,2026,M08
+WPU1542,15,Miscellaneous products,42,U,198200,"PPI Commodity data for Miscellaneous products-Photographic supplies, not seasonally adjusted",1947,M01,2026,M09
+WPU155,15,Miscellaneous products,5,U,198200,"PPI Commodity data for Miscellaneous products-Mobile homes, not seasonally adjusted",1981,M01,2026,M09
+WPU1553,15,Miscellaneous products,53,U,198200,"PPI Commodity data for Miscellaneous products-Manufactured homes (mobile homes), all sizes (incl. multisection), not seasonally adjusted",1976,M07,2026,M09
+WPU156,15,Miscellaneous products,6,U,198200,"PPI Commodity data for Miscellaneous products-Medical, surgical & personal aid devices, not seasonally adjusted",1978,M06,2026,M09
+WPU1562,15,Miscellaneous products,62,U,198206,"PPI Commodity data for Miscellaneous products-Surgical and medical instruments, not seasonally adjusted",1982,M06,2026,M09
+WPU1563,15,Miscellaneous products,63,U,198306,"PPI Commodity data for Miscellaneous products-Medical and surgical appliances and supplies, not seasonally adjusted",1983,M06,2026,M09
+WPU1564,15,Miscellaneous products,64,U,198312,"PPI Commodity data for Miscellaneous products-Ophthalmic goods, not seasonally adjusted",1983,M12,2026,M09
+WPU1565,15,Miscellaneous products,65,U,198506,"PPI Commodity data for Miscellaneous products-Dental equipment and supplies, not seasonally adjusted",1985,M06,2026,M09
+WPU157,15,Miscellaneous products,7,U,198200,"PPI Commodity data for Miscellaneous products-Other industrial safety equipment, not seasonally adjusted",1978,M06,2026,M09
+WPU1571,15,Miscellaneous products,71,U,198200,"PPI Commodity data for Miscellaneous products-Personal safety equipment and clothing, not seasonally adjusted",1978,M06,2026,M09
+WPU159,15,Miscellaneous products,9,U,198200,"PPI Commodity data for Miscellaneous products-Other miscellaneous products, not seasonally adjusted",1947,M01,2026,M09
+WPU1591,15,Miscellaneous products,91,U,198200,"PPI Commodity data for Miscellaneous products-Burial caskets, not seasonally adjusted",1947,M01,2026,M09
+WPU1593,15,Miscellaneous products,93,U,198200,"PPI Commodity data for Miscellaneous products-Musical instruments, not seasonally adjusted",1947,M01,2026,M09
+WPU1594,15,Miscellaneous products,94,U,198200,"PPI Commodity data for Miscellaneous products-Jewelry and jewelry products, not seasonally adjusted",1979,M01,2026,M09
+WPU1597,15,Miscellaneous products,97,U,198200,"PPI Commodity data for Miscellaneous products-Brooms and brushes, not seasonally adjusted",1947,M01,2026,M09
+WPU159A,15,Miscellaneous products,9A,U,198512,"PPI Commodity data for Miscellaneous products-Miscellaneous products, n.e.c., not seasonally adjusted",1985,M12,2026,M09
+WPU159F,15,Miscellaneous products,9F,U,202512,"PPI Commodity data for Miscellaneous products-Hides, skins, and related leather products, not seasonally adjusted",2025,M12,2026,M09

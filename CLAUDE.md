@@ -66,6 +66,8 @@ project rules and the prompt sequence; run the prompts in order, one per session
   Treasury receipts (~$115bn by 2026-08); Census calculated duties are as assessed at entry.
 - **De minimis**: shipments under $800 were mostly absent from official trade statistics before its end,
   so a post-repeal "increase" in recorded small parcels can be a measurement change, not a real increase.
+- **October 2025 BLS gap**: the 2025 shutdown left most CPI (21 of ~700 series) and about half of
+  import-price series without an October 2025 value. Handle it explicitly in any monthly price model.
 - **Facts about tariffs must be cited**: no rate, date or HS scope goes into `tariff_actions.csv` without
   an official source (Federal Register citation, presidential proclamation/EO, USTR notice or CBP CSMS
   number) and a `verified_on` date. Recall is not a source.
@@ -124,7 +126,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > chart in `reports/qa/`. Report results month by month. If Gate 1 fails, diagnose (country groupings,
 > revisions, general vs consumption) before continuing. Commit `P04`.
 
-**P05 — BLS import prices, CPI and PPI ingest**
+**P05 — BLS import prices, CPI and PPI ingest ✅ DONE!**
 > Implement `src/tpt/ingest/bls_mxp.py` and `bls_cpi.py` (and a light PPI ingest in the same pattern)
 > using the BLS API v2 (`api.bls.gov/publicAPI/v2/timeseries/data/`), batching up to 50 series and 20
 > years per request. Build series catalogs in `data/reference/`: (a) MXP import price indexes by

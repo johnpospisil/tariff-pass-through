@@ -1,15 +1,20 @@
-.PHONY: setup ingest ingest-census ingest-status reconcile build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-status reconcile build models figures report test lint format all
 
 UV := uv run
 
 setup:
 	uv sync
 
-ingest: ingest-census
-	@echo "ingest: BLS and BEA not implemented yet (P05, P06)"
+ingest: ingest-census ingest-bls
+	@echo "ingest: BEA not implemented yet (P06)"
 
 ingest-census:  ## HS10 x country x month imports; resumable (cached chunks are skipped)
 	$(UV) python -m tpt.ingest.census_trade
+
+ingest-bls:  ## BLS import prices, CPI, PPI (API v2; ~45 requests)
+	$(UV) python -m tpt.ingest.bls_mxp
+	$(UV) python -m tpt.ingest.bls_cpi
+	$(UV) python -m tpt.ingest.bls_ppi
 
 ingest-status:  ## live progress bar for a running ingest: make ingest-status SOURCE=bls
 	@$(UV) python -m tpt.ingest.progress $(or $(SOURCE),census)

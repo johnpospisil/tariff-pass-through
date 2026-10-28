@@ -62,11 +62,22 @@ class Source:
     key_param: str | None = None
     key_env: str | None = None
     key_location: Literal["query", "json"] = "query"
+    user_agent_env: str | None = None  # env var with a contact email, for hosts that require one
 
     def api_key(self) -> str | None:
         if self.key_env is None:
             return None
         return os.environ.get(self.key_env, "").strip() or None
+
+    def headers(self) -> dict[str, str]:
+        if self.user_agent_env is None:
+            return {}
+        contact = os.environ.get(self.user_agent_env, "").strip()
+        if not contact:
+            raise RuntimeError(
+                f"{self.name} requires a contact email: set {self.user_agent_env} in .env"
+            )
+        return {"User-Agent": f"tariff-pass-through research ({contact})"}
 
 
 SOURCES = {
@@ -76,6 +87,8 @@ SOURCES = {
     ),
     "fiscaldata": Source("fiscaldata", 0.2),
     "download": Source("download", 0.5),
+    # download.bls.gov returns 403 unless the User-Agent carries a contact email.
+    "blsdownload": Source("blsdownload", 1.0, user_agent_env="BLS_CONTACT_EMAIL"),
 }
 
 
@@ -245,7 +258,12 @@ class CachedClient:
         self.max_attempts = max_attempts
         self._sleep = sleep
         self._limiter = RateLimiter(self.source.min_interval, clock=clock, sleep=sleep)
-        self._client = httpx.Client(transport=transport, timeout=timeout, follow_redirects=True)
+        self._client = httpx.Client(
+            transport=transport,
+            timeout=timeout,
+            follow_redirects=True,
+            headers=self.source.headers(),
+        )
 
     def close(self) -> None:
         self._client.close()

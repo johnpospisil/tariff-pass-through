@@ -9,8 +9,8 @@ Every source, vintage, licence and known issue used in this project. Updated as 
 | Census International Trade API | HS10 × country × month imports, duties | api.census.gov | 2017-01 to 2026-08, retrieved 2026-10-27 (P03) | Public domain (US Gov) |
 | FT-900 country file | Reconciliation of monthly totals | census.gov/foreign-trade/balance/country.xlsx | through 2026-08, retrieved 2026-10-27 (P04) | Public domain |
 | Monthly Treasury Statement, table 4 | Reconciliation of customs duties | api.fiscaldata.treasury.gov | FY2017 to 2026-09, retrieved 2026-10-27 (P04) | Public domain |
-| BLS Import Price Indexes (MXP) | Pre-duty import prices | api.bls.gov | — (P05) | Public domain |
-| BLS CPI / PPI | Consumer and producer prices | api.bls.gov | — (P05) | Public domain |
+| BLS Import Price Indexes (MXP) | Pre-duty import prices | api.bls.gov (data), download.bls.gov (catalog) | 2015-01 to 2026-09, retrieved 2026-10-28 (P05) | Public domain |
+| BLS CPI / PPI | Consumer and producer prices | api.bls.gov (data), download.bls.gov (catalog) | 2015-01 to 2026-09, retrieved 2026-10-28 (P05) | Public domain |
 | BEA input-output tables, PCE bridge | HS → CPI concordance | bea.gov | — (P06) | Public domain |
 | Tariff actions | Tariff timeline | Federal Register, USTR, CBP CSMS | — (P08, P09) | Public domain |
 
@@ -31,6 +31,23 @@ verified. Legal status (including the Supreme Court IEEPA case) is recorded here
   USMCA, ...). The all-countries total, code `-`, is also `DET`; individual countries are `DET` and not
   `-`. See `data/reference/census_countries.csv`.
 - Outputs: `data/interim/census_imports/year=YYYY/data.parquet`, `data/interim/census_totals.parquet`.
+
+## BLS prices (P05)
+
+Run `make ingest-bls` (about 45 API requests, under a minute). Catalogs are in
+`data/reference/bls_{mxp,cpi,ppi}_series.csv`; data are long tables (series_id, month, value,
+footnotes) in `data/interim/bls/`. All series start 2015-01, so 12-month changes exist from 2016.
+
+- **Import price indexes (MXP)**, 998 series, not seasonally adjusted, measured before duties.
+  Families: CO (by locality of origin: China, Canada, Mexico, EU, Japan, ASEAN, Taiwan, UK, ...; NAICS
+  detail), IR (BEA end use), IP (HS), IZ (NAICS). Base periods differ by series; many detailed
+  series were rebased or introduced in 2025.
+- **CPI-U**, U.S. city average, monthly, 721 series: 386 NSA and 335 SA, display levels 0 (All
+  items) to 8 (most detailed). Many detailed items are NSA only.
+- **PPI commodity indexes**, 415 NSA series: goods groups 00–15 down to two digits, plus the
+  final-demand tree (FD4...).
+- Catalog files come from `download.bls.gov`, which returns 403 unless the User-Agent carries a
+  contact email; it is read from `BLS_CONTACT_EMAIL` in `.env` and sent to bls.gov only.
 
 ## Reconciliation (P04)
 
@@ -71,6 +88,11 @@ to be checked in P09):
   whether it uses duties as assessed or net of refunds.
 
 ## Known issues
+
+- **October 2025 (federal shutdown)**: BLS did not collect most October 2025 prices ("Data unavailable
+  due to the 2025 lapse in appropriations"). CPI: only 21 of ~700 series have an October 2025 value;
+  import prices: about 450 of ~980. PPI is complete. Month-to-month changes across October 2025
+  need interpolation or exclusion; 12-month changes for October 2025 and October 2026 are affected.
 
 - **All-zero rows**: about 40% of HS10 × country × month rows (2025) have zero value and quantity; the
   API returns rows for months without trade. Dropped when the import panel is built (P12).

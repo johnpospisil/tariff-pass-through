@@ -335,3 +335,19 @@ def test_cached_lookup_never_hits_network(source, tmp_path):
     hit = client.cached(URL, {"t": "1"})
     assert hit is not None and hit.from_cache
     assert len(rec.requests) == 1
+
+
+def test_user_agent_from_env(tmp_path, monkeypatch):
+    monkeypatch.setenv("TEST_CONTACT", "someone@example.org")
+    src = Source(name="ua", min_interval=0.0, user_agent_env="TEST_CONTACT")
+    rec = Recorder()
+    client, _ = make_client(src, tmp_path, rec)
+    client.get(URL, params={"t": "1"})
+    assert "someone@example.org" in rec.requests[0].headers["User-Agent"]
+
+
+def test_user_agent_env_missing_raises(tmp_path, monkeypatch):
+    monkeypatch.delenv("TEST_CONTACT", raising=False)
+    src = Source(name="ua", min_interval=0.0, user_agent_env="TEST_CONTACT")
+    with pytest.raises(RuntimeError, match="TEST_CONTACT"):
+        make_client(src, tmp_path, Recorder())
