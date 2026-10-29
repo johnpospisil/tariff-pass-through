@@ -108,10 +108,11 @@ refresh:  ## re-pull trailing Census window (revisions) + BLS/Treasury, rebuild 
 	$(MAKE) ingest-bls ingest-reference reconcile build models explorer figures report
 
 snapshot-pack:  ## CI data snapshot: raw downloads (not Census HS10 JSON) + parsed interim data
-	tar -czf $(SNAPSHOT) --exclude=data/raw/census --exclude=data/interim/import_panel_unwinsorised.parquet --exclude='_progress.json' data/raw data/interim
+	COPYFILE_DISABLE=1 tar -czf $(SNAPSHOT) --exclude='._*' --exclude=data/raw/census --exclude=data/interim/import_panel_unwinsorised.parquet --exclude='_progress.json' data/raw data/interim
 
-snapshot-unpack:
+snapshot-unpack:  ## (drops any macOS AppleDouble ._ files, which DuckDB would read as parquet)
 	tar -xzf $(SNAPSHOT)
+	find data -name '._*' -delete
 
 test:
 	$(UV) pytest

@@ -33,6 +33,10 @@ permissions:
   pages: write
   id-token: write
 
+defaults:
+  run:
+    shell: bash  # -eo pipefail: a failing `make ... | tee` fails the step
+
 concurrency:
   group: monthly-refresh
   cancel-in-progress: false
@@ -88,6 +92,7 @@ jobs:
         run: |
           mkdir -p reports/qa
           make refresh 2>&1 | tee reports/qa/refresh.log
+          test -s report/_site/index.html && test -s report/_site/explorer_data/index.json
       - name: Tests (reconciliation gates, pinned estimates, report, explorer in a browser)
         run: uv run pytest -q -rw 2>&1 | tee reports/qa/tests.log
       - uses: actions/upload-pages-artifact@v3
