@@ -1,4 +1,4 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value border-pt build models figures report test lint format all
 
 UV := uv run
 
@@ -67,8 +67,10 @@ timeline-validate:  ## P07 check data/reference/tariff_actions.csv (citations, d
 build: concordance timeline-validate rates validate-rates import-panel effective-rates front-running low-value
 	@echo "build: not implemented yet (P10, P12, P18)"
 
-models:
-	@echo "models: not implemented yet (P15-P20)"
+models: border-pt  ## P15-P20 regressions -> data/published/
+
+border-pt:  ## P15 2018-19 replication (static specs + levels event studies, ~25 min)
+	$(UV) python -u -m tpt.models.border_pt
 
 figures:  ## charts from data/published/ in light and dark -> report/figures/
 	$(UV) python -m tpt.viz.figures

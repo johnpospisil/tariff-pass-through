@@ -570,7 +570,77 @@ treatment of former de minimis shipments was found (searched 2026-10-28). The se
 recording indicator, not a measure of parcel imports; the 9999.95 line carries no calculated
 duty (P11) and is excluded from the price panel (P12).
 
+## Border pass-through: 2018–19 replication (P15)
+
+`src/tpt/models/border_pt.py` (pyfixest), outputs `data/published/border_pt_replication.csv` and
+`border_pt_event_2018_19.csv`, QA chart `reports/qa/border_pt_event_2018_19.png`. Regressions of
+12-month log changes on Δln(1 + τ), τ = P10 statutory additional duty, at HS10-family × country ×
+month. β on pre-duty unit values: 0 = US buyers pay the full tariff, −1 = foreign exporters
+absorb it.
+
+Published benchmarks (read from the papers, 2026-10-28):
+- Amiti, Redding and Weinstein (2019), NBER w25672, Table 1: 2017-01..2018-12, 12-month changes,
+  HTS10 product FE + country × year FE, HS8 clusters, unit-value ratios beyond 3 dropped. Unit
+  value −0.003 (0.024), quantity −1.299 (0.094), value −1.380 (0.090); N = 1,576,955.
+- Fajgelbaum, Goldberg, Kennedy and Khandelwal (2020), QJE 135(1), Table IV: 2017:1–2019:4,
+  product × time, country × time, country × sector FE, two-way clusters (country, HS8). Unit value
+  0.00 (0.08), quantity −1.47 (0.24), value −1.52 (0.18), duty-inclusive 0.58 (0.13; built from
+  collected duties, so not 1 + β); N = 2,454,023.
+
+Our estimates (SEs in parentheses):
+
+| Spec | Pre-duty unit value | Duty-incl. unit value | Quantity | Value | N (price) |
+|---|---|---|---|---|---|
+| main: HS6 × month + country × month FE, HS8 clusters, 2018–19, 1/99 winsorised | +0.167 (0.047) | +0.942 (0.047) | −1.956 (0.091) | −1.835 (0.067) | 2,129,659 |
+| twoway: same, clusters HS8 + country | +0.167 (0.049) | +0.942 (0.060) | −1.956 (0.281) | −1.835 (0.222) | 2,129,659 |
+| main_trim3: main FE, ARW outlier rule | −0.058 (0.020) | +0.723 (0.020) | −1.664 (0.080) | – | 1,728,765 |
+| arw: ARW design, 2018 | −0.107 (0.021) | – | −1.122 (0.082) | −1.393 (0.071) | 865,886 |
+| fgkk: FGKK design, 2018-01..2019-04 (sector = HS2) | +0.156 (0.076) | +0.877 (0.106) | −1.969 (0.430) | −1.931 (0.325) | 1,375,080 |
+
+**Gate (passed, with one documented gap).** Every unit-value estimate is between −0.11 and +0.17
+with its 95% CI above −0.25: foreign exporters absorbed little of the 2018–19 tariffs, as both
+papers find. Trade responses match: ARW-design value −1.393 vs −1.380 (0.1 combined SEs),
+quantity −1.122 vs −1.299 (1.4); FGKK-design value and quantity within 1.1 combined SEs.
+FGKK-design unit value +0.156 vs 0.00 is 1.4 combined SEs. The ARW-design unit value (−0.107)
+is 3.3 combined SEs below ARW's −0.003; that gap is kept as a known issue (below).
+
+Diagnosis of the unit-value spread (2018–19, main FE unless stated):
+- **Outlier rule** is the main driver. The 1/99 winsor bounds are ±4.2 log points (a 70× change),
+  so winsorising keeps almost all composition jumps; 19% of price-sample rows have a unit-value
+  ratio beyond 3 or below 1/3. Among tariffed Chinese varieties these jumps lean upward (mean
+  +0.115 vs +0.002 for untariffed Chinese varieties), as cheaper shipments drop out. Raw changes
+  with ARW's ratio rule: −0.058 (0.020) instead of +0.167. P17 varies this rule.
+- **China** carries the positive estimate: excluding China gives −0.016 (0.068).
+- **Steel and aluminum**: HS6 products with Section 232 duties alone give −0.427 (0.169; 62,558
+  rows); excluding them and Section 201 products gives +0.230.
+- **Within-year currency moves**: ARW's country × year FE leave the 2018 yuan depreciation
+  (about 8% from April to October) in the error. With country × month FE the ARW sample gives
+  −0.058 instead of −0.107.
+- **Sample size**: our ARW-design sample is 55% of theirs (866k vs 1.58M price rows for 2018;
+  1.29M vs 2.38M value rows). We use imports for consumption with a quantity in the year's
+  HS10-list unit and comparable product codes; their cells may be finer (not verified).
+
+Event study (FGKK eq. 1, levels; variety, HS6 × month and country × month FE; k = months since a
+variety's first tariff increase, half-rate rule ≈ their 15th-of-month cutoff; binned at +6;
+k = −1 reference; 21,053 targeted varieties over 2017–19):
+- FGKK window (2017-01..2019-04): no pre-trend (quantity −2% to −3% at k = −6..−2, all
+  |t| < 1.3; unit value within ±1%). On impact quantities fall 30% (FGKK: 23%) and stay 35–40%
+  lower; pre-duty unit values do not fall (+1% to +5%); duty-inclusive unit values rise.
+- Through 2019-12: quantities of targeted varieties are 23% below their k = −1 level at k = −6
+  (t ≈ −9). The run-up comes from varieties first hit in mid/late 2019 (List 4A, Sep 2019:
+  3,092 varieties): importers stocked up before the duties. Because k = −1 is the peak of that
+  run-up, the post-tariff drop measured from it (−33% at k = 0, −54% at k = 6) overstates the
+  decline relative to earlier months. P16 should check for the same pattern in 2025.
+
+Pinned in `tests/test_pinned_estimates.py` (tolerance 0.02 on price coefficients, 0.05 on
+quantity and value).
+
 ## Known issues
+
+- **2018–19 unit-value replication (P15)**: our ARW-design pre-duty unit-value estimate (−0.107,
+  SE 0.021) is 3.3 combined SEs below ARW's −0.003 (0.024). Partly explained by within-2018
+  currency moves (−0.058 with country × month FE) and a smaller sample (55% of theirs); the rest is
+  not resolved. All specifications agree that exporters absorbed little of the tariffs.
 
 - **Census API quantity units (found in P12)**: `UNIT_QY1` in the API is the current unit for all
   months; use the annual HS10 list unit for historical months (see "Import panel").

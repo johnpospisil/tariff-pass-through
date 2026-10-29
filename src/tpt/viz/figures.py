@@ -18,6 +18,8 @@ from tpt.viz import theme
 EFFECTIVE = config.PUBLISHED_DIR / "effective_rates.csv"
 FRONT_RUNNING = config.PUBLISHED_DIR / "front_running.csv"
 LOW_VALUE = config.PUBLISHED_DIR / "low_value_imports.csv"
+BORDER_EVENT_2018 = config.PUBLISHED_DIR / "border_pt_event_2018_19.csv"
+QA_DIR = config.PROJECT_ROOT / "reports" / "qa"
 # China last, with its own scale labelled on the right; shared-scale ticks only in column 1
 PANELS = ["All countries", "Canada", "Mexico", "EU", "Japan", "Vietnam", "India", "China"]
 OWN_SCALE = {"China": (1.1, 0.25)}  # panel -> (y max, tick step); the rest share SHARED
@@ -197,7 +199,54 @@ def chart6_low_value(mode: str = "light", data: Path = LOW_VALUE,
         return theme.save(fig, "chart6_low_value", mode, out_dir)
 
 
+EVENT_PANELS = [("uv", "Pre-duty unit value"), ("uv_dut", "Duty-inclusive unit value"),
+                ("qty", "Quantity"), ("val", "Import value")]  # fmt: skip
+
+
+def qa_border_event_2018(mode: str = "light", data: Path = BORDER_EVENT_2018,
+                         out_dir: Path | None = None) -> list[Path]:  # fmt: skip
+    """QA (P15): 2018-19 event study of targeted vs untargeted varieties, two samples."""
+    df = pl.read_csv(data)
+    samples = (("fgkk", "To Apr 2019 (Fajgelbaum et al. sample), 95% CI"),
+               ("full", "Through Dec 2019 (adds the Sep 2019 actions)"))  # fmt: skip
+    with theme.style(mode) as t:
+        colors = dict(zip([s for s, _ in samples], t["series"][:2], strict=True))
+        fig, axes = plt.subplots(1, 4, figsize=(theme.WIDTH_IN, 4.4), sharex=True)
+        fig.subplots_adjust(left=0.06, right=0.985, top=0.66, bottom=0.2, wspace=0.32)
+        for ax, (o, title) in zip(axes, EVENT_PANELS, strict=True):
+            ax.axhline(0, color=t["axis"], linewidth=0.8, zorder=2)
+            ax.axvline(-0.5, color=t["muted"], linewidth=0.8, zorder=2)
+            for s, _ in reversed(samples):
+                p = df.filter(pl.col("sample") == s, pl.col("outcome") == o).sort("k")
+                k = p["k"].to_list()
+                if s == "fgkk":
+                    _band(ax, k, p["ci_low"], p["ci_high"], t)
+                ax.plot(k, p["coef"], color=colors[s], zorder=4)
+                ax.plot(k, p["coef"], "o", markersize=3.5, color=colors[s],
+                        markeredgecolor=t["surface"], markeredgewidth=1, zorder=5)  # fmt: skip
+            ax.set_title(title, color=t["text"], fontsize=9.5)
+            ax.yaxis.set_major_formatter(
+                FuncFormatter(lambda x, _: f"{x * 100:+.0f}%" if x else "0")
+            )
+            ax.xaxis.set_major_locator(MultipleLocator(3))
+            ax.set_xlabel("Months from first tariff increase", color=t["muted"], fontsize=8)
+        handles = [plt.Line2D([], [], color=colors[s], lw=theme.LINE_WIDTH) for s, _ in samples]
+        fig.legend(handles, [label for _, label in samples], loc="upper left",
+                   bbox_to_anchor=(0.006, 0.79), ncol=2, fontsize=8.5,
+                   labelcolor=t["text2"])  # fmt: skip
+        theme.header(
+            fig, "2018–19 tariffs: targeted vs untargeted imports (replication check)",
+            "Log difference from untargeted varieties of the same HS6 product in the same month, "
+            "relative to month −1 (Fajgelbaum et al. 2020, eq. 1).\nVariety, HS6 × month and "
+            "country × month fixed effects; SEs clustered by HS8. Month 6 includes later "
+            "months.", t,
+        )  # fmt: skip
+        theme.footer(fig, theme.SOURCE_CENSUS, t)
+        return theme.save(fig, "border_pt_event_2018_19", mode, out_dir or QA_DIR)
+
+
 FIGURES = [chart2_effective_rates, chart5_front_running, chart6_low_value]
+QA_FIGURES = [qa_border_event_2018]  # light only, to reports/qa
 
 
 def run() -> None:
@@ -205,6 +254,9 @@ def run() -> None:
         for mode in theme.MODES:
             for path in fn(mode):
                 print(path.relative_to(config.PROJECT_ROOT))
+    for fn in QA_FIGURES:
+        for path in fn("light"):
+            print(path.relative_to(config.PROJECT_ROOT))
 
 
 if __name__ == "__main__":

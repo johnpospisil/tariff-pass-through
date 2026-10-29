@@ -53,3 +53,16 @@ def test_chart5_and_chart6_render(tmp_path, mode):
     p6 = figures.chart6_low_value(mode, data=tmp_path / "lv.csv", out_dir=tmp_path)
     assert all(p.exists() for p in p5 + p6)
     assert "$54.5bn" in p6[0].read_text()  # currency, not math text
+
+
+def test_qa_border_event_renders(tmp_path):
+    rows = [{"sample": s, "outcome": o, "k": k, "coef": 0.01 * k, "se": 0.01,
+             "ci_low": 0.01 * k - 0.02,
+             "ci_high": 0.01 * k + 0.02, "n": 100, "varieties_targeted": 10}
+            for s in ("fgkk", "full") for o, _ in figures.EVENT_PANELS
+            for k in range(-6, 7)]  # fmt: skip
+    path = tmp_path / "event.csv"
+    pl.DataFrame(rows).write_csv(path)
+    paths = figures.qa_border_event_2018("light", data=path, out_dir=tmp_path)
+    assert paths[1].stat().st_size > 10_000
+    assert "replication check" in paths[0].read_text()

@@ -1,0 +1,19 @@
+spec,outcome,y,coef,se,ci_low,ci_high,n,r2,fe,cluster,start,end,published_coef,published_se,published_source
+main,uv,dln_uv,0.16731,0.04674,0.07570,0.25893,2129659,0.04797,hs6^ym + cty_code^ym,hs8,2018-01-01,2019-12-01,,,
+twoway,uv,dln_uv,0.16731,0.04854,0.07160,0.26303,2129659,0.04797,hs6^ym + cty_code^ym,hs8+cty_code,2018-01-01,2019-12-01,,,
+main,uv_dut,dln_uv_dut,0.94233,0.04667,0.85084,1.03382,2129659,0.04885,hs6^ym + cty_code^ym,hs8,2018-01-01,2019-12-01,,,
+twoway,uv_dut,dln_uv_dut,0.94233,0.06018,0.82367,1.06099,2129659,0.04885,hs6^ym + cty_code^ym,hs8+cty_code,2018-01-01,2019-12-01,,,
+main,qty,dln_qty,-1.95595,0.09063,-2.13360,-1.77830,2129659,0.05499,hs6^ym + cty_code^ym,hs8,2018-01-01,2019-12-01,,,
+twoway,qty,dln_qty,-1.95595,0.28084,-2.50974,-1.40216,2129659,0.05499,hs6^ym + cty_code^ym,hs8+cty_code,2018-01-01,2019-12-01,,,
+main,val,dln_val,-1.83520,0.06665,-1.96586,-1.70455,2584882,0.05638,hs6^ym + cty_code^ym,hs8,2018-01-01,2019-12-01,,,
+twoway,val,dln_val,-1.83520,0.22195,-2.27283,-1.39758,2584882,0.05638,hs6^ym + cty_code^ym,hs8+cty_code,2018-01-01,2019-12-01,,,
+main_trim3,uv,dln_uv_raw,-0.05766,0.01966,-0.09620,-0.01913,1728765,0.06101,hs6^ym + cty_code^ym,hs8,2018-01-01,2019-12-01,,,
+main_trim3,uv_dut,dln_uv_dut_raw,0.72296,0.02047,0.68282,0.76309,1728765,0.06672,hs6^ym + cty_code^ym,hs8,2018-01-01,2019-12-01,,,
+main_trim3,qty,dln_qty_raw,-1.66441,0.08047,-1.82215,-1.50666,1728765,0.06893,hs6^ym + cty_code^ym,hs8,2018-01-01,2019-12-01,,,
+arw,uv,dln_uv_raw,-0.10713,0.02056,-0.14743,-0.06682,865886,0.03285,prod_id + cty_code^year,hs8,2018-01-01,2018-12-01,-0.00300,0.02400,"Amiti, Redding and Weinstein (2019), NBER w25672 Table 1"
+arw,qty,dln_qty_raw,-1.12165,0.08194,-1.28228,-0.96103,865886,0.03767,prod_id + cty_code^year,hs8,2018-01-01,2018-12-01,-1.29900,0.09400,"Amiti, Redding and Weinstein (2019), NBER w25672 Table 1"
+arw,val,dln_val_raw,-1.39292,0.07056,-1.53124,-1.25460,1287462,0.03072,prod_id + cty_code^year,hs8,2018-01-01,2018-12-01,-1.38000,0.09000,"Amiti, Redding and Weinstein (2019), NBER w25672 Table 1"
+fgkk,uv,dln_uv,0.15608,0.07640,0.00540,0.30676,1375080,0.11979,prod_id^ym + cty_code^ym + cty_code^hs2,hs8+cty_code,2018-01-01,2019-04-01,0.00000,0.08000,"Fajgelbaum, Goldberg, Kennedy and Khandelwal (2020), QJE Table IV"
+fgkk,uv_dut,dln_uv_dut,0.87717,0.10627,0.66757,1.08677,1375080,0.12065,prod_id^ym + cty_code^ym + cty_code^hs2,hs8+cty_code,2018-01-01,2019-04-01,0.58000,0.13000,"Fajgelbaum, Goldberg, Kennedy and Khandelwal (2020), QJE Table IV"
+fgkk,qty,dln_qty,-1.96950,0.43022,-2.81803,-1.12097,1375080,0.13508,prod_id^ym + cty_code^ym + cty_code^hs2,hs8+cty_code,2018-01-01,2019-04-01,-1.47000,0.24000,"Fajgelbaum, Goldberg, Kennedy and Khandelwal (2020), QJE Table IV"
+fgkk,val,dln_val,-1.93130,0.32543,-2.57311,-1.28949,1674043,0.13560,prod_id^ym + cty_code^ym + cty_code^hs2,hs8+cty_code,2018-01-01,2019-04-01,-1.52000,0.18000,"Fajgelbaum, Goldberg, Kennedy and Khandelwal (2020), QJE Table IV"

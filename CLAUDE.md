@@ -72,6 +72,9 @@ project rules and the prompt sequence; run the prompts in order, one per session
   on low-value estimates (9999.95), Chapter 98 lines and USMCA-claimed (rate provision 19)
   entries; Section 232 derivative duties fall on metal content only; in-transit exemptions delay
   each 2025 increase by 1–2 months. Drop 9999/98 lines from product panels.
+- **Unit-value outliers** (P15, DATA.md "Border pass-through"): 1/99 winsorising of 12-month
+  unit-value changes keeps composition jumps (bounds ±4.2 log points) that move β by about 0.2;
+  always report the ARW ratio-3 trim alongside (spec `main_trim3`).
 - **De minimis**: shipments under $800 were mostly absent from official trade statistics before its end,
   so a post-repeal "increase" in recorded small parcels can be a measurement change, not a real increase.
 - **October 2025 BLS gap**: the 2025 shutdown left most CPI (21 of ~700 series) and about half of
@@ -238,7 +241,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 
 ### Phase 4 — Border pass-through (Week 4)
 
-**P15 — Replicate 2018–19 (credibility gate)**
+**P15 — Replicate 2018–19 (credibility gate) ✅ DONE!**
 > Implement `src/tpt/models/border_pt.py` with pyfixest: regress 12-month Δln unit value (pre-duty) on
 > Δln(1+τ) with HS6 × month and country × month FE (Amiti–Redding–Weinstein design), clustered by HS8;
 > also duty-inclusive price and quantity regressions, and a Fajgelbaum-style event study with leads and
