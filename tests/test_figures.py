@@ -84,3 +84,22 @@ def test_hero_border_pt_renders(tmp_path, mode):
     svg = paths[0].read_text()
     assert "Foreign exporters pay" in svg and "US buyers pay" in svg
     assert paths[1].stat().st_size > 10_000
+
+
+@pytest.mark.parametrize("mode", theme.MODES)
+def test_spec_curve_renders(tmp_path, mode):
+    from tpt.models import robustness as rb
+
+    rows = [
+        {"period": p, "outcome": "uv", "cleaning": c, "variant": v.name, "coef": 0.01 * i,
+         "ci_low": 0.01 * i - 0.05, "ci_high": 0.01 * i + 0.05}
+        for p in ("2018_19", "2025_26")
+        for i, s in enumerate(rb.grid(p))
+        for c, v in [(s.cleaning, s.variant)]
+    ]  # fmt: skip
+    path = tmp_path / "robustness.csv"
+    pl.DataFrame(rows).write_csv(path)
+    paths = figures.chart_spec_curve(mode, data=path, out_dir=tmp_path)
+    svg = paths[0].read_text()
+    assert "Drop China" in svg and "Trim ratio" in svg
+    assert paths[1].stat().st_size > 10_000

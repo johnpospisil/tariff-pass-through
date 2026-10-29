@@ -1,4 +1,4 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value border-pt border-pt-2025 build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value border-pt border-pt-2025 robustness build models figures report test lint format all
 
 UV := uv run
 
@@ -67,10 +67,13 @@ timeline-validate:  ## P07 check data/reference/tariff_actions.csv (citations, d
 build: concordance timeline-validate rates validate-rates import-panel effective-rates front-running low-value
 	@echo "build: not implemented yet (P10, P12, P18)"
 
-models: border-pt  ## P15-P20 regressions -> data/published/
+models: border-pt robustness  ## P15-P20 regressions -> data/published/
 
 border-pt:  ## P15 replication + P16 2025-26 border pass-through (~1 h)
 	$(UV) python -u -m tpt.models.border_pt
+
+robustness:  ## P17 robustness grid (cleaning x variants, both periods, ~15 min)
+	$(UV) python -u -m tpt.models.robustness
 
 border-pt-2025:  ## P16 only: static grid, heterogeneity, MXP check, 2025-26 event studies
 	$(UV) python -u -m tpt.models.border_pt pt

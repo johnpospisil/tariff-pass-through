@@ -168,3 +168,37 @@ def test_event_study_2025_front_running_and_no_price_decline(ev25):
     uv = _path(ev25, "pre_ruling", "uv")
     assert min(c for k, c in uv.items() if k >= 0) > -0.02
     assert _path(ev25, "pre_ruling", "uv_dut")[0] > 0.07
+
+
+# --- P17: robustness grid ---------------------------------------------------------
+
+from tpt.models import robustness as rb  # noqa: E402
+
+
+@pytest.fixture(scope="module")
+def grid() -> dict:
+    if not rb.OUT.exists():
+        pytest.skip("run make robustness")
+    df = pl.read_csv(rb.OUT)
+    return {(r["period"], r["outcome"], r["cleaning"], r["variant"]): r
+            for r in df.iter_rows(named=True)}  # fmt: skip
+
+
+def test_grid_baseline_reproduces_main(grid):
+    assert grid[("2025_26", "uv", "w1", "baseline")]["coef"] == pytest.approx(0.041, abs=0.02)
+    assert grid[("2025_26", "uv", "trim3", "baseline")]["coef"] == pytest.approx(-0.039, abs=0.02)
+    assert grid[("2018_19", "uv", "w1", "baseline")]["coef"] == pytest.approx(0.167, abs=0.02)
+
+
+def test_unweighted_grid_never_finds_large_exporter_absorption(grid):
+    """Every unweighted 2025-26 pre-duty estimate is between -0.10 and +0.30 (DATA.md P17)."""
+    for (p, o, _c, v), r in grid.items():
+        if p == "2025_26" and o == "uv" and v != "weighted":
+            assert -0.10 < r["coef"] < 0.30, (_c, v)
+
+
+def test_value_weighted_2025_is_the_documented_outlier(grid):
+    """Value-weighted 2025-26 estimates are negative (-0.18 to -0.36), driven by HS 84
+    (DATA.md P17). Fails if that changes, so the note stays accurate."""
+    for c in rb.CLEANING:
+        assert grid[("2025_26", "uv", c, "weighted")]["coef"] < -0.1, c

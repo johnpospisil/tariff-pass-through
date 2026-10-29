@@ -243,7 +243,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > best tracks small parcels, with the measurement-change caveat on the chart. Charts 5 and 6 plus
 > published CSVs. Commit `P14`.
 
-### Phase 4 — Border pass-through (Week 4)
+### Phase 4 — Border pass-through (Week 4) ✅ DONE!
 
 **P15 — Replicate 2018–19 (credibility gate) ✅ DONE!**
 > Implement `src/tpt/models/border_pt.py` with pyfixest: regress 12-month Δln unit value (pre-duty) on
@@ -264,7 +264,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > plain-language interpretation ("of each 10% tariff, roughly X% fell on US buyers"). Pin estimates.
 > Commit `P16`.
 
-**P17 — Robustness grid**
+**P17 — Robustness grid ✅ DONE!**
 > Run a robustness grid over: unit-value cleaning rules (winsor 1/99 vs 5/95 vs trimming), excluding
 > front-running months, alternative FE (HS8 × month), clustering choices, value-weighted vs unweighted,
 > dropping China, dropping S232 products, 2025-only vs full window. Output a specification curve chart

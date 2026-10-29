@@ -387,13 +387,16 @@ def split_x(df: pl.DataFrame, by: str, x: str = X) -> tuple[pl.DataFrame, list[s
 
 
 def fit_terms(df: pl.DataFrame, y: str, xs: list[str], fe: tuple[str, ...],
-              cluster: str = "hs8", iv: str | None = None) -> list[dict]:  # fmt: skip
-    """FE regression of y on xs (or IV: xs[0] instrumented by iv); one dict per term."""
+              cluster: str = "hs8", iv: str | None = None,
+              weights: str | None = None) -> list[dict]:  # fmt: skip
+    """FE regression of y on xs (or IV: xs[0] instrumented by iv), optionally weighted; one
+    dict per term."""
     keys = {f for e in fe for f in e.split("^")} | set(cluster.split("+"))
-    data = df.select(y, *xs, *([iv] if iv else []), *keys).to_pandas()
+    extra = [c for c in (iv, weights) if c]
+    data = df.select(y, *xs, *extra, *keys).to_pandas()
     fml = (f"{y} ~ 1 | {' + '.join(fe)} | {xs[0]} ~ {iv}" if iv
            else f"{y} ~ {' + '.join(xs)} | {' + '.join(fe)}")  # fmt: skip
-    m = pf.feols(fml, data=data, vcov={"CRV1": cluster})
+    m = pf.feols(fml, data=data, vcov={"CRV1": cluster}, weights=weights)
     t = m.tidy()
     r2 = getattr(m, "_r2", None)
     return [
@@ -456,7 +459,7 @@ def load_pt(period: str) -> tuple[pl.DataFrame, tuple[date, date]]:
     months = (lo, hi or panel_end())
     df = load_changes(months)
     cur = ["prod_id", "level", "cty_code", "month"]
-    rates = pl.scan_parquet(PANEL).select(*cur, "stat_rate", *RATE_COLS)
+    rates = pl.scan_parquet(PANEL).select(*cur, "stat_rate", "con_val", *RATE_COLS)
     lagged = rates.filter(
         pl.col("month").is_between(
             lo.replace(year=lo.year - 1), months[1].replace(year=months[1].year - 1)
@@ -464,7 +467,7 @@ def load_pt(period: str) -> tuple[pl.DataFrame, tuple[date, date]]:
     ).select(
         *cur[:3],
         pl.col("month").dt.offset_by("12mo"),
-        *(pl.col(c).alias(f"{c}_b") for c in ["stat_rate", *RATE_COLS]),
+        *(pl.col(c).alias(f"{c}_b") for c in ["stat_rate", "con_val", *RATE_COLS]),
     )
     rates = rates.filter(pl.col("month").is_between(*months))
     df = df.join(rates.collect(), on=cur, how="left").join(lagged.collect(), on=cur, how="left")

@@ -718,7 +718,85 @@ mostly USMCA-claimed and Annex II goods.
 Pinned in `tests/test_pinned_estimates.py` (P16 block; 2025–26 pins will move with Census revisions,
 P24 decides warn vs fail).
 
+## Robustness grid (P17)
+
+`src/tpt/models/robustness.py` (`make robustness`), output `data/published/robustness.csv` (one row
+per period × outcome × cleaning × variant, 184 fits) and chart
+`report/figures/robustness_spec_curve.png` (and `_dark`). Every variant of the main specification
+is run under four cleaning rules, for 2018–19 and 2025–26, pre-duty unit value and quantity.
+- **Cleaning**:
+  - `w1`: 1/99 winsorised (main).
+  - `w5`: 5/95 winsorised.
+  - `trim1`: unit-value changes outside the 1/99 bounds dropped.
+  - `trim3`: ARW unit-value ratio > 3 dropped.
+
+  Bounds are pooled over the whole panel's price sample, as in P12: unit value 1/99 = −4.22/+4.29,
+  5/95 = −1.96/+2.01 log points. Even 5/95 allows a 7× change, so `trim3` (±1.10) is the only
+  tight rule.
+- **Variants**:
+  - fixed effects: HS8 × month;
+  - clustering: HS6, HS8 + country, country;
+  - weights: import value 12 months earlier;
+  - dropping China;
+  - dropping Section 232 products (any S232 rate in the change or its base, any country);
+  - front-running: dropping months k = −6..−1 before a variety's first increase, and also
+    k = 6..11, whose base month was a front-run month;
+  - windows: a single year (2018 or 2025); to 2026-01 (2025–26 only).
+- **Flags**: `moves_beta` marks variants whose β differs from the same-cleaning baseline by more
+  than that baseline's SE. `moves_vs_main` marks anything that differs from the main estimate by
+  more than the main SE.
+
+**Pre-duty unit value, 2025–26** (main β = +0.041, SE 0.029; the four columns are w1 / w5 / trim1 / trim3):
+
+| Variant | w1 | w5 | trim1 | trim3 |
+|---|---|---|---|---|
+| baseline | +0.041 | +0.016 | +0.008 | −0.039 |
+| HS8 × month FE | +0.116 | +0.074 | +0.073 | −0.028 |
+| weighted by import value | −0.290 (0.141) | −0.277 | −0.359 | −0.179 (0.085) |
+| drop China | +0.059 | +0.027 | +0.019 | −0.036 |
+| drop Section 232 products | +0.270 | +0.195 | +0.204 | +0.028 |
+| drop front-run months | +0.042 | +0.016 | +0.008 | −0.038 |
+| also drop front-run base months | +0.126 | +0.078 | +0.073 | −0.014 |
+| 2025 only | 0.000 | −0.011 | −0.016 | −0.044 |
+| to 2026-01 | −0.001 | −0.012 | −0.016 | −0.049 |
+
+Clustering changes only the SE: 0.029 with HS8, 0.034 with HS6, 0.060 with HS8 + country and 0.058
+with country.
+
+**Choices that move β by more than its SE (2025–26, pre-duty)**:
+- **Value weighting** (−0.29; −0.18 with the ARW trim) is the only choice that turns β clearly
+  negative, and it is fragile. Weighted, Chapter 84 alone gives −1.07 (0.25), and dropping it gives
+  −0.028 (0.132). Dropping HS 87 (autos) or Japan, Korea and Germany barely matters. The weight
+  sits on a few HS6 lines: 847150 automatic data-processing machines and units, 847330 computer
+  parts and 851713 phones. Their unit values jumped with the AI-server import surge from Taiwan and
+  Mexico, which were largely exempt (USMCA, the electronics exemption), while China's rate on them
+  rose. That is a shift in product mix lining up with cross-country tariff differences, not
+  exporter price cuts. The unweighted, variety-level estimate is the main one.
+- **Dropping Section 232 products** raises β (+0.27 winsorised; +0.03 trimmed). Section 232 goods
+  are where exporters absorb a little (P16: −0.08), and these rows carry the noisiest statutory
+  rates (P16 first stage 0.38).
+- **HS8 × month FE** (+0.116) and **dropping front-run base months** (+0.126) raise the winsorised
+  β by more than its SE. Neither moves the trimmed β by more than 0.025.
+- **Cleaning** moves β by up to 0.08 (trim3 −0.039 vs w1 +0.041). w5 and trim1 lie in between
+  (+0.016, +0.008).
+- **Not moving it**: dropping China (+0.018), dropping front-run months (+0.001), clustering.
+  2025 only and to 2026-01 (−0.04) are just above one SE.
+
+**Range.** Across all 44 unweighted specifications for 2025–26, β is between −0.049 and +0.270.
+None implies exporters absorbing more than 5% of the tariff, and all 95% CIs are above −0.08.
+2018–19: unweighted β from −0.150 (drop China, trim3) to +0.237 (drop Section 232, w1). Dropping
+China moves 2018–19 the most (−0.18 winsorised), as found in P15. The weighted 2018–19 SEs are
+0.10–0.22.
+
+**Quantity** (2025–26 main −0.706): w5 −0.59, HS8 FE −0.88, drop Section 232 −1.06 (statutory
+attenuation, P16), weighted −0.76 (0.26); the other variants are within ±0.06. 2018–19 main −1.956:
+dropping China −0.73, weighted −3.05, 2018 only −1.31, front-run exclusions −1.59 to −1.76.
+
 ## Known issues
+
+- **Value-weighted pass-through (P17)**: value weighting gives −0.29 (0.14) in 2025–26, entirely from
+  HS 84 (computers and servers: a shift in product mix lining up with cross-country tariff
+  differences). Report unweighted variety-level estimates as main.
 
 - **Statutory Section 232 rates at the variety level (P16)**: in 2025–26 collected duties rise
   0.38 per unit of statutory Section 232 change (0.76 for other rows), so statutory-τ coefficients

@@ -20,6 +20,7 @@ FRONT_RUNNING = config.PUBLISHED_DIR / "front_running.csv"
 LOW_VALUE = config.PUBLISHED_DIR / "low_value_imports.csv"
 BORDER_EVENT_2018 = config.PUBLISHED_DIR / "border_pt_event_2018_19.csv"
 BORDER_PT = config.PUBLISHED_DIR / "border_pt.csv"
+ROBUSTNESS = config.PUBLISHED_DIR / "robustness.csv"
 BORDER_EVENT_2025 = config.PUBLISHED_DIR / "border_pt_event_2025_26.csv"
 QA_DIR = config.PROJECT_ROOT / "reports" / "qa"
 # China last, with its own scale labelled on the right; shared-scale ticks only in column 1
@@ -339,7 +340,75 @@ def hero_border_pt(mode: str = "light", data: Path = BORDER_PT,
         return theme.save(fig, "hero_border_pt", mode, out_dir)
 
 
-FIGURES = [chart2_effective_rates, chart5_front_running, chart6_low_value, hero_border_pt]
+def _beta_tick(v: float, _pos: int) -> str:
+    return "US buyers pay  0" if abs(v) < 1e-9 else f"{v:+.1f}".replace("-", "−")
+
+
+def chart_spec_curve(mode: str = "light", data: Path = ROBUSTNESS,
+                     out_dir: Path | None = None) -> list[Path]:  # fmt: skip
+    """P17: specification curve of beta on pre-duty unit values, 2018-19 and 2025-26."""
+    from tpt.models import robustness as rb
+
+    df = pl.read_csv(data).filter(pl.col("outcome") == "uv")
+    rows = [(c, lbl) for c, lbl in rb.CLEANING.items()]
+    rows += [(v.name, v.label) for v in rb.VARIANTS if v.name != "baseline"]
+    with theme.style(mode) as t:
+        color, main_c = t["series"][0], t["series"][1]
+        fig, axes = plt.subplots(2, 2, figsize=(theme.WIDTH_IN, 7.6), sharex="col",
+                                 gridspec_kw={"height_ratios": [1.15, 1]})  # fmt: skip
+        fig.subplots_adjust(left=0.22, right=0.985, top=0.83, bottom=0.08, hspace=0.06,
+                            wspace=0.06)  # fmt: skip
+        for j, (period, title) in enumerate(HERO_PERIODS):
+            p = df.filter(pl.col("period") == period).sort("coef")
+            top, bot = axes[0, j], axes[1, j]
+            x = list(range(p.height))
+            top.axhline(0, color=t["axis"], linewidth=1, zorder=1)
+            is_main = [(c == "w1" and v == "baseline")
+                       for c, v in zip(p["cleaning"], p["variant"], strict=True)]  # fmt: skip
+            cols = [main_c if m else color for m in is_main]
+            top.vlines(x, p["ci_low"], p["ci_high"], colors=cols, linewidth=1.2, zorder=2)
+            top.scatter(x, p["coef"], s=16, c=cols, edgecolors=t["surface"], linewidths=0.8,
+                        zorder=3)  # fmt: skip
+            top.set_ylim(-0.3, 0.45)
+            top.yaxis.set_major_locator(MultipleLocator(0.1))
+            top.yaxis.set_major_formatter(FuncFormatter(_beta_tick))
+            top.set_title(title, color=t["text"])
+            for i, (key, _) in enumerate(rows):
+                on = [(c == key or v == key)
+                      for c, v in zip(p["cleaning"], p["variant"], strict=True)]  # fmt: skip
+                xs = [xi for xi, o in zip(x, on, strict=True) if o]
+                bot.scatter(xs, [i] * len(xs), s=10, marker="s", color=t["text2"], zorder=3)
+                bot.axhline(i, color=t["grid"], linewidth=0.6, zorder=1)
+            bot.set_ylim(len(rows) - 0.5, -0.5)
+            bot.set_yticks(range(len(rows)), [lbl for _, lbl in rows] if j == 0 else [],
+                           fontsize=8, color=t["text"])  # fmt: skip
+            bot.axhline(len(CLEAN_ROWS) - 0.5, color=t["axis"], linewidth=0.8)
+            bot.set_xticks([])
+            bot.grid(False)
+            if j:
+                top.tick_params(axis="y", labelleft=False)
+        axes[0, 0].set_ylabel("β, pre-duty unit value", color=t["muted"], fontsize=8.5)
+        theme.header(
+            fig, "Pass-through estimates under alternative specifications",
+            "Each column is one specification, sorted by its estimate (95% CI); the main "
+            "specification is highlighted. Rows below mark its choices:\ncleaning rule (top "
+            "four) and one change to the main specification. 12-month changes, HS6 × month and "
+            "country × month FE unless marked.", t,
+        )  # fmt: skip
+        theme.footer(fig, theme.SOURCE_CENSUS, t,
+                     note="Confidence intervals beyond the axis are clipped (value-weighted "
+                     "specifications). Data: data/published/robustness.csv.")  # fmt: skip
+        return theme.save(fig, "robustness_spec_curve", mode, out_dir)
+
+
+CLEAN_ROWS = ("w1", "w5", "trim1", "trim3")
+FIGURES = [
+    chart2_effective_rates,
+    chart5_front_running,
+    chart6_low_value,
+    hero_border_pt,
+    chart_spec_curve,
+]
 QA_FIGURES = [qa_border_event_2018, qa_border_event_2025]  # light only, to reports/qa
 
 
