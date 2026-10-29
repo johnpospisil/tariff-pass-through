@@ -12,6 +12,11 @@ from tpt.report import numbers as nm
 N = nm.numbers()
 ```
 
+```{python}
+#| output: asis
+print(nm.fig("hero_border_pt", "Response of pre-duty import prices to tariff changes"))
+```
+
 ::: {.callout-note appearance="simple"}
 **Data as of `{python} N["data_month"]`** (Census trade and tariff rates; CPI to the same month).
 Legal status of the tariffs checked on `{python} N["legal_checked"]`; see
@@ -110,12 +115,7 @@ responses) and the rate actually collected as a check.
 
 ## Border pass-through
 
-```{python}
-#| output: asis
-print(nm.fig("hero_border_pt", "Response of pre-duty import prices to tariff changes"))
-```
-
-The question is whether the price a foreign exporter charges, before duty, falls when the tariff
+The chart at the top of the page shows the estimates in this section. The question is whether the price a foreign exporter charges, before duty, falls when the tariff
 rises. We follow @arw2019: for each product (HS10) and country, the 12-month change in the log
 unit value (customs value ÷ quantity) is regressed on the change in ln(1 + tariff), with fixed
 effects for HS6 product × month and country × month, so the estimate compares varieties of the

@@ -418,7 +418,10 @@ def fig(name: str, caption: str) -> str:
     data = m["data"].removeprefix("data/published/")
     out = []
     for mode, cls in (("light", ".light-content"), ("dark", ".dark-content")):
-        out.append(f'![{caption}](figures/{m["files"][mode]}){{{cls} fig-alt="{alt}"}}')
+        # class on a wrapping div, so the hidden version's caption is hidden too
+        out.append(
+            f'::: {{{cls}}}\n![{caption}](figures/{m["files"][mode]}){{fig-alt="{alt}"}}\n:::'
+        )
     out.append(f"\n<small>Data: [`{data}`](https://github.com/{config.GITHUB_REPO}/blob/main/"
                f"data/published/{data})</small>")  # fmt: skip
     return "\n\n".join(out)
