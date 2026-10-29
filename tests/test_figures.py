@@ -128,3 +128,18 @@ def test_chart3_retail_renders(tmp_path, mode):
     svg = paths[0].read_text()
     assert "Consumer prices of goods by tariff exposure" in svg
     assert theme.tokens(mode)["series"][0] in svg.lower()
+
+
+@pytest.mark.parametrize("mode", theme.MODES)
+def test_chart4_diversion_renders(tmp_path, mode):
+    from tpt.models import diversion as dv
+
+    months = [date(2018 + m // 12, m % 12 + 1, 1) for m in range(36)]
+    rows = [{"panel": p, "month": mo, "group": g, "value": 1.0, "value_r": 12.0,
+             "share": 1 / len(dv.GROUPS)}
+            for p in ("s301", "other") for mo in months for g in dv.GROUPS]  # fmt: skip
+    path = tmp_path / "diversion_shares.csv"
+    pl.DataFrame(rows).write_csv(path)
+    paths = figures.chart4_diversion(mode, data=path, out_dir=tmp_path)
+    svg = paths[0].read_text()
+    assert "Where US imports come from" in svg

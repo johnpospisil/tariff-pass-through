@@ -1,0 +1,26 @@
+period,model,spec,outcome,term,coef,se,ci_low,ci_high,n,n_term,r2,fe,cluster,weights
+2018_19,long_diff,ld_main,dln_v,dtau,-2.09714,0.09603,-2.28539,-1.90888,104731,5978,0.06933,hs6,hs6,
+2018_19,long_diff,ld_cty_fe,dln_v,dtau,-1.91739,0.21893,-2.34659,-1.48819,104726,5978,0.08683,hs6 + cty_code,hs6,
+2018_19,long_diff,ld_weighted,dln_v,dtau,-2.47749,0.34442,-3.15272,-1.80226,104731,5978,0.40326,hs6,hs6,v_b
+2018_19,long_diff,ld_share,dshare,dtau,-0.54303,0.08027,-0.70039,-0.38567,131400,6502,0.55046,hs6,hs6,v_b
+2018_19,long_diff,ld_share_unweighted,dshare,dtau,-0.18072,0.00924,-0.19883,-0.16261,192480,6910,0.01129,hs6,hs6,
+2018_19,long_diff,ld_china_split,dln_v,dtau_china,-2.19745,0.09472,-2.38314,-2.01175,104731,3917,0.06944,hs6,hs6,
+2018_19,long_diff,ld_china_split,dln_v,dtau_other,-1.08678,0.37914,-1.83006,-0.34350,104731,2061,0.06944,hs6,hs6,
+2018_19,long_diff,ld_base_ge_median,dln_v,dtau,-1.39548,0.09131,-1.57449,-1.21648,86359,5639,0.08504,hs6,hs6,
+2018_19,long_diff,ld_base_ge_p90,dln_v,dtau,-1.85121,0.11163,-2.07010,-1.63232,18240,2482,0.23486,hs6,hs6,
+2018_19,ppml,ppml,value,lntau,-2.26690,0.28717,-2.82975,-1.70405,1728201,,,hs6^quarter + hs6^cty_code,hs6,
+2018_19,ppml,ppml_cty_quarter,value,lntau,-2.27741,0.31433,-2.89349,-1.66133,1727325,,,hs6^quarter + hs6^cty_code + cty_code^quarter,hs6,
+2025_26,long_diff,ld_main,dln_v,dtau,0.56124,0.07114,0.42178,0.70070,112319,104293,0.07481,hs6,hs6,
+2025_26,long_diff,ld_cty_fe,dln_v,dtau,1.68497,0.10828,1.47270,1.89725,112308,104293,0.09665,hs6 + cty_code,hs6,
+2025_26,long_diff,ld_weighted,dln_v,dtau,-2.95332,0.75216,-4.42788,-1.47876,112319,104293,0.52517,hs6,hs6,v_b
+2025_26,long_diff,ld_share,dshare,dtau,-0.61566,0.20277,-1.01317,-0.21815,140239,107661,0.48871,hs6,hs6,v_b
+2025_26,long_diff,ld_share_unweighted,dshare,dtau,-0.00425,0.00144,-0.00708,-0.00142,213226,126898,0.00004,hs6,hs6,
+2025_26,long_diff,ld_pretrend,dln_v_dd,dtau,0.34049,0.11683,0.11146,0.56953,92598,86748,0.07756,hs6,hs6,
+2025_26,long_diff,ld_pretrend_cty_fe,dln_v_dd,dtau,1.12884,0.18666,0.76289,1.49479,92584,86748,0.08739,hs6 + cty_code,hs6,
+2025_26,long_diff,ld_pretrend_weighted,dln_v_dd,dtau,-1.88071,0.54747,-2.95400,-0.80741,92598,86748,0.47485,hs6,hs6,v_b
+2025_26,long_diff,ld_china_split,dln_v,dtau_china,-0.83426,0.08801,-1.00680,-0.66173,112319,4268,0.07755,hs6,hs6,
+2025_26,long_diff,ld_china_split,dln_v,dtau_other,0.92103,0.07384,0.77627,1.06579,112319,100025,0.07755,hs6,hs6,
+2025_26,long_diff,ld_base_ge_median,dln_v,dtau,1.19205,0.07580,1.04344,1.34066,94537,87670,0.09960,hs6,hs6,
+2025_26,long_diff,ld_base_ge_p90,dln_v,dtau,-0.69083,0.12565,-0.93721,-0.44446,20238,19214,0.28955,hs6,hs6,
+2025_26,ppml,ppml,value,lntau,-1.46646,0.33132,-2.11584,-0.81707,2157736,,,hs6^quarter + hs6^cty_code,hs6,
+2025_26,ppml,ppml_cty_quarter,value,lntau,-1.15920,0.24915,-1.64753,-0.67087,2155382,,,hs6^quarter + hs6^cty_code + cty_code^quarter,hs6,

@@ -22,6 +22,7 @@ BORDER_EVENT_2018 = config.PUBLISHED_DIR / "border_pt_event_2018_19.csv"
 BORDER_PT = config.PUBLISHED_DIR / "border_pt.csv"
 ROBUSTNESS = config.PUBLISHED_DIR / "robustness.csv"
 RETAIL_HIGH_LOW = config.PUBLISHED_DIR / "retail_high_low.csv"
+DIVERSION_SHARES = config.PUBLISHED_DIR / "diversion_shares.csv"
 BORDER_EVENT_2025 = config.PUBLISHED_DIR / "border_pt_event_2025_26.csv"
 QA_DIR = config.PROJECT_ROOT / "reports" / "qa"
 # China last, with its own scale labelled on the right; shared-scale ticks only in column 1
@@ -477,10 +478,74 @@ def chart3_retail(mode: str = "light", data: Path = RETAIL_HIGH_LOW,
         return theme.save(fig, "chart3_retail", mode, out_dir)
 
 
+DIVERSION_PANELS = (("s301", "Products on the 2018–19 Section 301 lists (China)"),
+                    ("other", "All other products"))  # fmt: skip
+
+
+def chart4_diversion(mode: str = "light", data: Path = DIVERSION_SHARES,
+                     out_dir: Path | None = None) -> list[Path]:  # fmt: skip
+    """Chart 4: supplier shares of US imports (12-month rolling), Section 301 products vs the
+    rest, stacked in a fixed group order."""
+    from tpt.models.diversion import GROUPS
+
+    df = pl.read_csv(data, try_parse_dates=True)
+    order = list(GROUPS)
+    with theme.style(mode) as t:
+        colors = dict(zip(order, t["series"], strict=True))
+        fig, axes = plt.subplots(1, 2, figsize=(theme.WIDTH_IN, 5.8), sharey=True)
+        fig.subplots_adjust(left=0.06, right=0.87, top=0.70, bottom=0.17, wspace=0.36)
+        for ax, (panel, title) in zip(axes, DIVERSION_PANELS, strict=True):
+            p = (
+                df.filter(pl.col("panel") == panel)
+                .pivot(on="group", index="month", values="share")
+                .sort("month")
+            )
+            x = p["month"].to_list()
+            ys = [p[g].fill_null(0).to_numpy() for g in order]
+            ax.stackplot(x, ys, colors=[colors[g] for g in order], edgecolor=t["surface"],
+                         linewidth=1.0, zorder=3)  # fmt: skip
+            cum = 0.0
+            for g, y in zip(order, ys, strict=True):
+                if y[-1] >= 0.04:
+                    short = g.replace("Southeast", "SE")
+                    ax.annotate(f"{short} {y[-1]:.0%}", (x[-1], cum + y[-1] / 2), xytext=(5, 0),
+                                textcoords="offset points", va="center", fontsize=7.5,
+                                color=t["text2"], annotation_clip=False)  # fmt: skip
+                cum += y[-1]
+            ax.set_title(title, color=t["text"], fontsize=9.5)
+            ax.set_ylim(0, 1)
+            ax.set_xlim(x[0], x[-1])
+            ax.grid(False)
+            ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.0%}"))
+            ax.xaxis.set_major_locator(mdates.YearLocator(2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+            for when in (date(2018, 7, 6), date(2025, 2, 4)):
+                ax.axvline(when, color=t["surface"], linewidth=1.2, linestyle=(0, (2, 2)),
+                           zorder=4)  # fmt: skip
+        axes[1].tick_params(axis="y", labelleft=False)
+        handles = [plt.Rectangle((0, 0), 1, 1, color=colors[g]) for g in order]
+        fig.legend(handles, order, loc="upper left", bbox_to_anchor=(0.006, 0.80), ncol=8,
+                   fontsize=8, labelcolor=t["text2"], handlelength=1.0,
+                   columnspacing=1.2)  # fmt: skip
+        theme.header(
+            fig, "Where US imports come from: products tariffed on China in 2018–19 and the rest",
+            "Share of US imports for consumption by supplier, 12-month rolling sums. Dotted "
+            "lines: first Section 301 tariffs (Jul 2018), first 2025 tariffs (Feb 2025).\n"
+            "Section 301 products: HS10 families with a China Section 301 rate in Dec 2019.", t,
+        )  # fmt: skip
+        theme.footer(
+            fig, theme.SOURCE_CENSUS, t,
+            note="Other Southeast Asia: Thailand, Malaysia, Indonesia, Cambodia, Philippines, "
+            "Singapore, Laos, Burma. EU: 27 members. Chapters 98–99 excluded.",
+        )  # fmt: skip
+        return theme.save(fig, "chart4_diversion", mode, out_dir)
+
+
 CLEAN_ROWS = ("w1", "w5", "trim1", "trim3")
 FIGURES = [
     chart2_effective_rates,
     chart3_retail,
+    chart4_diversion,
     chart5_front_running,
     chart6_low_value,
     hero_border_pt,

@@ -955,7 +955,100 @@ store prices):
 - The 2018–19 CPI results neither confirm nor contradict the literature. The 2025–26 design has
   far more exposure variation.
 
+## Trade diversion and transshipment proxies (P20)
+
+`src/tpt/models/diversion.py` (`make diversion`, about 35 s). Outputs:
+- `data/published/diversion.csv`: estimates;
+- `diversion_shares.csv`: chart 4 series;
+- `transshipment_flags.csv`;
+- chart `report/figures/chart4_diversion.png` (and `_dark`).
+
+**Data.** Imports for consumption, individual countries, HS chapters 98–99 excluded, at HS6 ×
+country × month. Statutory rates (P10 `rate_total`) are averaged from HS10 using the pair's
+weight-year customs value (2017 or 2024; unweighted when there is none), and carried forward or
+back to months without trade.
+
+**Import shares (chart 4; 12-month rolling sums).**
+- **Products on the 2018–19 Section 301 lists** (HS10 families with a China Section 301 rate in
+  December 2019; $2.26tn in the 12 months to August 2026):
+
+  | Supplier | 2017-12 | 2019-12 | 2024-12 | 2026-08 |
+  |---|---|---|---|---|
+  | China | 25.5% | 20.2% | 13.9% | 7.4% |
+  | Taiwan | 2.4% | 3.1% | 5.4% | 11.0% |
+  | Vietnam | 2.7% | 3.7% | 5.8% | 8.3% |
+  | Mexico | 16.2% | 17.4% | 19.6% | 21.3% |
+  | Other Southeast Asia | 6.7% | 7.3% | 8.4% | 11.4% |
+  | EU | 14.8% | 15.9% | 15.3% | 12.8% |
+
+- **All other products** ($1.04tn): China 15.8% → 12.7% (2024) → 7.2%; Vietnam 0.8% → 2.3% →
+  5.8%.
+- Most of China's decline in other products came in 2025, and most of Taiwan's gain is computers
+  and servers (HS 8471).
+
+**Elasticity of imports to Δln(1 + τ).** Clustered by HS6.
+- **Long differences:** two seasonally matched 8-month windows two years apart, with HS6 FE so the
+  tariff change is relative to other suppliers of the same product. 2025–26: 2023-06..2024-01 vs
+  2025-06..2026-01, before the 2024-election front-running and before the IEEPA ruling. 2018–19:
+  2017-06..2018-01 vs 2019-06..2020-01.
+- **PPML:** quarterly, balanced for pairs that traded in the weight year, zeros kept.
+
+| Specification | 2018–19 | 2025–26 |
+|---|---|---|
+| Long difference, Δln value, HS6 FE | −2.10 (0.10) | **+0.56 (0.07)** |
+| + country FE | −1.92 (0.22) | +1.69 (0.11) |
+| Weighted by base value | −2.48 (0.34) | −2.95 (0.75) |
+| Pairs in the top decile of base value | −1.85 (0.11) | −0.69 (0.13) |
+| Pairs at or above the median base value | −1.40 (0.09) | +1.19 (0.08) |
+| China's own tariff change / others' | −2.20 (0.10) / −1.09 (0.38) | −0.83 (0.09) / +0.92 (0.07) |
+| Net of the pair's 2021→2023 growth (2025–26 only) | | +0.34 (0.12); weighted −1.88 (0.55) |
+| Δshare (pp), weighted | −0.54 (0.08) | −0.62 (0.20) |
+| PPML, HS6 × quarter + HS6 × country FE | −2.27 (0.29) | −1.47 (0.33) |
+| + country × quarter FE | −2.28 (0.31) | −1.16 (0.25) |
+
+**Reading it.**
+- **2018–19** is consistent across methods: imports fell about 2% per 1% tariff, in line with
+  Fajgelbaum et al. (2020) and Amiti et al. (2019).
+- **2025–26 trade-weighted estimates** (PPML, value-weighted and top-decile long differences) are
+  negative: −0.7 to −3.0, PPML −1.2 to −1.5.
+- **The unweighted 2025–26 long difference is positive.** Two things drive it:
+  - *Small flows.* Pairs below the median base value give +4.4. Small pairs that trade in both
+    windows are noisy and selected on growth.
+  - *Reallocation from China to mid-tariff suppliers.* Within a product, Vietnam (+56%) and
+    Thailand (+41%) gained while facing larger tariff increases (about 0.12) than Canada and Mexico
+    (0.07; −11% and −16%), because they replaced China (0.21; −37%).
+- So the elasticity on a supplier's own tariff relative to the product average is the wrong
+  object when one large supplier (China) faces a much higher rate. China's own coefficient
+  (−0.83) and the trade-weighted estimates are the meaningful ones.
+- Netting out pair pre-trends shrinks the positive estimate (+0.34) but does not remove it.
+- Statutory attenuation (Section 232 content rates, USMCA claims; P16) also biases magnitudes
+  toward zero. Dropping Section 232 HS6s gives +0.23.
+
+**Transshipment proxies** (`transshipment_flags.csv`; patterns consistent with rerouting and
+equally with real relocation of production, not proof). Rule: within an HS6 product, China's
+share fell by at least 10 pp, a country went from under 5% to at least 10% and gained at least
+$25m a year. Unit-value gap = value-weighted mean |ln(UV ÷ China's UV)| over HS10s both supply;
+"converged" if the gap shrank. Only HS6 codes present in both periods are used (HS 2022 renumbered
+some).
+- **2017 → 2024:** 204 pairs, $89.0bn gained; 74 with unit values converging on China's.
+  - By country: Vietnam 58 pairs ($45.8bn), Taiwan 6 ($20.7bn), Thailand 18 ($5.5bn), Korea 9,
+    Mexico 13, India 15, Cambodia 7, Indonesia 11.
+  - Largest: Taiwan computers and servers 847150 (+$15.4bn; the unit-value gap widened from 0.37
+    to 3.19, so different products, consistent with AI servers rather than rerouting); Vietnam
+    laptops 847130 (+$12.1bn, gap 1.09 → 0.32); Vietnam network equipment 851762 (+$10.7bn,
+    0.36 → 0.10); Vietnam computer parts 847330; Vietnam headphones 851830; Vietnam vinyl wall
+    coverings 391810; Vietnam kitchen furniture 940340.
+- **2024 → the latest 12 months (2025-09..2026-08):** 67 pairs, $12.9bn gained; 27 converging.
+  - By country: Thailand 10 ($7.4bn, including laptops 847130 +$5.4bn), Vietnam 22, Indonesia 7
+    (artificial graphite 380110), Cambodia 5 (footwear, e-motorcycles), Malaysia 3.
+- These flags list where to look (customs origin investigations and evasion findings), not
+  findings of evasion.
+
 ## Known issues
+
+- **Unweighted 2025–26 diversion elasticity (P20)**: positive (+0.56), driven by small flows and
+  by reallocation from China to mid-tariff Asian suppliers; use PPML or trade-weighted estimates
+  (−0.7 to −3.0) and China's own coefficient (−0.83).
 
 - **CPI pre-trends (P19)**: high-exposure CPI goods were falling relative to low-exposure goods
   before 2018 and 2025. Retail DiDs need item trends; without them estimates are negative

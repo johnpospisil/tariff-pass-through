@@ -1,4 +1,4 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value exposure retail-did border-pt border-pt-2025 robustness build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value exposure retail-did diversion border-pt border-pt-2025 robustness build models figures report test lint format all
 
 UV := uv run
 
@@ -67,7 +67,7 @@ timeline-validate:  ## P07 check data/reference/tariff_actions.csv (citations, d
 build: concordance timeline-validate rates validate-rates import-panel effective-rates front-running low-value exposure
 	@echo "build: not implemented yet (P10, P12, P18)"
 
-models: border-pt robustness retail-did  ## P15-P20 regressions -> data/published/
+models: border-pt robustness retail-did diversion  ## P15-P20 regressions -> data/published/
 
 border-pt:  ## P15 replication + P16 2025-26 border pass-through (~1 h)
 	$(UV) python -u -m tpt.models.border_pt
@@ -77,6 +77,9 @@ exposure:  ## P18 CPI item import shares and tariff exposure (BEA bridge and han
 
 retail-did:  ## P19 CPI DiD and event studies on P18 exposure (both periods)
 	$(UV) python -u -m tpt.models.retail_did
+
+diversion:  ## P20 long differences, PPML gravity, transshipment flags, chart 4 shares
+	$(UV) python -u -m tpt.models.diversion
 
 robustness:  ## P17 robustness grid (cleaning x variants, both periods, ~15 min)
 	$(UV) python -u -m tpt.models.robustness

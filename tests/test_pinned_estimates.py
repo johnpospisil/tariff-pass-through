@@ -253,3 +253,53 @@ def test_retail_event_study_flat_before_2025(retail):
     post = ev.filter(pl.col("k").is_between(9, 18))["coef"]
     assert pre.abs().max() < 0.015
     assert post.mean() > 0.02
+
+
+# --- P20: trade diversion -------------------------------------------------------------
+
+from tpt.models import diversion as dv  # noqa: E402
+
+PINNED_DIV = {
+    ("2018_19", "ld_main", "dtau"): (-2.097, 0.15), ("2018_19", "ppml", "lntau"): (-2.267, 0.3),
+    ("2025_26", "ld_weighted", "dtau"): (-2.953, 0.5), ("2025_26", "ppml", "lntau"): (-1.466, 0.3),
+    ("2025_26", "ppml_cty_quarter", "lntau"): (-1.159, 0.3),
+    ("2025_26", "ld_china_split", "dtau_china"): (-0.834, 0.15),
+    ("2025_26", "ld_base_ge_p90", "dtau"): (-0.691, 0.2),
+}  # fmt: skip
+
+
+@pytest.fixture(scope="module")
+def div() -> dict:
+    if not dv.OUT.exists():
+        pytest.skip("run make diversion")
+    df = pl.read_csv(dv.OUT)
+    return {(r["period"], r["spec"], r["term"]): r for r in df.iter_rows(named=True)}
+
+
+@pytest.mark.parametrize(("key", "pin"), PINNED_DIV.items(), ids=lambda v: str(v))
+def test_pinned_diversion(div, key, pin):
+    assert div[key]["coef"] == pytest.approx(pin[0], abs=pin[1])
+
+
+def test_trade_weighted_elasticities_negative(div):
+    """Imports fall with tariffs in every trade-weighted specification, both periods."""
+    for period in ("2018_19", "2025_26"):
+        for spec, term in (("ld_weighted", "dtau"), ("ppml", "lntau"),
+                           ("ppml_cty_quarter", "lntau"), ("ld_base_ge_p90", "dtau")):  # fmt: skip
+            assert div[(period, spec, term)]["ci_high"] < 0, (period, spec)
+
+
+def test_unweighted_2025_sign_is_the_documented_anomaly(div):
+    """2025-26 unweighted long difference is positive (small flows; reallocation from China to
+    mid-tariff Asian suppliers; DATA.md P20). Fails if that changes, so the note stays accurate."""
+    assert div[("2025_26", "ld_main", "dtau")]["coef"] > 0
+    assert div[("2025_26", "ld_china_split", "dtau_other")]["coef"] > 0
+
+
+def test_china_share_of_s301_products_fell():
+    s = (
+        pl.read_csv(dv.SHARES_OUT, try_parse_dates=True)
+        .filter(pl.col("panel") == "s301", pl.col("group") == "China")
+        .sort("month")
+    )
+    assert s["share"][0] > 0.24 and s["share"][-1] < 0.09

@@ -274,7 +274,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > and a table in `data/published/robustness.csv`. Report which choices move β by more than its SE.
 > Commit `P17`.
 
-### Phase 5 — Retail and diversion (Week 5)
+### Phase 5 — Retail and diversion (Week 5) ✅ DONE!
 
 **P18 — HS → CPI exposure ✅ DONE!**
 > Implement `src/tpt/build/exposure.py`: for each CPI item, the import share of supply and the
@@ -291,7 +291,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > FE). Report the implied retail pass-through relative to the border estimate. Chart 3: high- vs
 > low-exposure CPI indexed to Jan 2025. Pin estimates. Commit `P19`.
 
-**P20 — Trade diversion (chart 4)**
+**P20 — Trade diversion (chart 4) ✅ DONE!**
 > Implement `src/tpt/models/diversion.py`: within-HS6 country import shares over time for tariffed
 > products; regressions of share changes on relative tariff changes; a gravity-style model with HS6 ×
 > month and country × HS6 FE (PPML via pyfixest). Transshipment proxies: HS6 products where a country's
