@@ -1,4 +1,4 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value exposure retail-did diversion explorer refresh snapshot-pack snapshot-unpack border-pt border-pt-2025 robustness build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value exposure retail-did diversion explorer review refresh snapshot-pack snapshot-unpack border-pt border-pt-2025 robustness build models figures report test lint format all
 
 UV := uv run
 
@@ -88,6 +88,9 @@ border-pt-2025:  ## P16 only: static grid, heterogeneity, MXP check, 2025-26 eve
 	$(UV) python -u -m tpt.models.border_pt pt
 	$(UV) python -u -m tpt.models.border_pt events25
 
+review:  ## P25 review packet tables -> reports/review/
+	$(UV) python -m tpt.report.review
+
 explorer:  ## P23 product explorer bundle -> data/published/explorer/
 	$(UV) python -u -m tpt.report.explorer
 
@@ -105,7 +108,7 @@ SNAPSHOT ?= data-snapshot.tar.gz
 
 refresh:  ## re-pull trailing Census window (revisions) + BLS/Treasury, rebuild everything, render
 	$(UV) python -u -m tpt.ingest.census_trade --refresh-months $(REFRESH_MONTHS)
-	$(MAKE) ingest-bls ingest-reference reconcile build models explorer figures report
+	$(MAKE) ingest-bls ingest-reference reconcile build models explorer review figures report
 
 snapshot-pack:  ## CI data snapshot: raw downloads (not Census HS10 JSON) + parsed interim data
 	COPYFILE_DISABLE=1 tar -czf $(SNAPSHOT) --exclude='._*' --exclude=data/raw/census --exclude=data/interim/import_panel_unwinsorised.parquet --exclude='_progress.json' data/raw data/interim

@@ -299,7 +299,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > with China's; list top flagged pairs, framed as suspicious patterns, not proof. Chart 4: stacked area of
 > import shares by country for tariffed products. Commit `P20`.
 
-### Phase 6 — Publish (Weeks 6–7)
+### Phase 6 — Publish (Weeks 6–7) ✅ DONE!
 
 **P21 — Hero chart and final figures ✅ DONE!**
 > Load the dataviz skill. Finalize the hero chart: pass-through estimates (2018–19 vs 2025–26, by
@@ -332,7 +332,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > repository secrets. Also add a workflow that reminds (issue) to re-verify tariff actions monthly. Run it
 > once manually and report. Commit `P24`.
 
-**P25 — Review packet and launch**
+**P25 — Review packet and launch ✅ DONE!**
 > Run the data:validate-data skill over the whole analysis. Then prepare a review packet for a trade
 > economist in `reports/review/`: one-page summary, key estimates with specs, the tariff timeline with
 > citations, known data gaps, and specific questions for the reviewer. Finalize README (how to run,

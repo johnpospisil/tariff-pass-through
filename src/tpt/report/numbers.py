@@ -129,7 +129,7 @@ def numbers() -> dict[str, str]:  # noqa: PLR0915 - one flat list of report numb
     pk = cn.row(int(cn["effective_rate"].arg_max()), named=True)
     n["eff_cn_peak"], n["eff_cn_peak_month"] = pct(pk["effective_rate"]), month_name(pk["month"])
     pk = cn.row(int(cn["statutory_rate"].arg_max()), named=True)
-    n["stat_cn_peak"] = pct(pk["statutory_rate"])
+    n["stat_cn_peak"], n["stat_cn_peak_month"] = pct(pk["statutory_rate"]), month_name(pk["month"])
     n["eff_cn_last"] = pct(cn["effective_rate"][-1])
     for g, k in (("Canada", "ca"), ("Mexico", "mx")):
         r = e.filter(pl.col("group") == g).sort("month").row(-1, named=True)
@@ -261,6 +261,10 @@ def numbers() -> dict[str, str]:  # noqa: PLR0915 - one flat list of report numb
     n["fr_excess"] = bn(big["excess_positive_bn"].sum())
     ph = _row(fr, action="pharma")
     n["fr_pharma_peak"] = pct(ph["peak_pct"], 0, sign=True)
+    # peak_k: months relative to the effective month
+    eff = ph["effective_month"]
+    k = eff.year * 12 + eff.month - 1 + int(ph["peak_k"])
+    n["fr_pharma_peak_month"] = month_name(date(k // 12, k % 12 + 1, 1))
     lv = _csv("low_value_imports.csv").sort("month")
     pre = lv.filter(pl.col("month").is_between(date(2025, 1, 1), date(2025, 4, 1)))
     n["lv_cn_pre"] = bn(pre["china_hk_bn"].mean(), 2)

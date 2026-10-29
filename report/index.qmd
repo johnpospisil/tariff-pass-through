@@ -104,7 +104,7 @@ rate peaked at `{python} N["eff_cn_peak"]` in `{python} N["eff_cn_peak_month"]` 
 `{python} N["eff_cn_last"]` in `{python} N["data_month"]` (Penn Wharton: `{python} N["pwbm_cn_eff"]`).
 
 The statutory rate, what the orders say applies, ran well above duties actually assessed:
-`{python} N["stat_peak"]` at its peak, and `{python} N["stat_cn_peak"]` for China in April 2025,
+`{python} N["stat_peak"]` at its peak, and `{python} N["stat_cn_peak"]` for China in `{python} N["stat_cn_peak_month"]`,
 when most goods shipped before the increase were still exempt in transit. The gap comes from
 identifiable sources: USMCA-qualifying goods from Canada and Mexico enter free (Canada
 `{python} N["eff_ca_last"]` effective against `{python} N["stat_ca_last"]` statutory; Mexico
@@ -255,7 +255,7 @@ For each 2025 action we compare imports of the affected product × country pairs
 seasonal pattern and pre-election growth. Goods facing the China, metals and reciprocal tariffs ran
 above trend for `{python} N["fr_months_lo"]`–`{python} N["fr_months_hi"]` months, peaking in the
 month before the duty, with `{python} N["fr_excess"]` of excess imports. The largest single surge
-was pharmaceuticals (`{python} N["fr_pharma_peak"]` in March 2025) when the Section 232 inquiry
+was pharmaceuticals (`{python} N["fr_pharma_peak"]` in `{python} N["fr_pharma_peak_month"]`) when the Section 232 inquiry
 opened. Afterwards imports fell below trend. Months around each effective date are excluded or
 tested separately in the pass-through estimates.
 

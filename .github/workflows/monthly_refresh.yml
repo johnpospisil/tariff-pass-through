@@ -113,7 +113,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/published data/reference report/figures
+          git add data/published data/reference report/figures reports/review
           if git diff --cached --quiet; then echo "no changes"; else
             git commit -m "Monthly refresh: Census data through ${{ needs.check.outputs.available }}"
             git status --short  # other tracked files the build rewrites; kept local
