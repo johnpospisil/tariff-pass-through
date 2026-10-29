@@ -103,3 +103,28 @@ def test_spec_curve_renders(tmp_path, mode):
     svg = paths[0].read_text()
     assert "Drop China" in svg and "Trim ratio" in svg
     assert paths[1].stat().st_size > 10_000
+
+
+def _high_low_csv(tmp_path):
+    months = [date(2023 + m // 12, m % 12 + 1, 1) for m in range(44)]
+    rows = [{"group": g, "month": mo, "rel": 0.0, "n_items": 3 if mo == date(2025, 10, 1) else 40,
+             "index": 100 + (i - 24) * (0.1 if g == "high" else 0.05),
+             "index_dt": 100 + max(i - 24, 0) * (0.1 if g == "high" else 0.0),
+             "period": "2025_26"}
+            for g in ("high", "mid", "low") for i, mo in enumerate(months)]  # fmt: skip
+    path = tmp_path / "retail_high_low.csv"
+    pl.DataFrame(rows).write_csv(path)
+    return path
+
+
+def test_sparse_months_masked():
+    df = pl.DataFrame({"group": ["high"] * 3, "n_items": [40, 3, 40], "index": [1.0, 2.0, 3.0]})
+    assert figures.mask_sparse(df, ["index"])["index"].to_list() == [1.0, None, 3.0]
+
+
+@pytest.mark.parametrize("mode", theme.MODES)
+def test_chart3_retail_renders(tmp_path, mode):
+    paths = figures.chart3_retail(mode, data=_high_low_csv(tmp_path), out_dir=tmp_path)
+    svg = paths[0].read_text()
+    assert "Consumer prices of goods by tariff exposure" in svg
+    assert theme.tokens(mode)["series"][0] in svg.lower()

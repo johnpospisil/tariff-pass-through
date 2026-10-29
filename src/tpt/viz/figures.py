@@ -21,6 +21,7 @@ LOW_VALUE = config.PUBLISHED_DIR / "low_value_imports.csv"
 BORDER_EVENT_2018 = config.PUBLISHED_DIR / "border_pt_event_2018_19.csv"
 BORDER_PT = config.PUBLISHED_DIR / "border_pt.csv"
 ROBUSTNESS = config.PUBLISHED_DIR / "robustness.csv"
+RETAIL_HIGH_LOW = config.PUBLISHED_DIR / "retail_high_low.csv"
 BORDER_EVENT_2025 = config.PUBLISHED_DIR / "border_pt_event_2025_26.csv"
 QA_DIR = config.PROJECT_ROOT / "reports" / "qa"
 # China last, with its own scale labelled on the right; shared-scale ticks only in column 1
@@ -401,9 +402,85 @@ def chart_spec_curve(mode: str = "light", data: Path = ROBUSTNESS,
         return theme.save(fig, "robustness_spec_curve", mode, out_dir)
 
 
+def mask_sparse(df: pl.DataFrame, cols: list[str], share: float = 0.5) -> pl.DataFrame:
+    """Null cols in months where a group has under `share` of its usual item count (Oct 2025:
+    most CPI items not collected)."""
+    full = pl.col("n_items").max().over("group")
+    return df.with_columns(
+        [pl.when(pl.col("n_items") >= share * full).then(pl.col(c)).alias(c) for c in cols]
+    )
+
+
+RETAIL_GROUPS = (("high", "Highest-exposure third"), ("low", "Lowest-exposure third"))
+
+
+def chart3_retail(mode: str = "light", data: Path = RETAIL_HIGH_LOW,
+                  out_dir: Path | None = None, period: str = "2025_26") -> list[Path]:  # fmt: skip
+    """Chart 3: CPI of high- vs low-exposure goods, indexed to Jan 2025; raw (deseasonalised)
+    and relative to each item's own 2023-24 trend."""
+    df = mask_sparse(
+        pl.read_csv(data, try_parse_dates=True).filter(pl.col("period") == period),
+        ["index", "index_dt"],
+    ).sort("month")
+    panels = (("index", "Deseasonalised index"),
+              ("index_dt", "Relative to each item's own 2023–24 trend"))  # fmt: skip
+    vals = df.filter(pl.col("group").is_in(["high", "low"]))
+    lo = min(vals["index"].min(), vals["index_dt"].min())
+    hi = max(vals["index"].max(), vals["index_dt"].max())
+    with theme.style(mode) as t:
+        colors = {"high": t["series"][1], "low": t["series"][0]}
+        fig, axes = plt.subplots(1, 2, figsize=(theme.WIDTH_IN, 5.4), sharey=True)
+        fig.subplots_adjust(left=0.06, right=0.86, top=0.72, bottom=0.2, wspace=0.08)
+        for ax, (col, title) in zip(axes, panels, strict=True):
+            ax.axhline(100, color=t["axis"], linewidth=0.8, zorder=2)
+            for when in (date(2025, 2, 1), date(2026, 2, 20)):
+                ax.axvline(when, color=t["muted"], linewidth=0.8, zorder=2)
+            for g, _ in RETAIL_GROUPS:
+                p = df.filter(pl.col("group") == g)
+                x = p["month"].to_list()
+                ax.plot(x, p[col], color=colors[g], zorder=4)
+                last = p.drop_nulls(col).row(-1, named=True)
+                theme.end_dot(ax, last["month"], last[col], colors[g], t)
+                if col == "index_dt":
+                    ax.annotate(f"{last[col]:.1f}", (last["month"], last[col]), xytext=(7, 0),
+                                textcoords="offset points", va="center", fontsize=8.5,
+                                color=t["text2"], annotation_clip=False)  # fmt: skip
+            ax.set_title(title, color=t["text"], fontsize=9.5)
+            ax.set_ylim(lo - 0.6, hi + 1.2)
+            ax.xaxis.set_major_locator(mdates.YearLocator())
+            ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+            ax.set_xlim(df["month"].min(), df["month"].max())
+        axes[0].annotate("First 2025 tariffs (Feb)", (date(2025, 2, 1), hi + 1.0), xytext=(-4, 0),
+                         textcoords="offset points", ha="right", va="top", fontsize=8,
+                         color=t["muted"])  # fmt: skip
+        axes[0].annotate("IEEPA ruling", (date(2026, 2, 20), hi + 1.0), xytext=(-4, 0),
+                         textcoords="offset points", ha="right", va="top", fontsize=8,
+                         color=t["muted"])  # fmt: skip
+        handles = [plt.Line2D([], [], color=colors[g], lw=theme.LINE_WIDTH)
+                   for g, _ in RETAIL_GROUPS]  # fmt: skip
+        fig.legend(handles, [label for _, label in RETAIL_GROUPS], loc="upper left",
+                   bbox_to_anchor=(0.006, 0.80), ncol=2, fontsize=8.5,
+                   labelcolor=t["text2"])  # fmt: skip
+        n = {g: int(df.filter(pl.col("group") == g)["n_items"].max()) for g, _ in RETAIL_GROUPS}
+        theme.header(
+            fig, "Consumer prices of goods by tariff exposure",
+            f"CPI goods items in the highest ({n['high']}) and lowest ({n['low']}) thirds of "
+            "2025–26 tariff exposure (import share × tariff change), mean log index,\n"
+            "Jan 2025 = 100. Item seasonal factors estimated on 2015–24.", t,
+        )  # fmt: skip
+        theme.footer(
+            fig, "Source: BLS CPI-U (U.S. city average, not seasonally adjusted); exposure from "
+            "Census imports, BEA 2017 supply and PCE bridge tables, tariff_actions.csv.", t,
+            note="October 2025 not shown: BLS collected no prices for most items (federal "
+            "shutdown). Exposure: data/processed/cpi_exposure.parquet (P18).",
+        )  # fmt: skip
+        return theme.save(fig, "chart3_retail", mode, out_dir)
+
+
 CLEAN_ROWS = ("w1", "w5", "trim1", "trim3")
 FIGURES = [
     chart2_effective_rates,
+    chart3_retail,
     chart5_front_running,
     chart6_low_value,
     hero_border_pt,

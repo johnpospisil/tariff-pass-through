@@ -202,3 +202,54 @@ def test_value_weighted_2025_is_the_documented_outlier(grid):
     (DATA.md P17). Fails if that changes, so the note stays accurate."""
     for c in rb.CLEANING:
         assert grid[("2025_26", "uv", c, "weighted")]["coef"] < -0.1, c
+
+
+# --- P19: retail CPI DiD (CPI through 2026-09, exposure through 2026-08) ------------
+
+from tpt.models import retail_did as rd  # noqa: E402
+
+PINNED_RETAIL = {
+    ("2025_26", "main"): (0.294, 0.10), ("2025_26", "main_eff"): (0.651, 0.15),
+    ("2025_26", "pre_ruling"): (0.237, 0.10), ("2025_26", "diff12"): (0.068, 0.10),
+    ("2025_26", "binary"): (0.026, 0.01), ("2025_26", "no_trend"): (-0.760, 0.10),
+    ("2018_19", "main"): (0.962, 0.30),
+}  # fmt: skip
+
+
+@pytest.fixture(scope="module")
+def retail() -> dict:
+    if not rd.OUT.exists():
+        pytest.skip("run make retail-did")
+    df = pl.read_csv(rd.OUT)
+    return {(r["period"], r["spec"]): r for r in df.iter_rows(named=True)}
+
+
+@pytest.mark.parametrize(("key", "pin"), PINNED_RETAIL.items(), ids=lambda v: str(v))
+def test_pinned_retail(retail, key, pin):
+    assert retail[key]["coef"] == pytest.approx(pin[0], abs=pin[1])
+
+
+def test_retail_pass_through_partial_and_below_border(retail):
+    """2025-26: retail prices rose by a fraction of the duty cost (theta 0.2-0.7 against each
+    item's pre-trend), about 0.6 of the border duty-inclusive response on either duty measure."""
+    for spec in ("main", "main_eff", "pre_ruling", "trend_long"):
+        assert 0.1 < retail[("2025_26", spec)]["coef"] < 0.8, spec
+    for spec in ("main", "main_eff"):
+        assert 0.4 < retail[("2025_26", spec)]["retail_vs_border"] < 0.8, spec
+
+
+def test_retail_without_item_trends_is_biased_by_pre_trends(retail):
+    """High-exposure goods were falling relative to low-exposure ones before both episodes;
+    without item trends the estimate is negative (DATA.md P19). Fails if that changes."""
+    for period in ("2025_26", "2018_19"):
+        assert retail[(period, "no_trend")]["coef"] < 0
+
+
+def test_retail_event_study_flat_before_2025(retail):
+    ev = pl.read_csv(rd.EVENT_OUT).filter(
+        pl.col("period") == "2025_26", pl.col("trend") == "pre", pl.col("design") == "binary"
+    )
+    pre = ev.filter(pl.col("k").is_between(-12, -1))["coef"]
+    post = ev.filter(pl.col("k").is_between(9, 18))["coef"]
+    assert pre.abs().max() < 0.015
+    assert post.mean() > 0.02

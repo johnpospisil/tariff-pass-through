@@ -875,7 +875,91 @@ truce, rises with the August 2025 reciprocal rates and Section 232 derivatives, 
 IEEPA ruling (March 2026) and the Section 122 expiry (July 2026). Toys: 0.108 in 2025-04, 0.031 in
 2025-12, 0.020 in 2026-08. IEEPA status as recorded in P09 (checked 2026-10-28).
 
+## Retail pass-through: CPI DiD (P19)
+
+`src/tpt/models/retail_did.py` (`make retail-did`, a few seconds). Outputs:
+- `data/published/retail_did.csv`: one row per period × specification;
+- `retail_event.csv`: event studies;
+- `retail_high_low.csv`: chart 3 series;
+- chart `report/figures/chart3_retail.png` (and `_dark`).
+
+**Data and sample.** CPI-U U.S. city average item indexes, NSA (P05), with the P18 exposure E_it
+(bea route). E_it is the duty as a share of the consumer price under full pass-through, so θ = 1
+means retail prices rose by the full duty cost of the item's imports.
+- **Items:** 118 leaf goods items, those with at least half of their P18 weight on goods; a
+  parent is dropped when a more detailed child is in the sample.
+- **Clusters:** 47 expenditure classes (first four characters of the item code). Items in a class
+  share bridge lines, hence exposure.
+- **Weights:** none.
+- **Windows:** 2023-01..2026-08 (the last exposure month) and 2016-01..2019-12.
+- **October 2025:** 115 of the 118 items have no index (federal shutdown). Those months are left
+  missing, not interpolated, and 12-month differences that touch them drop out.
+
+**Pre-trends decide the specification.** In both episodes, high-exposure goods (appliances,
+apparel, electronics) were falling relative to low-exposure goods (food, fuel, drugs). In 2023–24
+the high-exposure third fell about 3% against the low third, after deseasonalising (chart 3, left
+panel). Without item trends, the levels DiD reads the 2025 halt of that decline as a negative
+effect: θ = −0.76 (0.24) for 2025–26 and −3.30 (1.84) for 2018–19, and the binary version gives
+−4.1%. So the main specification measures each item against its own pre-trend:
+1. Remove item month-of-year factors, estimated on 2015 to the December before the reference
+   month.
+2. Fit a linear trend on the window's pre-period (2023-01..2024-12 for 2025–26; 2016-01..2017-12
+   for 2018–19) and subtract it, extrapolated.
+3. Regress on E_it with item + month FE.
+
+A simulation test checks that this recovers θ when exposed items trend down, and that the no-trend
+version does not.
+
+**Results, 2025–26** (θ, SE clustered by class; "vs border" = θ ÷ the border duty-inclusive
+coefficient on the same duty measure, P16):
+
+| Specification | θ (SE) | vs border |
+|---|---|---|
+| Main (statutory exposure) | +0.294 (0.226) | 0.58 (÷ 0.508) |
+| Effective (collected-duty) exposure | +0.651 (0.417) | 0.61 (÷ 1.061, implied-rate IV) |
+| To Jan 2026 (before the IEEPA ruling) | +0.237 (0.189) | |
+| … effective | +0.532 (0.323) | |
+| Trend fitted from 2015 | +0.315 (0.327) | |
+| 12-month differences + item FE | +0.068 (0.166) | |
+| … effective | +0.332 (0.263) | |
+| BLS seasonally adjusted series (104 items) | +0.171 (0.235) | |
+| All items, services at zero exposure (174) | +0.345 (0.194) | |
+| Hand route (46 items) | +0.196 (0.247); effective +0.484 (0.566) | |
+| Item clusters | SE 0.232 | |
+| No item trends | −0.760 (0.239) | |
+| Binary, top vs bottom third | +2.6% (1.4); 0.81 per unit of exposure gap (0.032) | |
+
+**Reading it.**
+- Retail prices of more exposed goods rose relative to their own trends. The point estimates put
+  that rise at roughly 0.2–0.65 of the duty cost, which is about 0.6 of the border response on
+  either duty measure: at the border importers paid about the full duty (P16), and in stores
+  prices rose by a fraction of it.
+- No single estimate is significant at 5%. The binary and statutory pre-ruling estimates are
+  closest (t ≈ 1.8 and 1.25), and the 12-month-difference estimate is near zero.
+- **Event study** (binary, detrended):
+  - pre-period |coefficients| below 0.01 from k = −12 to −1;
+  - +1.5% at k = 4, +2.6% at k = 6, +4.4% at k = 12, +5.3% at k = 18 (SE 0.007–0.031);
+  - the continuous version reaches 0.5–1.0 per unit of window-mean exposure by k = 12–18.
+- **The response is gradual and has not reversed.** After the IEEPA ruling (Feb 2026), exposure
+  fell but prices of high-exposure items kept rising relative to trend. Chart 3, right panel: high
+  third 107.1, low third 102.3 in 2026-08, both relative to their own 2023–24 trends. So the
+  time-varying-exposure θ (which assumes prices respond to tariff cuts as they did to increases)
+  is likely below the cumulative response. The extrapolated 20-month trends add uncertainty to the
+  later months.
+
+**2018–19 check** (Cavallo, Gopinath, Neiman and Tang, 2021, found limited retail pass-through in
+store prices):
+- Exposure is an order of magnitude smaller (P18), so precision is low: main θ +0.962 (1.122);
+  12-month differences +1.29 (0.85); hand route +2.83 (1.10); binary −0.5% (1.2).
+- The binary event study's pre-period is not flat (+1–3% before Jan 2018).
+- The 2018–19 CPI results neither confirm nor contradict the literature. The 2025–26 design has
+  far more exposure variation.
+
 ## Known issues
+
+- **CPI pre-trends (P19)**: high-exposure CPI goods were falling relative to low-exposure goods
+  before 2018 and 2025. Retail DiDs need item trends; without them estimates are negative
+  (2025–26 −0.76). Retail θ is imprecise (no 5%-significant estimate); report ranges.
 
 - **CPI exposure via the BEA bridge (P18)**: many CPI strata share one PCE bridge line (footwear,
   apparel by gender, cereals, bakery), so they get identical exposure. Use the hand route for

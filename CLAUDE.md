@@ -79,6 +79,9 @@ project rules and the prompt sequence; run the prompts in order, one per session
   variety level collected duties rise only ~0.5 per unit of statutory change (Section 232 rows
   0.38), so duty-inclusive and quantity coefficients on statutory τ are attenuated; report
   `implied_iv` (implied τ instrumented by statutory) for magnitudes per duty collected.
+- **CPI pre-trends** (P19, DATA.md "Retail pass-through"): high-exposure CPI goods were already
+  falling relative to low-exposure goods before 2018 and 2025; retail DiDs must measure items
+  against their own pre-trends (no-trend levels DiD gives −0.76 in 2025–26).
 - **De minimis**: shipments under $800 were mostly absent from official trade statistics before its end,
   so a post-repeal "increase" in recorded small parcels can be a measurement change, not a real increase.
 - **October 2025 BLS gap**: the 2025 shutdown left most CPI (21 of ~700 series) and about half of
@@ -281,7 +284,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > low mapping coverage. Output `data/processed/cpi_exposure.parquet` and a top/bottom-20 exposure table.
 > Commit `P18`.
 
-**P19 — Retail DiD and event study (chart 3)**
+**P19 — Retail DiD and event study (chart 3) ✅ DONE!**
 > Implement `src/tpt/models/retail_did.py`: DiD on CPI item indexes with high vs low exposure (and a
 > continuous-exposure version), item and month FE, event study by month relative to Jan 2025; replicate on
 > 2018–19 as a check against Cavallo et al. Handle seasonality (SA series or NSA with item × month-of-year
