@@ -66,3 +66,21 @@ def test_qa_border_event_renders(tmp_path):
     paths = figures.qa_border_event_2018("light", data=path, out_dir=tmp_path)
     assert paths[1].stat().st_size > 10_000
     assert "replication check" in paths[0].read_text()
+
+
+@pytest.mark.parametrize("mode", theme.MODES)
+def test_hero_border_pt_renders(tmp_path, mode):
+    rows = [
+        {"period": p, "spec": spec, "outcome": "uv", "group": g, "coef": c, "ci_low": c - 0.05,
+         "ci_high": c + 0.05}
+        for p in ("2018_19", "2025_26")
+        for (spec, g) in figures.HERO_ROWS.values()
+        for spec, c in ((spec, 0.05), (figures.trim_spec(spec), -0.04))
+        if not (p == "2018_19" and g == "ieepa")
+    ]  # fmt: skip
+    path = tmp_path / "border_pt.csv"
+    pl.DataFrame(rows).write_csv(path)
+    paths = figures.hero_border_pt(mode, data=path, out_dir=tmp_path)
+    svg = paths[0].read_text()
+    assert "Foreign exporters pay" in svg and "US buyers pay" in svg
+    assert paths[1].stat().st_size > 10_000

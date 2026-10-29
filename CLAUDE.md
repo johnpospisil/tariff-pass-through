@@ -75,6 +75,10 @@ project rules and the prompt sequence; run the prompts in order, one per session
 - **Unit-value outliers** (P15, DATA.md "Border pass-through"): 1/99 winsorising of 12-month
   unit-value changes keeps composition jumps (bounds ±4.2 log points) that move β by about 0.2;
   always report the ARW ratio-3 trim alongside (spec `main_trim3`).
+- **Statutory τ attenuation in 2025–26** (P16, DATA.md "Border pass-through: 2025–26"): at the
+  variety level collected duties rise only ~0.5 per unit of statutory change (Section 232 rows
+  0.38), so duty-inclusive and quantity coefficients on statutory τ are attenuated; report
+  `implied_iv` (implied τ instrumented by statutory) for magnitudes per duty collected.
 - **De minimis**: shipments under $800 were mostly absent from official trade statistics before its end,
   so a post-repeal "increase" in recorded small parcels can be a measurement change, not a real increase.
 - **October 2025 BLS gap**: the 2025 shutdown left most CPI (21 of ~700 series) and about half of
@@ -250,7 +254,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > concordance, tariff timing) before P16. Pin the estimates in `tests/test_pinned_estimates.py` with
 > tolerances. Commit `P15`.
 
-**P16 — 2025–26 border pass-through**
+**P16 — 2025–26 border pass-through ✅ DONE!**
 > Run the same design on 2024–present. Main spec with statutory Δln(1+τ); alternative using implied rates
 > (flag endogeneity). Heterogeneity: by country (China vs others), by authority (S232 vs IEEPA), by
 > Rauch differentiated vs homogeneous, by time since tariff (pass-through may change as contracts

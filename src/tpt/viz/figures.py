@@ -19,6 +19,8 @@ EFFECTIVE = config.PUBLISHED_DIR / "effective_rates.csv"
 FRONT_RUNNING = config.PUBLISHED_DIR / "front_running.csv"
 LOW_VALUE = config.PUBLISHED_DIR / "low_value_imports.csv"
 BORDER_EVENT_2018 = config.PUBLISHED_DIR / "border_pt_event_2018_19.csv"
+BORDER_PT = config.PUBLISHED_DIR / "border_pt.csv"
+BORDER_EVENT_2025 = config.PUBLISHED_DIR / "border_pt_event_2025_26.csv"
 QA_DIR = config.PROJECT_ROOT / "reports" / "qa"
 # China last, with its own scale labelled on the right; shared-scale ticks only in column 1
 PANELS = ["All countries", "Canada", "Mexico", "EU", "Japan", "Vietnam", "India", "China"]
@@ -203,28 +205,26 @@ EVENT_PANELS = [("uv", "Pre-duty unit value"), ("uv_dut", "Duty-inclusive unit v
                 ("qty", "Quantity"), ("val", "Import value")]  # fmt: skip
 
 
-def qa_border_event_2018(mode: str = "light", data: Path = BORDER_EVENT_2018,
-                         out_dir: Path | None = None) -> list[Path]:  # fmt: skip
-    """QA (P15): 2018-19 event study of targeted vs untargeted varieties, two samples."""
+def _qa_event(mode: str, data: Path, samples: tuple, title: str, name: str,
+              out_dir: Path | None) -> list[Path]:  # fmt: skip
+    """Event study of targeted vs untargeted varieties, two samples (first one with its CI)."""
     df = pl.read_csv(data)
-    samples = (("fgkk", "To Apr 2019 (Fajgelbaum et al. sample), 95% CI"),
-               ("full", "Through Dec 2019 (adds the Sep 2019 actions)"))  # fmt: skip
     with theme.style(mode) as t:
         colors = dict(zip([s for s, _ in samples], t["series"][:2], strict=True))
         fig, axes = plt.subplots(1, 4, figsize=(theme.WIDTH_IN, 4.4), sharex=True)
         fig.subplots_adjust(left=0.06, right=0.985, top=0.66, bottom=0.2, wspace=0.32)
-        for ax, (o, title) in zip(axes, EVENT_PANELS, strict=True):
+        for ax, (o, panel) in zip(axes, EVENT_PANELS, strict=True):
             ax.axhline(0, color=t["axis"], linewidth=0.8, zorder=2)
             ax.axvline(-0.5, color=t["muted"], linewidth=0.8, zorder=2)
             for s, _ in reversed(samples):
                 p = df.filter(pl.col("sample") == s, pl.col("outcome") == o).sort("k")
                 k = p["k"].to_list()
-                if s == "fgkk":
+                if s == samples[0][0]:
                     _band(ax, k, p["ci_low"], p["ci_high"], t)
                 ax.plot(k, p["coef"], color=colors[s], zorder=4)
                 ax.plot(k, p["coef"], "o", markersize=3.5, color=colors[s],
                         markeredgecolor=t["surface"], markeredgewidth=1, zorder=5)  # fmt: skip
-            ax.set_title(title, color=t["text"], fontsize=9.5)
+            ax.set_title(panel, color=t["text"], fontsize=9.5)
             ax.yaxis.set_major_formatter(
                 FuncFormatter(lambda x, _: f"{x * 100:+.0f}%" if x else "0")
             )
@@ -235,18 +235,112 @@ def qa_border_event_2018(mode: str = "light", data: Path = BORDER_EVENT_2018,
                    bbox_to_anchor=(0.006, 0.79), ncol=2, fontsize=8.5,
                    labelcolor=t["text2"])  # fmt: skip
         theme.header(
-            fig, "2018–19 tariffs: targeted vs untargeted imports (replication check)",
+            fig, title,
             "Log difference from untargeted varieties of the same HS6 product in the same month, "
             "relative to month −1 (Fajgelbaum et al. 2020, eq. 1).\nVariety, HS6 × month and "
             "country × month fixed effects; SEs clustered by HS8. Month 6 includes later "
             "months.", t,
         )  # fmt: skip
         theme.footer(fig, theme.SOURCE_CENSUS, t)
-        return theme.save(fig, "border_pt_event_2018_19", mode, out_dir or QA_DIR)
+        return theme.save(fig, name, mode, out_dir or QA_DIR)
 
 
-FIGURES = [chart2_effective_rates, chart5_front_running, chart6_low_value]
-QA_FIGURES = [qa_border_event_2018]  # light only, to reports/qa
+def qa_border_event_2018(mode: str = "light", data: Path = BORDER_EVENT_2018,
+                         out_dir: Path | None = None) -> list[Path]:  # fmt: skip
+    """QA (P15): 2018-19 event study, FGKK sample and through 2019."""
+    samples = (("fgkk", "To Apr 2019 (Fajgelbaum et al. sample), 95% CI"),
+               ("full", "Through Dec 2019 (adds the Sep 2019 actions)"))  # fmt: skip
+    title = "2018–19 tariffs: targeted vs untargeted imports (replication check)"
+    return _qa_event(mode, data, samples, title, "border_pt_event_2018_19", out_dir)
+
+
+def qa_border_event_2025(mode: str = "light", data: Path = BORDER_EVENT_2025,
+                         out_dir: Path | None = None) -> list[Path]:  # fmt: skip
+    """QA (P16): 2025-26 event study, to Jan 2026 and through the latest month."""
+    samples = (("pre_ruling", "To Jan 2026 (before IEEPA duties ended), 95% CI"),
+               ("full", "Through the latest month"))  # fmt: skip
+    title = "2025–26 tariffs: imports hit by a new tariff vs those not hit"
+    return _qa_event(mode, data, samples, title, "border_pt_event_2025_26", out_dir)
+
+
+# label -> (spec, group) in border_pt.csv; ARW-trim twin via trim_spec
+HERO_ROWS = {
+    "All imports": ("main", "all"),
+    "China": ("china", "china"),
+    "Other countries": ("china", "other"),
+    "Section 232 duties": ("authority", "s232"),
+    "IEEPA duties": ("authority", "ieepa"),
+    "Section 301 duties": ("authority", "s301"),
+    "Differentiated goods": ("rauch", "differentiated"),
+    "Homogeneous goods": ("rauch", "homogeneous"),
+}  # fmt: skip
+HERO_PERIODS = (("2018_19", "2018–19"), ("2025_26", "2025–26"))
+
+
+def trim_spec(spec: str) -> str:
+    return f"{spec}_trim3"
+
+
+def hero_border_pt(mode: str = "light", data: Path = BORDER_PT,
+                   out_dir: Path | None = None) -> list[Path]:  # fmt: skip
+    """Hero (P16 draft, final in P21): pass-through of tariffs to pre-duty import prices."""
+    df = pl.read_csv(data).filter(pl.col("outcome") == "uv")
+    est = {(r["period"], r["spec"], r["group"]): r for r in df.iter_rows(named=True)}
+    labels = list(HERO_ROWS)
+    with theme.style(mode) as t:
+        colors = dict(zip([p for p, _ in HERO_PERIODS], t["series"][:2], strict=True))
+        fig, ax = plt.subplots(figsize=(theme.WIDTH_IN, 6.4))
+        fig.subplots_adjust(left=0.2, right=0.97, top=0.74, bottom=0.14)
+        for x, label in ((-1.0, "Foreign exporters pay"), (0.0, "US buyers pay")):
+            ax.axvline(x, color=t["axis"], linewidth=1, zorder=1)
+            ax.text(x, -0.75, label, ha="center", va="bottom", fontsize=8.5,
+                    color=t["text2"])  # fmt: skip
+        for i, label in enumerate(labels):
+            spec, group = HERO_ROWS[label]
+            for j, (p, _) in enumerate(HERO_PERIODS):
+                for dy, sp, filled in ((-0.18, spec, True), (-0.06, trim_spec(spec), False)):
+                    r = est.get((p, sp, group))
+                    if r is None:
+                        continue
+                    y = i + dy + 0.24 * j
+                    ax.plot([r["ci_low"], r["ci_high"]], [y, y], color=colors[p],
+                            linewidth=theme.LINE_WIDTH, zorder=3)  # fmt: skip
+                    ax.plot([r["coef"]], [y], "o", markersize=6,
+                            color=colors[p] if filled else t["surface"],
+                            markeredgecolor=colors[p], markeredgewidth=1.5, zorder=4)  # fmt: skip
+        ax.set_yticks(range(len(labels)), labels, color=t["text"], fontsize=9.5)
+        ax.set_ylim(len(labels) - 0.4, -0.8)
+        ax.set_xlim(-1.25, 0.55)
+        ax.xaxis.set_major_locator(MultipleLocator(0.25))
+        ax.grid(axis="y", visible=False)
+        ax.set_xlabel("Change in pre-duty import price per unit change in ln(1 + tariff) (β)",
+                      color=t["muted"], fontsize=8.5)  # fmt: skip
+        handles = [plt.Line2D([], [], color=colors[p], marker="o", lw=theme.LINE_WIDTH)
+                   for p, _ in HERO_PERIODS]  # fmt: skip
+        handles += [
+            plt.Line2D([], [], color=t["muted"], marker="o", lw=0, markersize=6),
+            plt.Line2D([], [], color=t["muted"], marker="o", lw=0, markersize=6,
+                       markerfacecolor=t["surface"], markeredgewidth=1.5),
+        ]  # fmt: skip
+        names = [lbl for _, lbl in HERO_PERIODS]
+        names += ["Winsorised 1/99 (main)", "Unit-value ratio > 3 dropped (ARW)"]
+        fig.legend(handles, names, loc="upper left", bbox_to_anchor=(0.006, 0.83), ncol=4,
+                   fontsize=8.5, labelcolor=t["text2"])  # fmt: skip
+        theme.header(
+            fig, "Who pays the tariffs at the border: 2018–19 and 2025–26 (draft)",
+            "Estimated response of pre-duty import unit values to tariff changes, 95% CIs. "
+            "β = 0: the duty is added in full to what US buyers pay;\nβ = −1: foreign exporters "
+            "cut prices by the full duty. 12-month changes, HS6 × month and country × month "
+            "fixed effects, SEs clustered by HS8.", t,
+        )  # fmt: skip
+        theme.footer(fig, theme.SOURCE_CENSUS, t,
+                     note="Section 232 and IEEPA terms come from one regression with duties "
+                     "split by authority; IEEPA duties began in 2025.")  # fmt: skip
+        return theme.save(fig, "hero_border_pt", mode, out_dir)
+
+
+FIGURES = [chart2_effective_rates, chart5_front_running, chart6_low_value, hero_border_pt]
+QA_FIGURES = [qa_border_event_2018, qa_border_event_2025]  # light only, to reports/qa
 
 
 def run() -> None:

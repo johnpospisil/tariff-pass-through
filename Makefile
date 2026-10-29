@@ -1,4 +1,4 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value border-pt build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value border-pt border-pt-2025 build models figures report test lint format all
 
 UV := uv run
 
@@ -69,8 +69,12 @@ build: concordance timeline-validate rates validate-rates import-panel effective
 
 models: border-pt  ## P15-P20 regressions -> data/published/
 
-border-pt:  ## P15 2018-19 replication (static specs + levels event studies, ~25 min)
+border-pt:  ## P15 replication + P16 2025-26 border pass-through (~1 h)
 	$(UV) python -u -m tpt.models.border_pt
+
+border-pt-2025:  ## P16 only: static grid, heterogeneity, MXP check, 2025-26 event studies
+	$(UV) python -u -m tpt.models.border_pt pt
+	$(UV) python -u -m tpt.models.border_pt events25
 
 figures:  ## charts from data/published/ in light and dark -> report/figures/
 	$(UV) python -m tpt.viz.figures

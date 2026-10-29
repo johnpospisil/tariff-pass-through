@@ -635,7 +635,95 @@ k = −1 reference; 21,053 targeted varieties over 2017–19):
 Pinned in `tests/test_pinned_estimates.py` (tolerance 0.02 on price coefficients, 0.05 on
 quantity and value).
 
+## Border pass-through: 2025–26 (P16)
+
+`src/tpt/models/border_pt.py` (`make border-pt-2025`), outputs `data/published/border_pt.csv`
+(every spec, both periods, one row per term), `border_pt_event_2025_26.csv`, `border_pt_mxp.csv`;
+hero draft `report/figures/hero_border_pt.png` (and `_dark`), QA chart
+`reports/qa/border_pt_event_2025_26.png`. Same design as P15: 12-month log changes on Δln(1 + τ),
+HS6 × month + country × month FE, HS8 clusters. Sample: changes for 2024-01..2026-08 (vs a year
+earlier). IEEPA status used as checked in P09 (2026-10-28): struck down 2026-02-20, collection
+ended 2026-02-24; Census duties are as assessed, so refunds do not enter. From 2026-02 the
+12-month changes include the fall in rates (IEEPA ended, Section 122 at 10% until 2026-07-24);
+`pre_ruling` stops at 2026-01.
+
+| Spec (2025–26) | Pre-duty unit value | Duty-incl. unit value | Quantity | Value | N (price) |
+|---|---|---|---|---|---|
+| main (statutory τ, 1/99 winsorised) | +0.041 (0.029) | +0.508 (0.034) | −0.706 (0.053) | −0.659 (0.040) | 3,725,047 |
+| twoway clusters (HS8 + country) | +0.041 (0.060) | +0.508 (0.088) | −0.706 (0.157) | −0.659 (0.102) | 3,725,047 |
+| main_trim3 (ARW ratio-3 rule) | −0.039 (0.011) | +0.433 (0.020) | −0.574 (0.044) | – | 2,877,668 |
+| pre_ruling (to 2026-01) | −0.001 (0.032) | +0.497 (0.038) | −0.724 (0.058) | −0.720 (0.045) | |
+| implied_ols (τ = duties/value; endogenous) | +0.224 (0.026) | +1.192 (0.026) | −1.535 (0.044) | – | 3,725,047 |
+| implied_iv (implied τ instrumented by statutory) | +0.086 (0.060) | +1.061 (0.060) | −1.476 (0.096) | – | 3,725,047 |
+| MXP locality × month (BLS, before duties) | +0.011 (0.016) | – | – | – | 248 |
+
+2018–19 for comparison (same file): main +0.167 (0.047), trim3 −0.058 (0.020), implied_iv
++0.213 (0.060), MXP locality +0.096 (0.078).
+
+**Interpretation.** Pre-duty import prices did not fall with the 2025–26 tariffs: of each 10% tariff,
+roughly 10% (9.6 points with the ARW trim, all of it with the main spec) was added to what US
+buyers paid at the border; foreign exporters absorbed at most about 4%. Every pooled estimate has a
+95% CI above −0.10. This is the same finding as 2018–19.
+
+**Why the duty-inclusive and quantity coefficients are smaller than in 2018–19.** At the variety
+level, collected duties rose only 0.48 per unit of statutory change (first stage, main FE; 2018–19:
+0.78), although locality aggregates match (China June 2025: statutory +0.263, collected +0.248).
+The gap is Section 232: rows touched by Section 232 have a first stage of 0.38; without them it is
+0.76. Statutory Section 232 rates overstate duties per variety (derivatives pay on metal content
+only, Section 232 replaces the reciprocal rate; P11). That measurement error attenuates the
+statutory-τ coefficients on duty-inclusive prices and quantity. Per unit of duty collected (IV),
+duty-inclusive prices rise 1.06 and quantity falls 1.48, close to 2018–19 (1.20, −2.49 per
+collected duty). Not timing: 2025 H2 alone gives 0.53, excluding April–May 0.51.
+Implied-rate OLS is biased upward for prices (specific duties and composition move duties/value
+with unit values); the IV removes most of it.
+
+Heterogeneity (pre-duty unit value, main spec / ARW trim; one regression per split with Δln(1 + τ)
+interacted with group):
+- **Country**: China +0.074 (0.042) / −0.009 (0.020); other countries +0.036 (0.031) / −0.044
+  (0.012). Canada +0.151 / −0.002, Mexico +0.111 / −0.092 (trimmed).
+- **Authority** (Δln(1 + τ) split by authority, log-mean approximation; 2.6% of rows without a
+  lagged panel row dropped): Section 232 −0.086 (0.039) / −0.077 (0.015), the only group with
+  some exporter absorption in both periods (2018–19: −0.084 / −0.130); IEEPA +0.195 (0.036) /
+  0.000 (0.014); Section 301 +0.059 (0.128) / +0.101 (0.063).
+- **Rauch**: differentiated +0.044 / −0.032; homogeneous +0.050 / −0.071 (reference-priced and
+  exchange-traded goods absorb slightly more when trimmed).
+- **Time since the first 2025 increase** (trimmed): 0–2 months −0.023 (0.017), 3–5 −0.032, 6–8
+  −0.051, 9–11 −0.055 (0.016), 12+ −0.010. A small drift toward exporter absorption over the
+  first year as contracts reset, within about 3 points. The winsorised 12+ bin (+0.203) mixes in
+  the 2026 rate cuts and composition jumps.
+- The winsorised vs trimmed gap (IEEPA +0.195 vs 0.000) is the composition issue found in P15:
+  report both.
+
+**BLS cross-check** (`border_pt_mxp.csv`): locality-of-origin import price indexes (all industries,
+NSA, measured before duties) for China, Canada, Mexico, EU, Japan, UK, Taiwan and ASEAN against our
+value-weighted statutory Δln(1 + τ) for the same countries, locality and month FE,
+heteroskedasticity-robust SEs (8 localities, too few to cluster): +0.011 (0.016). China's index
+was 2.9% lower in June 2025 than a year earlier while its tariff change was +0.263; other
+localities moved −3% to +2%. October 2025 has no index values (shutdown) and drops out.
+
+**Event study** (levels, FGKK eq. 1; event = first month a variety's rate is ≥ 2.5 pp above its
+Dec 2024 rate, from 2025-01; no half-rate rule, because rates rose in successive monthly steps and
+nearly all 2025 actions took effect in the first 12 days of a month; varieties without a 2024 base
+dropped). 253,315 of 330,777 varieties have an event (77%; 115,756 in April 2025); controls are
+mostly USMCA-claimed and Annex II goods.
+- **Front-running**: quantity is 10–14% below its k = −1 level at k = −6..−2 and value 9–11% below.
+  The month before the tariff is a stockpiling peak, as in P14 and in the 2019 run-up (P15). Drops
+  measured from k = −1 (quantity −19% at k = 0, −20% at k = 6) overstate the decline; measured
+  from k = −6..−2 quantities fall about 5–8%.
+- **Pre-duty unit value** does not fall: +3% to +6% at k = 0..6 vs k = −1, with a 1–3% dip before
+  the event (composition of the front-run shipments). **Duty-inclusive** unit values rise 10–12%
+  at impact, about the 10% baseline rate.
+- Through 2026-08 the paths are almost the same.
+
+Pinned in `tests/test_pinned_estimates.py` (P16 block; 2025–26 pins will move with Census revisions,
+P24 decides warn vs fail).
+
 ## Known issues
+
+- **Statutory Section 232 rates at the variety level (P16)**: in 2025–26 collected duties rise
+  0.38 per unit of statutory Section 232 change (0.76 for other rows), so statutory-τ coefficients
+  on duty-inclusive prices and quantity are attenuated; use `implied_iv` for per-collected-duty
+  magnitudes. Pre-duty β is near zero either way.
 
 - **2018–19 unit-value replication (P15)**: our ARW-design pre-duty unit-value estimate (−0.107,
   SE 0.021) is 3.3 combined SEs below ARW's −0.003 (0.024). Partly explained by within-2018
