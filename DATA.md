@@ -792,7 +792,95 @@ China moves 2018–19 the most (−0.18 winsorised), as found in P15. The weight
 attenuation, P16), weighted −0.76 (0.26); the other variants are within ±0.06. 2018–19 main −1.956:
 dropping China −0.73, weighted −3.05, 2018 only −1.31, front-run exclusions −1.59 to −1.76.
 
+## CPI item tariff exposure (P18)
+
+`src/tpt/build/exposure.py` (`make exposure`, about 5 s). Outputs:
+- `data/processed/cpi_exposure.parquet`: route × period × CPI item, window means;
+- `cpi_exposure_monthly.parquet`: the same by month, from December of the base year;
+- `cpi_commodity_weights.parquet`: item × BEA commodity group weights;
+- `data/published/cpi_exposure_top_bottom.csv`;
+- `reports/qa/cpi_exposure_coverage.csv`.
+
+**Definitions** (purchasers'-value basis; τ = statutory additional rate, P10 `rate_total`):
+- `import_share` = Σ_c w_purch,c × s_c, where s_c = imports (MCIF) ÷ total product supply at basic
+  prices (T013), BEA 2017 detail supply table. `goods_import_share` restricts it to goods.
+- `dtau` = import-weighted Δln(1 + τ) over the item's goods imports, against December of the base
+  year. Within a BEA commodity, HS10 × individual country pairs are weighted by base-year customs
+  value (2017 for 2018–19; 2024 for 2025–26; chapters 98–99 excluded).
+- `exposure` = Σ_c w_purch,c × s_c × Δln(1 + τ_c): the duty as a share of the consumer price if
+  passed through in full (no domestic price response).
+- `_eff` versions use the collected rate ln(1 + duties ÷ customs value) of the commodity's actual
+  imports that month, against the base-year average.
+- Window means: 2018–19 over 2018-01..2019-12; 2025–26 over 2025-01..2026-08.
+
+**Route 1, BEA bridge (main).** HS10 → NAICS → BEA commodity (P06) → PCE bridge line → CPI item
+(BLS ELI mapping, P06):
+- **Weights.** Each ELI of an item counts equally. An ELI on several bridge lines is split by the
+  lines' purchasers' value, and a line by its commodities' producers' value. `w` sums to 1 in every
+  item (197 items; test). `w_purch` sums to 1 minus the trade and transport margin share (median
+  0.43), so margins dilute exposure.
+- **Pooled commodities.** Where one NAICS 2022 or 2012 code spans several BEA 2017 commodities,
+  Census lists put every HS10 on the first one. Those commodities are pooled into one group, for
+  both tariff changes and import shares. The goods cases: cars + light trucks (336111+336112),
+  batteries (335911+335912), lamps (335110+335120), and optical/photographic/other machinery
+  (333314+333316+333318). Retail, publishing and telecom groups carry no tariffs.
+- **Coverage.**
+  - 0.15% / 0.08% of base-year value (2017 / 2024) has no BEA commodity.
+  - The rate panel has rows only for pairs traded that month. A pair missing in a month takes its
+    family's mean rate for that country. Failing that, at the base month, it takes its latest
+    earlier base-year rate. At the last month (2019-12 / 2026-08), 96.2% / 96.3% of base value has a
+    rate; the rest are pairs not traded that month, and the weights are renormalised.
+  - Every goods item has tariff data for all of its goods-import weight (no item below 90%).
+  - 8 items have no bridge line, all services: owners' equivalent rent (SEHC, SEHC01), hospital
+    services, college tuition, cable/streaming, gardening, motor vehicle fees (SETF, SETF01).
+- **Limit.** The bridge has about 150 goods lines, and the BLS mapping sends many CPI strata to the
+  same line: all footwear to line 112, all men's apparel to line 107, cereals and bakery each to one
+  line. 128 goods items (at least half of their weight on goods) take 78 distinct exposure values
+  in 2025–26.
+
+**Route 2, hand map.** `data/reference/cpi_hs_hand_map.csv` maps 46 major-goods CPI items to HS
+headings or subheadings. Each prefix was checked against Census HS10 descriptions; all resolve in
+both 2017 and 2024, and phones take 851712 (HS 2017) and 851713/851714 (HS 2022). The tariff change
+is computed over those HS10s; the import share is the BEA route's `goods_import_share`. So the hand
+map checks the HS → item mapping of the tariff change, not the import share.
+
+**Results, 2025–26 window means** (128 goods items):
+- Median `goods_import_share` 0.109, `dtau` 0.085, `exposure` 0.0071 (90th percentile 0.039).
+- Effective exposure median 0.0046; correlation with statutory exposure 0.95.
+- Top items: other appliances 0.064 (effective 0.032), major appliances 0.061 (0.025), televisions
+  0.041, footwear and men's apparel 0.039–0.040, audio and video equipment 0.036–0.038.
+- Bottom items: drugs 0.002 (Annex II and Section 232 pharmaceuticals not applied), cereals,
+  bakery, dairy, tobacco and poultry (import shares 0.4–4%), and fuels (energy exempt).
+- Rent and other services have exposure 0.
+- 2018–19 is an order of magnitude smaller: median `dtau` 0.007, exposure 0.0004, 90th percentile
+  0.0057; the largest exposures are appliances and furniture.
+- **Routes compared** (46 items; correlation across items of the two routes):
+
+  | Period | dtau | exposure | effective dtau | mean dtau, BEA / hand | mean effective, BEA / hand |
+  |---|---|---|---|---|---|
+  | 2025–26 | 0.88 | 0.89 | 0.85 | 0.121 / 0.131 | 0.074 / 0.079 |
+  | 2018–19 | 0.57 | 0.51 | 0.56 | 0.014 / 0.012 | — |
+
+  The 2018–19 correlation is lower because there is little variation outside a few items.
+- **Large gaps between routes** come from the statutory rate:
+  - Major appliances: statutory 0.343 hand vs 0.263 BEA, yet effective 0.105 vs 0.106.
+  - Beer: statutory 0.167 vs effective 0.011, since only the aluminium can bears the duty.
+  - In both cases the statutory rate applies Section 232 derivative rates to full value (P11, P16).
+    The effective versions are the better magnitudes for retail exposure.
+- **Televisions**: the BEA route (0.099, the whole audio-video commodity 334300) is far above the
+  hand route (0.034). TV sets come mostly from Mexico under USMCA.
+
+**Monthly path** (bea, statutory): peaks in April 2025 (China 145%), eases after the May 2025
+truce, rises with the August 2025 reciprocal rates and Section 232 derivatives, and falls after the
+IEEPA ruling (March 2026) and the Section 122 expiry (July 2026). Toys: 0.108 in 2025-04, 0.031 in
+2025-12, 0.020 in 2026-08. IEEPA status as recorded in P09 (checked 2026-10-28).
+
 ## Known issues
+
+- **CPI exposure via the BEA bridge (P18)**: many CPI strata share one PCE bridge line (footwear,
+  apparel by gender, cereals, bakery), so they get identical exposure. Use the hand route for
+  item-level contrasts within those groups. Statutory exposure overstates Section 232 derivative
+  goods (appliances, beer, cookware); effective exposure is the better magnitude.
 
 - **Value-weighted pass-through (P17)**: value weighting gives −0.29 (0.14) in 2025–26, entirely from
   HS 84 (computers and servers: a shift in product mix lining up with cross-country tariff

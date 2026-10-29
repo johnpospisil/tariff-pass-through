@@ -1,0 +1,9 @@
+period,item_code,item_name,goods_weight,goods_import_share,coverage,issue
+,SEEB01,College tuition and fees,,,,no_bridge_line
+,SEHC,Owners' equivalent rent of residences,,,,no_bridge_line
+,SEHC01,Owners' equivalent rent of primary residence,,,,no_bridge_line
+,SEHP02,Gardening and lawncare services,,,,no_bridge_line
+,SEMD01,Hospital services,,,,no_bridge_line
+,SERA02,"Cable, satellite, and live streaming television service",,,,no_bridge_line
+,SETF,Motor vehicle fees,,,,no_bridge_line
+,SETF01,State motor vehicle registration and license fees,,,,no_bridge_line

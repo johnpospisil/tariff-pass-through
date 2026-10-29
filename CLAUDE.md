@@ -273,7 +273,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 
 ### Phase 5 — Retail and diversion (Week 5)
 
-**P18 — HS → CPI exposure**
+**P18 — HS → CPI exposure ✅ DONE!**
 > Implement `src/tpt/build/exposure.py`: for each CPI item, the import share of supply and the
 > import-weighted tariff change, mapped HS10 → NAICS → BEA commodity → PCE category → CPI item using the
 > P06 concordances (spec §4.3). Build two alternative concordances (direct hand-mapping for major goods

@@ -1,0 +1,91 @@
+item_code,hs_prefix,heading
+SEAA01,6201,"Men's or boys' overcoats, anoraks (not knitted)"
+SEAA01,6101,"Men's or boys' overcoats, anoraks (knitted)"
+SEAA01,6203,"Men's or boys' suits, jackets, trousers (not knitted)"
+SEAA03,6205,"Men's or boys' shirts (not knitted)"
+SEAA03,6105,"Men's or boys' shirts (knitted)"
+SEAA03,6110,"Jerseys, pullovers, sweatshirts (knitted)"
+SEAA04,620342,"Men's or boys' trousers and shorts of cotton"
+SEAA04,620343,"Men's or boys' trousers and shorts of synthetic fibres"
+SEAC01,6202,"Women's or girls' overcoats, anoraks (not knitted)"
+SEAC01,6102,"Women's or girls' overcoats, anoraks (knitted)"
+SEAC02,620442,"Women's or girls' dresses of cotton"
+SEAC02,620443,"Women's or girls' dresses of synthetic fibres"
+SEAC02,610442,"Women's or girls' dresses of cotton (knitted)"
+SEAC02,610443,"Women's or girls' dresses of synthetic fibres (knitted)"
+SEAC03,6204,"Women's or girls' suits, jackets, skirts, trousers (not knitted)"
+SEAC03,6104,"Women's or girls' suits, jackets, skirts, trousers (knitted)"
+SEAE01,64,Footwear
+SEAE02,64,Footwear
+SEAE03,64,Footwear
+SEAF,6111,Babies' garments (knitted)
+SEAF,6209,Babies' garments (not knitted)
+SEAG01,9101,Wrist watches with precious-metal cases
+SEAG01,9102,"Wrist watches, other"
+SEAG02,7113,Articles of jewellery of precious metal
+SEAG02,7117,Imitation jewellery
+SEEE01,8471,Automatic data processing machines (computers)
+SEEE04,851712,Telephones for cellular networks (HS 2017)
+SEEE04,851713,Smartphones (HS 2022)
+SEEE04,851714,Other telephones for cellular networks (HS 2022)
+SEFC03,0201,"Meat of bovine animals, fresh or chilled"
+SEFC03,0202,"Meat of bovine animals, frozen"
+SEFG01,0302,"Fish, fresh or chilled"
+SEFG01,0306,Crustaceans
+SEFG02,1604,Prepared or preserved fish
+SEFG02,1605,Prepared or preserved crustaceans
+SEFK02,0803,Bananas
+SEFK03,0805,Citrus fruit
+SEFL03,0702,"Tomatoes, fresh or chilled"
+SEFP01,0901,Coffee
+SEFP01,210111,"Extracts, essences and concentrates of coffee"
+SEFW01,2203,Beer made from malt
+SEFW02,2208,Spirits
+SEFW03,2204,Wine of fresh grapes
+SEHH01,57,Carpets and other textile floor coverings
+SEHH03,6302,"Bed, table, toilet and kitchen linen"
+SEHJ01,940350,Wooden furniture of a kind used in the bedroom
+SEHJ01,9404,Mattresses and bedding
+SEHJ02,940161,Upholstered seats with wooden frames
+SEHJ02,940171,Upholstered seats with metal frames
+SEHJ02,940360,Other wooden furniture
+SEHK01,841810,Combined refrigerator-freezers
+SEHK01,841821,"Household refrigerators, compression type"
+SEHK01,8450,Household or laundry-type washing machines
+SEHK01,845121,"Drying machines, capacity not exceeding 10 kg"
+SEHK01,842211,"Dishwashing machines, household type"
+SEHK01,851660,"Other ovens; cookers, cooking plates, boiling rings"
+SEHK02,8509,Electromechanical domestic appliances
+SEHK02,851650,Microwave ovens
+SEHK02,851671,Coffee or tea makers
+SEHK02,851672,Toasters
+SEHK02,851679,Other electrothermic domestic appliances
+SEHK02,841451,"Table, floor, wall, window, ceiling or roof fans"
+SEHL01,9405,Lamps and lighting fittings
+SEHL01,9105,Other clocks
+SEHL03,6911,"Tableware and kitchenware, of porcelain or china"
+SEHL03,6912,"Ceramic tableware and kitchenware, other"
+SEHL03,7013,Glassware of a kind used for table or kitchen
+SEHL03,8215,"Spoons, forks, ladles and similar kitchen or tableware"
+SEHL04,7323,"Table, kitchen or other household articles of iron or steel"
+SEHL04,7615,"Table, kitchen or other household articles of aluminium"
+SEHM01,8467,Tools for working in the hand with self-contained motor
+SEHM01,8203,"Files, pliers, pincers, tweezers"
+SEHM01,8204,Hand-operated spanners and wrenches
+SEHM01,8205,Other hand tools
+SEHM02,843311,"Mowers for lawns, powered, cutting device rotating horizontally"
+SEHM02,843319,"Mowers for lawns, other"
+SEMF01,3004,Medicaments in measured doses
+SERA01,852872,"Reception apparatus for television, colour"
+SERA05,8518,"Microphones, loudspeakers, headphones, amplifiers"
+SERA05,8519,Sound recording or reproducing apparatus
+SERA05,8527,Radio broadcast receivers
+SERC01,8712,Bicycles and other cycles
+SERC02,9506,Articles and equipment for sports and outdoor games
+SERE01,9503,"Tricycles, scooters, dolls, other toys, puzzles"
+SERE03,92,Musical instruments
+SETA01,8703,Motor cars and other motor vehicles for the transport of persons
+SETC01,4011,"New pneumatic tyres, of rubber"
+SETC02,8708,Parts and accessories of motor vehicles
+SEGB02,3303,Perfumes and toilet waters
+SEGB02,3304,Beauty or make-up preparations
