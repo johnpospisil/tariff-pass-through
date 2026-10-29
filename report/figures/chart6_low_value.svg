@@ -41,56 +41,56 @@ z
     <g id="xtick_1">
      <g id="line2d_1">
       <defs>
-       <path id="md237bb6529" d="M 0 0 
+       <path id="m40ecddfddb" d="M 0 0 
 L 0 3 
 " style="stroke: #898781; stroke-width: 0.8"/>
       </defs>
       <g>
-       <use xlink:href="#md237bb6529" x="50.4" y="311.04" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+       <use xlink:href="#m40ecddfddb" x="50.4" y="311.04" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_1">
-      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #898781" x="50.4" y="326.108" transform="rotate(-0 50.4 326.108)">2022</text>
+      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #898781" x="50.4" y="324.377891" transform="rotate(-0 50.4 324.377891)">2022</text>
      </g>
     </g>
     <g id="xtick_2">
      <g id="line2d_2">
       <g>
-       <use xlink:href="#md237bb6529" x="163.499821" y="311.04" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+       <use xlink:href="#m40ecddfddb" x="163.499821" y="311.04" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_2">
-      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #898781" x="163.499821" y="326.108" transform="rotate(-0 163.499821 326.108)">2023</text>
+      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #898781" x="163.499821" y="324.377891" transform="rotate(-0 163.499821 324.377891)">2023</text>
      </g>
     </g>
     <g id="xtick_3">
      <g id="line2d_3">
       <g>
-       <use xlink:href="#md237bb6529" x="276.599641" y="311.04" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+       <use xlink:href="#m40ecddfddb" x="276.599641" y="311.04" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_3">
-      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #898781" x="276.599641" y="326.108" transform="rotate(-0 276.599641 326.108)">2024</text>
+      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #898781" x="276.599641" y="324.377891" transform="rotate(-0 276.599641 324.377891)">2024</text>
      </g>
     </g>
     <g id="xtick_4">
      <g id="line2d_4">
       <g>
-       <use xlink:href="#md237bb6529" x="390.009325" y="311.04" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+       <use xlink:href="#m40ecddfddb" x="390.009325" y="311.04" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_4">
-      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #898781" x="390.009325" y="326.108" transform="rotate(-0 390.009325 326.108)">2025</text>
+      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #898781" x="390.009325" y="324.377891" transform="rotate(-0 390.009325 324.377891)">2025</text>
      </g>
     </g>
     <g id="xtick_5">
      <g id="line2d_5">
       <g>
-       <use xlink:href="#md237bb6529" x="503.109145" y="311.04" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+       <use xlink:href="#m40ecddfddb" x="503.109145" y="311.04" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_5">
-      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #898781" x="503.109145" y="326.108" transform="rotate(-0 503.109145 326.108)">2026</text>
+      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #898781" x="503.109145" y="324.377891" transform="rotate(-0 503.109145 324.377891)">2026</text>
      </g>
     </g>
    </g>
@@ -99,72 +99,72 @@ L 0 3
      <g id="line2d_6">
       <path d="M 50.4 311.04 
 L 568.8 311.04 
-" clip-path="url(#pd92066a170)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.7; stroke-linecap: round"/>
+" clip-path="url(#p3f75d91f6c)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.7; stroke-linecap: round"/>
      </g>
      <g id="text_6">
-      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #898781" x="43.4" y="315.324" transform="rotate(-0 43.4 315.324)">0</text>
+      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #898781" x="43.4" y="314.458945" transform="rotate(-0 43.4 314.458945)">0</text>
      </g>
     </g>
     <g id="ytick_2">
      <g id="line2d_7">
       <path d="M 50.4 275.282187 
 L 568.8 275.282187 
-" clip-path="url(#pd92066a170)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.7; stroke-linecap: round"/>
+" clip-path="url(#p3f75d91f6c)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.7; stroke-linecap: round"/>
      </g>
      <g id="text_7">
-      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #898781" x="43.4" y="279.566187" transform="rotate(-0 43.4 279.566187)">$0.5bn</text>
+      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #898781" x="43.4" y="278.701484" transform="rotate(-0 43.4 278.701484)">$0.5bn</text>
      </g>
     </g>
     <g id="ytick_3">
      <g id="line2d_8">
       <path d="M 50.4 239.524374 
 L 568.8 239.524374 
-" clip-path="url(#pd92066a170)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.7; stroke-linecap: round"/>
+" clip-path="url(#p3f75d91f6c)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.7; stroke-linecap: round"/>
      </g>
      <g id="text_8">
-      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #898781" x="43.4" y="243.808374" transform="rotate(-0 43.4 243.808374)">$1.0bn</text>
+      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #898781" x="43.4" y="242.943671" transform="rotate(-0 43.4 242.943671)">$1.0bn</text>
      </g>
     </g>
     <g id="ytick_4">
      <g id="line2d_9">
       <path d="M 50.4 203.766561 
 L 568.8 203.766561 
-" clip-path="url(#pd92066a170)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.7; stroke-linecap: round"/>
+" clip-path="url(#p3f75d91f6c)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.7; stroke-linecap: round"/>
      </g>
      <g id="text_9">
-      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #898781" x="43.4" y="208.050561" transform="rotate(-0 43.4 208.050561)">$1.5bn</text>
+      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #898781" x="43.4" y="207.185857" transform="rotate(-0 43.4 207.185857)">$1.5bn</text>
      </g>
     </g>
     <g id="ytick_5">
      <g id="line2d_10">
       <path d="M 50.4 168.008747 
 L 568.8 168.008747 
-" clip-path="url(#pd92066a170)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.7; stroke-linecap: round"/>
+" clip-path="url(#p3f75d91f6c)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.7; stroke-linecap: round"/>
      </g>
      <g id="text_10">
-      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #898781" x="43.4" y="172.292747" transform="rotate(-0 43.4 172.292747)">$2.0bn</text>
+      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #898781" x="43.4" y="171.428044" transform="rotate(-0 43.4 171.428044)">$2.0bn</text>
      </g>
     </g>
     <g id="ytick_6">
      <g id="line2d_11">
       <path d="M 50.4 132.250934 
 L 568.8 132.250934 
-" clip-path="url(#pd92066a170)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.7; stroke-linecap: round"/>
+" clip-path="url(#p3f75d91f6c)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.7; stroke-linecap: round"/>
      </g>
      <g id="text_11">
-      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #898781" x="43.4" y="136.534934" transform="rotate(-0 43.4 136.534934)">$2.5bn</text>
+      <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #898781" x="43.4" y="135.670231" transform="rotate(-0 43.4 135.670231)">$2.5bn</text>
      </g>
     </g>
    </g>
    <g id="line2d_12">
     <path d="M 427.50269 311.04 
 L 427.50269 101.088 
-" clip-path="url(#pd92066a170)" style="fill: none; stroke: #898781; stroke-width: 0.8; stroke-linecap: round"/>
+" clip-path="url(#p3f75d91f6c)" style="fill: none; stroke: #898781; stroke-width: 0.8; stroke-linecap: round"/>
    </g>
    <g id="line2d_13">
     <path d="M 464.37633 311.04 
 L 464.37633 101.088 
-" clip-path="url(#pd92066a170)" style="fill: none; stroke: #898781; stroke-width: 0.8; stroke-linecap: round"/>
+" clip-path="url(#p3f75d91f6c)" style="fill: none; stroke: #898781; stroke-width: 0.8; stroke-linecap: round"/>
    </g>
    <g id="patch_3">
     <path d="M 50.4 311.04 
@@ -172,18 +172,18 @@ L 568.8 311.04
 " style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_12">
-    <text style="font-size: 8.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="576.8" y="146.21915" transform="rotate(-0 576.8 146.21915)">All other countries  $2.3bn</text>
+    <text style="font-size: 8.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="576.8" y="145.28674" transform="rotate(-0 576.8 145.28674)">All other countries  $2.3bn</text>
    </g>
    <g id="text_13">
-    <text style="font-size: 8.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="576.8" y="238.2097" transform="rotate(-0 576.8 238.2097)">China and Hong Kong  $1.1bn</text>
+    <text style="font-size: 8.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="576.8" y="237.27729" transform="rotate(-0 576.8 237.27729)">China and Hong Kong  $1.1bn</text>
    </g>
    <g id="text_14">
-    <text style="font-size: 8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(361.99144 108.816)">De minimis ends:</text>
-    <text style="font-size: 8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(329.40644 118.36)">China, Hong Kong (May 2)</text>
+    <text style="font-size: 8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(353.91144 107.967531)">De minimis ends:</text>
+    <text style="font-size: 8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(319.11519 117.569719)">China, Hong Kong (May 2)</text>
    </g>
    <g id="text_15">
-    <text style="font-size: 8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(468.37633 108.816)">All countries</text>
-    <text style="font-size: 8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(468.37633 118.36)">(Aug 29)</text>
+    <text style="font-size: 8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(468.37633 107.967531)">All countries</text>
+    <text style="font-size: 8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(468.37633 117.569094)">(Aug 29)</text>
    </g>
    <g id="line2d_14">
     <path d="M 50.4 212.212556 
@@ -242,7 +242,7 @@ L 540.292648 144.952109
 L 549.898386 156.380306 
 L 559.194262 147.912856 
 L 568.8 143.0784 
-" clip-path="url(#pd92066a170)" style="fill: none; stroke: #eb6834; stroke-width: 1.5; stroke-linecap: round"/>
+" clip-path="url(#p3f75d91f6c)" style="fill: none; stroke: #eb6834; stroke-width: 1.5; stroke-linecap: round"/>
    </g>
    <g id="line2d_15">
     <path d="M 50.4 282.998723 
@@ -301,13 +301,13 @@ L 540.292648 236.80678
 L 549.898386 233.309666 
 L 559.194262 234.389552 
 L 568.8 235.06895 
-" clip-path="url(#pd92066a170)" style="fill: none; stroke: #2a78d6; stroke-width: 1.5; stroke-linecap: round"/>
+" clip-path="url(#p3f75d91f6c)" style="fill: none; stroke: #2a78d6; stroke-width: 1.5; stroke-linecap: round"/>
    </g>
    <g id="line2d_16">
     <path d="M 568.8 143.0784 
 " style="fill: none; stroke: #eb6834; stroke-width: 1.5; stroke-linecap: round"/>
     <defs>
-     <path id="me0618d00aa" d="M 0 3 
+     <path id="md24814fb61" d="M 0 3 
 C 0.795609 3 1.55874 2.683901 2.12132 2.12132 
 C 2.683901 1.55874 3 0.795609 3 0 
 C 3 -0.795609 2.683901 -1.55874 2.12132 -2.12132 
@@ -320,14 +320,14 @@ z
 " style="stroke: #fcfcfb; stroke-width: 1.5"/>
     </defs>
     <g>
-     <use xlink:href="#me0618d00aa" x="568.8" y="143.0784" style="fill: #eb6834; stroke: #fcfcfb; stroke-width: 1.5"/>
+     <use xlink:href="#md24814fb61" x="568.8" y="143.0784" style="fill: #eb6834; stroke: #fcfcfb; stroke-width: 1.5"/>
     </g>
    </g>
    <g id="line2d_17">
     <path d="M 568.8 235.06895 
 " style="fill: none; stroke: #2a78d6; stroke-width: 1.5; stroke-linecap: round"/>
     <defs>
-     <path id="m4b7b15ce19" d="M 0 3 
+     <path id="m15ca482f08" d="M 0 3 
 C 0.795609 3 1.55874 2.683901 2.12132 2.12132 
 C 2.683901 1.55874 3 0.795609 3 0 
 C 3 -0.795609 2.683901 -1.55874 2.12132 -2.12132 
@@ -340,44 +340,44 @@ z
 " style="stroke: #fcfcfb; stroke-width: 1.5"/>
     </defs>
     <g>
-     <use xlink:href="#m4b7b15ce19" x="568.8" y="235.06895" style="fill: #2a78d6; stroke: #fcfcfb; stroke-width: 1.5"/>
+     <use xlink:href="#m15ca482f08" x="568.8" y="235.06895" style="fill: #2a78d6; stroke: #fcfcfb; stroke-width: 1.5"/>
     </g>
    </g>
   </g>
   <g id="text_16">
-   <text style="font-weight: 700; font-size: 13px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="8.64" y="24.339" transform="rotate(-0 8.64 24.339)">Recorded low-value imports before and after the end of de minimis</text>
+   <text style="font-weight: 700; font-size: 13px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="8.64" y="21.541969" transform="rotate(-0 8.64 21.541969)">Recorded low-value imports before and after the end of de minimis</text>
   </g>
   <g id="text_17">
-   <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #52514e" transform="translate(8.64 39.1545)">Monthly Census estimates of import shipments under $2,000 (HTS 9999.95), imports for consumption.</text>
-   <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #52514e" transform="translate(8.64 53.824359)">Measurement change: de minimis shipments (under $800) were not recorded before; part of the rise is newly recorded trade, not new imports.</text>
+   <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #52514e" transform="translate(8.64 37.943438)">Monthly Census estimates of import shipments under $2,000 (HTS 9999.95), imports for consumption.</text>
+   <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #52514e" transform="translate(8.64 50.543438)">Measurement change: de minimis shipments (under $800) were not recorded before; part of the rise is newly recorded trade, not new imports.</text>
   </g>
   <g id="text_18">
-   <text style="font-size: 7.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(8.64 367.990533)">For scale: de minimis imports were $54.5bn in 2023, about $4.5bn a month (Fajgelbaum and Khandelwal, 2025), none of it in Census data.</text>
-   <text style="font-size: 7.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(8.64 379.975181)">Source: U.S. Census Bureau, international trade (HTS 9999.95.0000 low-value estimates; Guide to Foreign Trade Statistics, sec. 2); EO 14256, EO 14324.</text>
+   <text style="font-size: 7.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(8.64 370.453931)">For scale: de minimis imports were $54.5bn in 2023, about $4.5bn a month (Fajgelbaum and Khandelwal, 2025), none of it in Census data.</text>
+   <text style="font-size: 7.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(8.64 380.953931)">Source: U.S. Census Bureau, international trade (HTS 9999.95.0000 low-value estimates; Guide to Foreign Trade Statistics, sec. 2); EO 14256, EO 14324.</text>
   </g>
   <g id="legend_1">
    <g id="line2d_18">
-    <path d="M 11.97 84.695 
-L 20.47 84.695 
-L 28.97 84.695 
+    <path d="M 11.97 83.061672 
+L 20.47 83.061672 
+L 28.97 83.061672 
 " style="fill: none; stroke: #2a78d6; stroke-width: 1.5; stroke-linecap: round"/>
    </g>
    <g id="text_19">
-    <text style="font-size: 8.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="35.77" y="87.67" transform="rotate(-0 35.77 87.67)">China and Hong Kong</text>
+    <text style="font-size: 8.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="35.77" y="86.036672" transform="rotate(-0 35.77 86.036672)">China and Hong Kong</text>
    </g>
    <g id="line2d_19">
-    <path d="M 137.005 84.695 
-L 145.505 84.695 
-L 154.005 84.695 
+    <path d="M 144.656328 83.061672 
+L 153.156328 83.061672 
+L 161.656328 83.061672 
 " style="fill: none; stroke: #eb6834; stroke-width: 1.5; stroke-linecap: round"/>
    </g>
    <g id="text_20">
-    <text style="font-size: 8.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="160.805" y="87.67" transform="rotate(-0 160.805 87.67)">All other countries</text>
+    <text style="font-size: 8.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="168.456328" y="86.036672" transform="rotate(-0 168.456328 86.036672)">All other countries</text>
    </g>
   </g>
  </g>
  <defs>
-  <clipPath id="pd92066a170">
+  <clipPath id="p3f75d91f6c">
    <rect x="50.4" y="101.088" width="518.4" height="209.952"/>
   </clipPath>
  </defs>
