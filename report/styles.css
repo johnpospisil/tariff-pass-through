@@ -1,0 +1,6 @@
+/* Report layout: readable measure, quiet tables, figures full width of the text column. */
+main.content { max-width: 52rem; }
+table { font-size: 0.9rem; }
+td, th { padding: 0.25rem 0.6rem; }
+img { width: 100%; height: auto; }
+.callout { font-size: 0.95rem; }

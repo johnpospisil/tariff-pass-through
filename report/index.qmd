@@ -1,0 +1,373 @@
+---
+title: "At the Border and at the Store: Tariff Pass-Through in 2025–26"
+subtitle: "Who paid the tariffs: US importers and consumers, or foreign exporters? Evidence from monthly product-level trade, import prices and consumer prices."
+author: "John Pospisil"
+bibliography: references.bib
+---
+
+```{python}
+#| include: false
+from tpt.report import numbers as nm
+
+N = nm.numbers()
+```
+
+::: {.callout-note appearance="simple"}
+**Data as of `{python} N["data_month"]`** (Census trade and tariff rates; CPI to the same month).
+Legal status of the tariffs checked on `{python} N["legal_checked"]`; see
+[Data as of and legal status](#data-as-of-and-legal-status). All code, data and tests:
+[github.com/johnpospisil/tariff-pass-through](https://github.com/johnpospisil/tariff-pass-through).
+:::
+
+## Findings
+
+- **At the border, US buyers paid nearly all of the 2025–26 tariffs.** Prices charged by foreign
+  exporters before duty barely moved when tariffs rose: the estimated response is
+  `{python} N["b25"]` (SE `{python} N["b25_se"]`), and `{python} N["b25_t3"]` with outliers
+  trimmed, where 0 means the duty was added in full to what US importers paid and −1 means
+  exporters cut their prices by the full duty. Of each dollar of duty, roughly
+  `{python} N["buyer_lo"]` to `{python} N["buyer_hi"]` cents fell on US buyers. That is the same
+  result the 2018–19 trade war produced, and we reproduce it with the same data and method
+  (`{python} N["b18"]`; `{python} N["b18_t3"]` trimmed).
+- **Section 232 metals and autos are the one place exporters gave a little.** Their estimate is
+  `{python} N["s23225"]` in 2025–26 (`{python} N["s232_18"]` in 2018–19). BLS import price indexes
+  by country of origin, measured before duty, agree: `{python} N["mxp25"]` (SE
+  `{python} N["mxp25_se"]`).
+- **In stores, prices of exposed goods rose by part of the duty cost, gradually.** Measured
+  against each item's own pre-2025 trend, consumer prices rose by about `{python} N["th_main"]`
+  (statutory exposure) to `{python} N["th_eff"]` (duties collected) of the duty cost of the
+  item's imports, about `{python} N["th_main_ratio"]`–`{python} N["th_eff_ratio"]` of the border
+  response. These estimates are imprecise; none is statistically significant at conventional levels.
+- **Tariffs collected were well below the rates on paper.** The effective rate (duties assessed
+  ÷ imports) peaked at `{python} N["eff_peak"]` in `{python} N["eff_peak_month"]` against a
+  statutory rate of `{python} N["stat_peak"]`, because of USMCA claims, in-transit exemptions and
+  duties on metal content only. It was `{python} N["eff_last"]` in `{python} N["data_month"]`,
+  after the Supreme Court struck down the IEEPA tariffs.
+- **Trade moved away from China.** China's share of US imports of the products tariffed in
+  2018–19 fell from `{python} N["sh_s301_cn0"]` to `{python} N["sh_s301_cn24"]` by 2024 and
+  `{python} N["sh_s301_cn1"]` in the year to `{python} N["div_last"]`; Taiwan, Vietnam, Mexico and
+  other Southeast Asian suppliers grew. In a gravity model the elasticity of imports to tariffs
+  is `{python} N["dv_ppml25"]` (`{python} N["dv_ppml18"]` in 2018–19).
+- **Importers stockpiled before each action, then cut back.** Imports of goods facing the China,
+  metals and reciprocal tariffs ran above their own trend for `{python} N["fr_months_lo"]`–`{python} N["fr_months_hi"]`
+  months before the duties, by `{python} N["fr_excess"]` in all, and fell below it afterwards.
+
+## Data and tariff timeline
+
+The analysis uses public data only:
+
+| Source | What it gives | Level |
+|---|---|---|
+| Census international trade API [@census_trade] | Imports for consumption: customs value, quantity, calculated duties | HS10 product × country × month |
+| Tariff timeline (this project) [@federal_register] | Every tariff action, rate, HS scope, dates, legal status, with citations | Action component |
+| BLS CPI [@bls_cpi] | Consumer price indexes, detailed items | Item × month |
+| BLS import price indexes [@bls_mxp] | Import prices by country of origin, before duty | Locality × month |
+| BEA input-output tables [@bea_io] | Import share of supply; PCE bridge to consumer categories | Commodity |
+| Treasury Monthly Treasury Statement [@treasury_mts] | Customs receipts (reconciliation) | Month |
+
+Monthly import totals reconcile to the published FT-900 within tolerance and calculated duties to
+Treasury customs receipts after timing lags (details in
+[DATA.md](https://github.com/johnpospisil/tariff-pass-through/blob/main/DATA.md)).
+
+**The tariff timeline** is the core of the project: `{python} N["tl_rows"]` action components in
+`{python} N["tl_groups"]` actions, from the 2018 Section 201 safeguards to the 2026 Section 232 and
+Section 301 actions. Each component carries an official source (Federal Register citation,
+proclamation or executive order number, USTR notice or CBP message) and the date it was verified.
+The timeline is expanded to a rate for every HS10 product × country × month, applying the stacking
+rules in the orders, exclusions and USMCA treatment.
+
+```{python}
+#| output: asis
+print(nm.table_timeline())
+```
+
+## Effective tariff rates
+
+```{python}
+#| output: asis
+print(nm.fig("chart2_effective_rates", "Statutory and effective tariff rates by trading partner"))
+```
+
+The average effective tariff rate on US imports was `{python} N["eff_2024"]` in 2024. It rose
+with the 2025 actions to a peak of `{python} N["eff_peak"]` in `{python} N["eff_peak_month"]` and
+was `{python} N["eff_last"]` in `{python} N["data_month"]` (Penn Wharton Budget Model, on a
+slightly different import base: `{python} N["pwbm_eff"]` [@pwbm2026]). For China the effective
+rate peaked at `{python} N["eff_cn_peak"]` in `{python} N["eff_cn_peak_month"]` and was
+`{python} N["eff_cn_last"]` in `{python} N["data_month"]` (Penn Wharton: `{python} N["pwbm_cn_eff"]`).
+
+The statutory rate, what the orders say applies, ran well above duties actually assessed:
+`{python} N["stat_peak"]` at its peak, and `{python} N["stat_cn_peak"]` for China in April 2025,
+when most goods shipped before the increase were still exempt in transit. The gap comes from
+identifiable sources: USMCA-qualifying goods from Canada and Mexico enter free (Canada
+`{python} N["eff_ca_last"]` effective against `{python} N["stat_ca_last"]` statutory; Mexico
+`{python} N["eff_mx_last"]` against `{python} N["stat_mx_last"]`), Section 232 derivative duties fall
+on the metal content only, and in-transit exemptions delay each increase by one to two months. We
+use the statutory rate as the tariff change in the regressions (it is not affected by importers'
+responses) and the rate actually collected as a check.
+
+## Border pass-through
+
+```{python}
+#| output: asis
+print(nm.fig("hero_border_pt", "Response of pre-duty import prices to tariff changes"))
+```
+
+The question is whether the price a foreign exporter charges, before duty, falls when the tariff
+rises. We follow @arw2019: for each product (HS10) and country, the 12-month change in the log
+unit value (customs value ÷ quantity) is regressed on the change in ln(1 + tariff), with fixed
+effects for HS6 product × month and country × month, so the estimate compares varieties of the
+same product in the same month that faced different tariff changes. Standard errors are clustered
+by HS8.
+
+- **2025–26** (January 2024 to `{python} N["data_month"]`): `{python} N["b25"]`
+  (SE `{python} N["b25_se"]`); `{python} N["b25_t3"]` (SE `{python} N["b25_t3_se"]`) when
+  varieties whose unit value changed more than threefold are dropped; `{python} N["b25_pre"]`
+  ending before the IEEPA ruling. US importers' duty-inclusive prices rose by
+  `{python} N["dut_iv25"]` per unit of duty actually collected (instrumenting collected duties with
+  statutory rates), and quantities fell by `{python} N["qty_iv25"]`.
+- **2018–19**, the same design on the trade war: `{python} N["b18"]` (SE `{python} N["b18_se"]`),
+  `{python} N["b18_t3"]` trimmed. @arw2019 report `{python} N["arw_pub"]` and @fgkk2020
+  `{python} N["fgkk_pub"]`; our versions of their exact specifications give `{python} N["arw_ours"]`
+  and `{python} N["fgkk_ours"]` (the gap is documented in DATA.md). All agree that exporters
+  absorbed little of the tariff.
+- **By authority** (2025–26): Section 232 `{python} N["s23225"]`; IEEPA `{python} N["ieepa25"]`
+  (`{python} N["ieepa25_t3"]` trimmed). **By supplier**: China `{python} N["cn25_t3"]` trimmed.
+- **Timing**: in an event study around each variety's first tariff increase, duty-inclusive
+  prices jump about `{python} N["ev_dut0"]` in the month the duty applies while pre-duty prices do
+  not fall; quantities in the months before sit `{python} N["ev_qty_front"]` below the month just
+  before the duty (stockpiling) and fall `{python} N["ev_qty0"]` on impact.
+- **Independent check**: BLS import price indexes by country of origin, measured before duty,
+  show the same: `{python} N["mxp25"]` (SE `{python} N["mxp25_se"]`) against the tariff on each
+  origin's imports.
+
+```{python}
+#| output: asis
+print(nm.table_border())
+```
+
+: Pre-duty unit-value response to Δln(1 + tariff), coefficient (SE). {#tbl-border}
+
+## At the store: retail prices
+
+```{python}
+#| output: asis
+print(nm.fig("chart3_retail", "Consumer prices of high- and low-exposure goods"))
+```
+
+Each CPI item gets a tariff exposure: the import share of what consumers buy (from BEA's 2017
+supply table, through the PCE bridge and BLS's PCE–CPI mapping) times the import-weighted tariff
+change. Exposure is the duty as a share of the consumer price if it were passed on in full. The
+most exposed items are household appliances (`{python} N["exp_top_name"]`:
+`{python} N["exp_top"]`, `{python} N["exp_top_eff"]` on duties collected), apparel, footwear and
+consumer electronics; food, fuels and drugs have little exposure.
+
+```{python}
+#| output: asis
+print(nm.table_exposure())
+```
+
+: Most exposed CPI goods items, 2025–26 (window means). {#tbl-exposure}
+
+**Pre-trends matter.** Highly exposed goods were getting cheaper relative to less exposed goods
+before 2025: in January 2023 the high-exposure third stood `{python} N["hl_pre_gap"]` index points
+above the low third, both indexed to January 2025 (left panel). A comparison that ignores this
+reads the end of that decline as a fall in prices (`{python} N["th_notrend"]`). We therefore
+measure each item against its own 2023–24 trend (right panel).
+
+On that basis, across `{python} N["th_items"]` CPI goods items in `{python} N["th_classes"]`
+expenditure classes, retail prices rose by `{python} N["th_main"]` (SE `{python} N["th_main_se"]`)
+of the duty cost on statutory exposure and `{python} N["th_eff"]` (SE `{python} N["th_eff_se"]`)
+on duties collected. Compared with the border, where importers' costs rose by about the full duty,
+that is `{python} N["th_main_ratio"]` and `{python} N["th_eff_ratio"]` of the border response.
+The most exposed third of items rose `{python} N["th_bin"]` (SE `{python} N["th_bin_se"]`)
+relative to the least exposed; the gap built up gradually (`{python} N["rev_6"]` six months in,
+`{python} N["rev_12"]` after a year) and had not reversed by `{python} N["hl_month"]` despite the
+IEEPA ruling (`{python} N["hl_high"]` vs `{python} N["hl_low"]` relative to trend). In 2018–19,
+when exposure was far smaller, the same design is too imprecise to say much
+(`{python} N["th18"]`, SE `{python} N["th18_se"]`); @cgnt2021 found limited pass-through to
+store prices in that episode.
+
+```{python}
+#| output: asis
+print(nm.table_retail())
+```
+
+: Retail response θ (θ = 1: prices rose by the full duty cost), 2025–26, SE clustered by expenditure class. {#tbl-retail}
+
+## Trade diversion
+
+```{python}
+#| output: asis
+print(nm.fig("chart4_diversion", "Supplier shares of US imports"))
+```
+
+For products tariffed on China in 2018–19 (`{python} N["s301_value"]` of imports in the year to
+`{python} N["div_last"]`), China's share fell from `{python} N["sh_s301_cn0"]` to
+`{python} N["sh_s301_cn24"]` by 2024 and `{python} N["sh_s301_cn1"]` by `{python} N["div_last"]`.
+Taiwan went from `{python} N["sh_s301_tw0"]` to `{python} N["sh_s301_tw1"]` (mostly computers and
+servers), Vietnam from `{python} N["sh_s301_vn0"]` to `{python} N["sh_s301_vn1"]`, Mexico from
+`{python} N["sh_s301_mx0"]` to `{python} N["sh_s301_mx1"]` and other Southeast Asia from
+`{python} N["sh_s301_sea0"]` to `{python} N["sh_s301_sea1"]`. In all other products China's share
+fell from `{python} N["sh_other_cn0"]` to `{python} N["sh_other_cn1"]`, mostly in 2025.
+
+Weighted by trade, imports fell with tariffs in both episodes: a gravity model (PPML, HS6 ×
+quarter and HS6 × country fixed effects) gives `{python} N["dv_ppml25"]` for 2025–26 and
+`{python} N["dv_ppml18"]` for 2018–19. One unweighted comparison in 2025–26 gives the opposite
+sign (`{python} N["dv_ld25"]`): within a product, the mid-tariff suppliers that replaced China
+(Vietnam, Thailand) grew while facing larger increases than Canada and Mexico. It measures
+substitution toward China's competitors, not the response to a supplier's own tariff; China's
+own coefficient is `{python} N["dv_ldcn25"]`.
+
+```{python}
+#| output: asis
+print(nm.table_diversion())
+```
+
+: Response of imports to Δln(1 + tariff), coefficient (SE), clustered by HS6. {#tbl-diversion}
+
+**Possible transshipment.** We list products where China's share fell by at least `{python} N["fl_cn_drop"]` points
+while a supplier with under `{python} N["fl_prior"]` before reached at least
+`{python} N["fl_post"]` and gained at least `{python} N["fl_gain"]` a year, with whether
+its unit values moved toward China's. From 2017 to 2024: `{python} N["fl_a_n"]` such cases,
+`{python} N["fl_a_bn"]` of gains, `{python} N["fl_a_conv"]` with converging unit values. From 2024
+to the latest year: `{python} N["fl_b_n"]` cases, `{python} N["fl_b_bn"]`,
+`{python} N["fl_b_conv"]` converging. These patterns are consistent with rerouting and equally with
+production genuinely moving; they are a list of where to look, not evidence of evasion.
+
+```{python}
+#| output: asis
+print(nm.table_flags())
+```
+
+: Largest flagged cases (full list: `transshipment_flags.csv`). {#tbl-flags}
+
+## Front-running
+
+```{python}
+#| output: asis
+print(nm.fig("chart5_front_running", "Imports of affected products around the 2025 actions"))
+```
+
+For each 2025 action we compare imports of the affected product × country pairs with their own
+seasonal pattern and pre-election growth. Goods facing the China, metals and reciprocal tariffs ran
+above trend for `{python} N["fr_months_lo"]`–`{python} N["fr_months_hi"]` months, peaking in the
+month before the duty, with `{python} N["fr_excess"]` of excess imports. The largest single surge
+was pharmaceuticals (`{python} N["fr_pharma_peak"]` in March 2025) when the Section 232 inquiry
+opened. Afterwards imports fell below trend. Months around each effective date are excluded or
+tested separately in the pass-through estimates.
+
+```{python}
+#| output: asis
+print(nm.table_front_running())
+```
+
+: Imports around each action relative to the products' own trend. {#tbl-frontrun}
+
+## De minimis
+
+```{python}
+#| output: asis
+print(nm.fig("chart6_low_value", "Recorded low-value imports"))
+```
+
+Duty-free entry for shipments under `{python} N["dm_threshold"]` ended for China and Hong Kong in May 2025 and for all
+countries in August 2025. Those shipments were not in Census trade data before
+(`{python} N["dm_2023"]` in 2023, about `{python} N["dm_month"]` a month, by @fk2025's estimate).
+Census records low-value formal entries under a single estimate line [@census_guide]; for China and
+Hong Kong it went from about `{python} N["lv_cn_pre"]` a month in early 2025 to
+`{python} N["lv_cn_last"]` in `{python} N["data_month"]`, and for other countries from
+`{python} N["lv_rest_pre"]` to `{python} N["lv_rest_last"]`. **Part of that rise is a change in
+measurement**: trade that used to enter unrecorded now appears. The recorded increase is far smaller
+than the former de minimis flow, so most of that trade either stopped or is still not visible in
+this line.
+
+## Robustness
+
+```{python}
+#| output: asis
+print(nm.fig("chart_spec_curve", "Specification curve"))
+```
+
+We re-estimated the border coefficient `{python} N["rb_fits"]` ways: `{python} N["rb_rules"]` rules
+for cleaning unit values, alternative fixed effects and clustering, dropping China or Section 232 products, excluding
+front-running months, single years and the pre-ruling window. Across the `{python} N["rb_n"]`
+unweighted 2025–26 specifications the estimate lies between `{python} N["rb_lo"]` and
+`{python} N["rb_hi"]`, and no confidence interval goes below `{python} N["rb_ci_lo"]`. Weighting by import
+value gives `{python} N["rb_weighted"]`, driven by one chapter (computers and servers, whose
+product mix shifted toward Taiwan and Mexico), not by exporters cutting prices.
+
+## Limitations
+
+- **Unit values are not prices.** Customs value ÷ quantity mixes price changes with changes in
+  what is shipped within a code. We clean outliers, compare within HS6 × month, and check against
+  BLS import price indexes, but composition changes remain.
+- **Statutory rates overstate duties for some goods.** Section 232 derivative duties apply to metal
+  content only and USMCA claims rose in 2025; coefficients on statutory rates are attenuated for
+  duty-inclusive prices and quantities, so we also report responses per unit of duty collected.
+- **The retail mapping is coarse.** Import shares come from 2017 input-output tables, and many CPI
+  items share one PCE bridge line. A hand-mapped route for `{python} N["hand_items"]` major goods gives similar answers.
+- **The retail estimates are imprecise** and depend on extrapolating each item's 2023–24 trend.
+- **Revisions and gaps.** Census revises recent months (annual revision each June); BLS collected
+  no prices for most items in October 2025 (federal shutdown), which we leave missing.
+- **Refunds.** Census duties are as assessed at entry; the IEEPA refunds paid in 2026 are a later
+  transfer to importers and are not netted out.
+
+## What we don't claim
+
+- **No welfare conclusions.** We measure prices and trade flows. Who ultimately bears a tariff
+  also depends on wages, profits, exchange rates and government revenue, which we do not model.
+- **No verdict on the policy.** The results describe what happened to prices and trade; they are
+  not an assessment of whether the tariffs were good or bad policy.
+- **No findings of evasion.** Transshipment flags are statistical patterns.
+- **No forecast.** Tariff policy changed several times during the sample and may change again.
+
+## Methods appendix
+
+**Data build.** Census imports for consumption by HS10 × individual country × month from January
+2017, cached with a manifest of every request. HS10 codes are linked across years into families
+(in the spirit of @pierce_schott2012). Calculated duties reconcile to Treasury customs receipts
+after timing; import totals to the FT-900.
+
+**Tariff rates.** Each action in the timeline is expanded to a daily rate by HS10 × country,
+applying the stacking rules in the orders (for example, Section 232 duties replace the reciprocal
+duty on the same goods), exclusions and USMCA treatment (approximated with the share of each
+product's imports claiming USMCA), then averaged over days in the month.
+
+**Border pass-through.** Δ₁₂ ln(unit value) = β Δ₁₂ ln(1 + τ) + HS6 × month + country × month
+fixed effects, by HS10 × country variety; also duty-inclusive unit value (unit value × (1 + τ)),
+quantity and value; 12-month log changes winsorised at the 1st and 99th percentiles. Heterogeneity
+by supplier, tariff authority, differentiated vs homogeneous goods [@rauch1999] and time since the
+tariff; event studies following @fgkk2020.
+
+**Retail.** ln CPI = θ × exposure + item + month fixed effects, on log indexes net of item seasonal
+factors (2015–24) and each item's linear trend over the pre-period, clustered by expenditure class.
+Robustness: 12-month differences, BLS seasonally adjusted series, all items, hand-mapped items,
+the pre-ruling window, and a trend fitted from 2015.
+
+**Diversion.** Long differences of import value and share by HS6 × country between seasonally
+matched windows two years apart, with HS6 fixed effects; quarterly PPML gravity with HS6 × quarter
+and HS6 × country (and country × quarter) fixed effects.
+
+Every estimate is produced by `make` from public data, pinned in tests, and listed in
+[DATA.md](https://github.com/johnpospisil/tariff-pass-through/blob/main/DATA.md) with its
+specification.
+
+## Data as of and legal status
+
+Trade, tariff and price data run to `{python} N["data_month"]`. The Supreme Court held on
+`{python} N["date_ruling"]` that the International Emergency Economic Powers Act does not authorize
+tariffs, and IEEPA duties stopped on `{python} N["date_collection_ended"]`. Customs and Border
+Protection estimated `{python} N["refunds_assessed"]` of IEEPA duties collected, and had certified
+`{python} N["refunds_paid"]` in refunds by `{python} N["refunds_paid_date"]`; the Court of
+International Trade certified a nationwide class of importers on `{python} N["date_cit_class"]`.
+Status checked on `{python} N["legal_checked"]`.
+
+```{python}
+#| output: asis
+print(nm.table_legal())
+```
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

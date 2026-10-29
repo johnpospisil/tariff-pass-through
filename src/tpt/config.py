@@ -21,6 +21,7 @@ PUBLISHED_DIR = DATA_DIR / "published"  # aggregates for the report and explorer
 
 REPORT_DIR = PROJECT_ROOT / "report"
 FIGURES_DIR = REPORT_DIR / "figures"
+GITHUB_REPO = "johnpospisil/tariff-pass-through"  # data links in the report
 
 # Sample window: 2017 onward so the 2018-19 trade war can be replicated as a check.
 # SAMPLE_END = None means "latest month available".

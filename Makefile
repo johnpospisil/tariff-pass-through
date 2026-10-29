@@ -91,8 +91,9 @@ border-pt-2025:  ## P16 only: static grid, heterogeneity, MXP check, 2025-26 eve
 figures:  ## charts from data/published/ in light and dark -> report/figures/
 	$(UV) python -m tpt.viz.figures
 
-report:
-	@echo "report: not implemented yet (P22)"
+report:  ## P22 report numbers + Quarto render -> report/_site/
+	$(UV) python -m tpt.report.numbers
+	JUPYTER_PATH=$(CURDIR)/.venv/share/jupyter QUARTO_PYTHON=$(CURDIR)/.venv/bin/python $(UV) quarto render report --execute-daemon-restart
 
 test:
 	$(UV) pytest

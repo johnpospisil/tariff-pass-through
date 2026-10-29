@@ -1078,6 +1078,35 @@ surfaces:
 
 Hover and interactive versions come with the Quarto report and explorer (P22–P23).
 
+## Report (P22)
+
+`report/index.qmd` (Quarto website in `report/`), rendered by `make report` to
+`report/_site/index.html`:
+1. `python -m tpt.report.numbers` writes `data/published/tariff_timeline_summary.csv`.
+2. `quarto render report` runs with the project's Python and kernel. `JUPYTER_PATH` puts
+   `.venv/share/jupyter` first, ahead of any user-level `python3` kernel.
+
+**No hard-coded figures.** Every number in the prose is an inline expression `N["key"]` from
+`tpt.report.numbers.numbers()`, which reads only `data/published/`. Tables and figure blocks come
+from the same module. `tests/test_report.py` fails if a decimal, percentage or dollar amount is
+typed into the prose, or if the report uses a key the module does not produce.
+
+**Figures.** Each figure is embedded in light and dark versions (`.light-content` /
+`.dark-content`, following the reader's colour scheme), with alt text from
+`report/figures/alt_text.json` and a link to its data table.
+
+**External facts are tables, not prose:**
+- `data/published/legal_status.csv`: court rulings, orders and refund totals, each with a
+  source and `checked_on`. Checked 2026-10-29 by web search. The refund figures are CBP court
+  declarations as reported by the Penn Wharton Budget Model (2026-10-14): $166bn of IEEPA duties
+  collected (declaration of 2026-03-06) and $126bn certified in refunds, including interest,
+  through 2026-10-02.
+- `data/published/external_benchmarks.csv`: Penn Wharton and Yale rate estimates, the 2023 de
+  minimis value (Fajgelbaum and Khandelwal, 2025) and the statutory de minimis limit.
+
+Bibliography: `report/references.bib`. The render gives no warnings. In a browser opened from
+`file://` the table of contents stays collapsed; served over HTTP (as on GitHub Pages) it works.
+
 ## Known issues
 
 - **Unweighted 2025–26 diversion elasticity (P20)**: positive (+0.56), driven by small flows and

@@ -1,0 +1,35 @@
+action_group,authority,first_effective,last_end,components,max_rate,legal_status,citation
+S201-SOLAR,S201,2018-02-07,2026-02-07,8,0.3,expired / superseded,Proc. 9693 (83 FR 3541)
+S201-WASHERPARTS,S201,2018-02-07,2023-02-08,5,0.5,expired / superseded,Proc. 9694 (83 FR 3553)
+S201-WASHERS,S201,2018-02-07,2023-02-08,5,0.2,expired / superseded,Proc. 9694 (83 FR 3553)
+S232-ALUM,S232,2018-03-23,2026-04-06,11,2.0,in_effect / superseded / terminated,Proc. 9704 (83 FR 11619); Proc. 9710 (83 FR 13355)
+S232-STEEL,S232,2018-03-23,2026-04-06,10,0.5,in_effect / superseded / terminated,Proc. 9705 (83 FR 11625); Proc. 9711 (83 FR 13361); Proc. 9740 (83 FR 20683)
+S301-CN-L1,S301,2018-07-06,,1,0.25,in_effect,83 FR 28710 (FR Doc 2018-13248)
+S301-CN-L2,S301,2018-08-23,,1,0.25,in_effect,83 FR 40823 (FR Doc 2018-17709)
+S301-CN-L3,S301,2018-09-24,2019-05-10,2,0.25,in_effect / superseded,83 FR 47974 (FR Doc 2018-20610); conforming amendment 83 FR 49153
+S301-CN-L4A,S301,2019-09-01,2020-02-14,2,0.15,in_effect / superseded,"84 FR 43304 (FR Doc 2019-17865), rate set to 15% by 84 FR 45821 (FR Doc 2019-18838)"
+S232-ALUMDER,S232,2020-02-08,2026-04-06,11,2.0,in_effect / superseded,Proc. 9980 (85 FR 5281)
+S232-STEELDER,S232,2020-02-08,2026-04-06,11,0.5,in_effect / superseded,Proc. 9980 (85 FR 5281)
+S301-CN-4YR,S301,2024-09-27,,9,1.0,in_effect,"89 FR 76581 (USTR, four-year review modifications)"
+IEEPA-FENT-CN,IEEPA_FENTANYL,2025-02-04,2026-02-24,6,0.2,struck_down,"EO 14195, 90 FR 9121"
+IEEPA-FENT-CA,IEEPA_FENTANYL,2025-03-04,2026-02-24,3,0.35,struck_down,"EO 14197, 90 FR 9183 (Canada duties delayed to 2025-03-04)"
+IEEPA-FENT-CA-ENERGY,IEEPA_FENTANYL,2025-03-04,2026-02-24,2,0.1,struck_down,"EO 14197, 90 FR 9183 (Canada duties delayed to 2025-03-04)"
+IEEPA-FENT-MX,IEEPA_FENTANYL,2025-03-04,2026-02-24,2,0.25,struck_down,"EO 14198, 90 FR 9185 (Mexico duties delayed to 2025-03-04)"
+IEEPA-FENT-MX-POTASH,IEEPA_FENTANYL,2025-03-07,2026-02-24,1,0.1,struck_down,"EO 14232, 90 FR 11787"
+S232-AUTOS,S232,2025-04-03,2025-11-01,29,0.25,in_effect,"Proclamation 10908, 90 FR 14705"
+IEEPA-RECIP,IEEPA_RECIPROCAL,2025-04-05,2026-02-24,80,1.25,struck_down,"EO 14257, 90 FR 15041"
+DE-MINIMIS,DE_MINIMIS,2025-05-02,2026-02-24,4,0.0,in_effect,"EO 14256, 90 FR 14899"
+S232-COPPER,S232,2025-08-01,2026-04-06,1,0.5,in_effect,"Proclamation 10962, 90 FR 37727"
+IEEPA-BRAZIL,IEEPA_OTHER,2025-08-06,2026-02-24,2,0.4,struck_down,"EO 14323, 90 FR 37739"
+IEEPA-INDIA-RUOIL,IEEPA_OTHER,2025-08-27,2026-02-07,1,0.25,struck_down,"EO 14329, 90 FR 38701"
+S232-LUMBER,S232,2025-10-14,2027-01-01,8,0.5,in_effect / scheduled,"Proclamation 10976, 90 FR 48127"
+S232-TRUCKS,S232,2025-11-01,,4,0.25,in_effect,"Proclamation 10984, 90 FR 48451"
+IEEPA-RECIP-AG,IEEPA_RECIPROCAL,2025-11-13,2026-02-24,1,0.0,struck_down,"EO 14360, 90 FR 54091"
+S232-SEMI,S232,2026-01-15,,1,0.25,in_effect,"Proclamation 11002, 91 FR 2443"
+S122,S122,2026-02-24,2026-07-24,1,0.1,expired,"Proclamation 11012, 91 FR 9339"
+S232-METALS26,S232,2026-04-06,,17,0.5,in_effect,"Proclamation 11021, 91 FR 18201"
+S301-BRAZIL,S301,2026-07-22,,1,0.25,in_effect,"Presidential action, 91 FR 45619 (Section 301, Brazil)"
+S301-FL,S301,2026-07-24,,60,0.125,in_effect,"91 FR 47318 (USTR notice of action, 60 forced-labor investigations); Presidential memorandum 91 FR 47717"
+S338-CANADA,S338,2026-08-22,,3,0.5,in_effect,"Proclamations 11046-11048, 91 FR 46639/46653/46663; effective date moved to 2026-08-22 by Proclamation 11056, 91 FR 54789"
+S232-DRONES,S232,2026-09-03,,1,0.25,in_effect,"Proclamation 11055, 91 FR 53699"
+S232-PHARMA,S232,2026-09-29,,7,1.0,in_effect,"Proclamation 11020, 91 FR 18183"

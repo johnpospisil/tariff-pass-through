@@ -1,0 +1,36 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+
+website:
+  title: "Who Pays the Tariffs?"
+  site-url: "https://johnpospisil.github.io/tariff-pass-through/"
+  repo-url: "https://github.com/johnpospisil/tariff-pass-through"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Report
+    right:
+      - icon: github
+        href: "https://github.com/johnpospisil/tariff-pass-through"
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    respect-user-color-scheme: true
+    toc: true
+    toc-depth: 2
+    fig-responsive: true
+    tbl-cap-location: top
+    link-external-newwindow: true
+    css: styles.css
+
+execute:
+  echo: false
+  warning: false
+
+bibliography: references.bib

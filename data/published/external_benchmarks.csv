@@ -1,0 +1,6 @@
+key,value,unit,description,source,url,checked_on
+pwbm_effective_2026_08,0.071,share,"Average effective tariff rate (customs duties / import value), August 2026",Penn Wharton Budget Model 2026-10-14,https://budgetmodel.wharton.upenn.edu/p/2026-10-14-effective-tariff-rates-and-revenues-updated-october-14-2026/,2026-10-28
+pwbm_china_effective_2026_08,0.243,share,"Effective tariff rate on imports from China, August 2026",Penn Wharton Budget Model 2026-10-14,https://budgetmodel.wharton.upenn.edu/p/2026-10-14-effective-tariff-rates-and-revenues-updated-october-14-2026/,2026-10-28
+yale_statutory_2026_07,0.111,share,"Average statutory tariff rate including MFN, pre-substitution weights (as of 2026-07-24)",Yale Budget Lab 2026-07-24,https://budgetlab.yale.edu/research/state-us-tariffs,2026-10-28
+deminimis_2023_bn,54.5,usd_bn,"Value of de minimis (Section 321) imports in 2023, not recorded in Census trade data","Fajgelbaum and Khandelwal (2025), The Value of de Minimis Imports",https://akhandelwal8.github.io/files/wp_DM/DM_post.pdf,2026-10-28
+deminimis_threshold_usd,800,usd,"De minimis value limit for duty-free entry of shipments (Section 321)",19 U.S.C. 1321(a)(2)(C),https://www.law.cornell.edu/uscode/text/19/1321,2026-10-29
