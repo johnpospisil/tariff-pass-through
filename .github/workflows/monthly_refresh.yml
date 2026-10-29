@@ -116,7 +116,8 @@ jobs:
           git add data/published data/reference report/figures
           if git diff --cached --quiet; then echo "no changes"; else
             git commit -m "Monthly refresh: Census data through ${{ needs.check.outputs.available }}"
-            git pull --rebase
+            git status --short  # other tracked files the build rewrites; kept local
+            git pull --rebase --autostash
             git push
           fi
       - name: Save data snapshot
