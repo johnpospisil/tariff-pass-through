@@ -4,3 +4,8 @@ table { font-size: 0.9rem; }
 td, th { padding: 0.25rem 0.6rem; }
 img { width: 100%; height: auto; }
 .callout { font-size: 0.95rem; }
+/* Product explorer (P23) */
+.explorer-product h3 { font-size: 1.1rem; margin-top: 1.25rem; }
+.explorer-product p { font-size: 0.9rem; }
+#explorer-results { max-width: 100%; }
+#explorer-results td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

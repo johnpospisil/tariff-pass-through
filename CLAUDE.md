@@ -316,7 +316,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > figures). Neutral framing. Cite literature (Amiti–Redding–Weinstein 2019, Fajgelbaum et al. 2020,
 > Cavallo et al. 2021) and all data sources. Render locally and report any warnings. Commit `P22`.
 
-**P23 — Product explorer**
+**P23 — Product explorer ✅ DONE!**
 > Build the interactive explorer as an Observable JS page in the Quarto site (`app/` or `report/explore.qmd`):
 > search a product by description ("washing machines", "toys") → its HS codes, tariff timeline by
 > country, pre-duty unit value and duty-inclusive price over time, and import sources over time. Export

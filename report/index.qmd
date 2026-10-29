@@ -52,6 +52,9 @@ Legal status of the tariffs checked on `{python} N["legal_checked"]`; see
   metals and reciprocal tariffs ran above their own trend for `{python} N["fr_months_lo"]`–`{python} N["fr_months_hi"]`
   months before the duties, by `{python} N["fr_excess"]` in all, and fell below it afterwards.
 
+The [product explorer](explore.qmd) shows the tariff rates, prices and import sources behind
+these estimates for any HS10 product.
+
 ## Data and tariff timeline
 
 The analysis uses public data only:

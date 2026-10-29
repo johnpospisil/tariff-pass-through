@@ -14,6 +14,8 @@ __pycache__/
 data/raw/
 data/interim/
 data/processed/
+# P23 explorer bundle (~70 MB, rewritten monthly): built by `make explorer`, deployed with the site
+data/published/explorer/
 
 # Quarto output
 report/_site/

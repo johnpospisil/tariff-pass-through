@@ -1,9 +1,10 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value exposure retail-did diversion border-pt border-pt-2025 robustness build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value exposure retail-did diversion explorer border-pt border-pt-2025 robustness build models figures report test lint format all
 
 UV := uv run
 
 setup:
 	uv sync
+	$(UV) playwright install chromium-headless-shell
 
 ingest: ingest-census ingest-bls ingest-reference
 
@@ -88,11 +89,15 @@ border-pt-2025:  ## P16 only: static grid, heterogeneity, MXP check, 2025-26 eve
 	$(UV) python -u -m tpt.models.border_pt pt
 	$(UV) python -u -m tpt.models.border_pt events25
 
+explorer:  ## P23 product explorer bundle -> data/published/explorer/
+	$(UV) python -u -m tpt.report.explorer
+
 figures:  ## charts from data/published/ in light and dark -> report/figures/
 	$(UV) python -m tpt.viz.figures
 
-report:  ## P22 report numbers + Quarto render -> report/_site/
+report:  ## P22/P23 report numbers + explorer data + Quarto render -> report/_site/
 	$(UV) python -m tpt.report.numbers
+	rsync -a --delete data/published/explorer/ report/explorer_data/
 	JUPYTER_PATH=$(CURDIR)/.venv/share/jupyter QUARTO_PYTHON=$(CURDIR)/.venv/bin/python $(UV) quarto render report --execute-daemon-restart
 
 test:

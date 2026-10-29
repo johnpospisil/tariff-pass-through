@@ -1107,6 +1107,39 @@ typed into the prose, or if the report uses a key the module does not produce.
 Bibliography: `report/references.bib`. The render gives no warnings. In a browser opened from
 `file://` the table of contents stays collapsed; served over HTTP (as on GitHub Pages) it works.
 
+## Product explorer (P23)
+
+`make explorer` (`src/tpt/report/explorer.py`, about 60 s) writes a JSON bundle to
+`data/published/explorer/`; `make report` copies it to `report/explorer_data/` and renders
+`report/explore.qmd` (Observable JS + Plot) into the site.
+
+- **Coverage**: every HS10 in the import panel (HS10 level, chapters 98/99 excluded):
+  21,105 products, 2017-01 to 2026-08. Monthly import value per product reconciles with the
+  panel to 0.1% (test).
+- **Per product**: the five largest suppliers over the whole window plus "Other"; monthly
+  customs value, pre-duty unit value (rows in the product's latest quantity unit only),
+  calculated duties / value and the statutory additional rate (P10), the last two as change
+  points. Three significant digits; duty ratio to 0.01, statutory rate to 0.001.
+  "All countries" is summed in the browser.
+- **Files**: `meta.json`, `index.json` (codes, latest-year long descriptions, imports in the
+  latest 12 months, search aliases; 2.4 MB) and one file per HS4 heading inside each chapter
+  folder (1,230 files, largest 1.5 MB). Whole-chapter files would be ~20 MB for chapter 84.
+  The bundle totals ~116 MB and changes every month, so it is **git-ignored** and built
+  locally/CI, not committed.
+- **Search**: word-prefix match on descriptions with plurals stemmed, ranked by whether the
+  first word matches and then by imports; numeric queries match HS code prefixes.
+  `data/reference/explorer_aliases.csv` maps everyday names to tariff wording (TV → "tv
+  receivers", laptop → "portable data processing", sneakers → "footwear tennis gym shoes");
+  a test checks every alias matches at least one description.
+- **Caveats on the page**: unit values mix models within a code; statutory rates do not net
+  out exclusions, USMCA claims or in-transit exemptions; Census duties are as assessed (not
+  revised for IEEPA refunds); HS10 codes are not linked across revisions on this page.
+- **Tests**: `tests/test_explorer.py` (encoding, top-5 + Other aggregation, reconciliation,
+  file sizes) and `tests/test_explorer_browser.py` (Playwright, headless Chromium via
+  `make setup`): page load to first three charts 0.37 s locally (gate < 3 s); searches for
+  toys, laptops, solar panels and an HS code; row selection; no-match message; dark mode
+  switches the chart palette; no page errors.
+
 ## Known issues
 
 - **Unweighted 2025–26 diversion elasticity (P20)**: positive (+0.56), driven by small flows and

@@ -1,0 +1,337 @@
+---
+title: "Product explorer"
+subtitle: "Tariffs, prices and import sources for any HS10 product, 2017 to the latest month"
+toc: false
+---
+
+Search for a product by name (for example *washing machines*, *toys*, *solar panels*) or by
+HS code. Pick a line to see its additional tariff rate by supplier, its pre-duty unit value and
+duty-inclusive price, and where its imports come from. Data are monthly U.S. Census imports for
+consumption at the 10-digit Harmonized Tariff Schedule (HS10) level; the tariff rates are the
+statutory additional duties compiled for this project from the Federal Register. See
+[the report](index.qmd) for methods and the legal status of the IEEPA duties.
+
+```{ojs}
+//| echo: false
+meta = d3.json("explorer_data/meta.json")
+index = d3.json("explorer_data/index.json")
+
+// Search words with plurals stemmed; mirrors tpt.report.explorer.words.
+function words(text) {
+  return text.toLowerCase().replace(/'/g, "").split(/[^a-z0-9]+/)
+    .filter(w => w.length >= 2)
+    .map(w => w.endsWith("sses") ? w.slice(0, -2)
+      : w.endsWith("ies") && w.length > 4 ? w.slice(0, -3) + "y"
+      : w.endsWith("s") && !w.endsWith("ss") && w.length > 3 ? w.slice(0, -1) : w);
+}
+
+STOP = new Set(["and", "or", "of", "the", "for", "with", "an", "in", "to"])
+
+catalog = index.rows.map(([hs10, desc, imports]) => ({hs10, desc, imports, w: words(desc)}))
+
+aliasList = Object.entries(index.aliases).sort((a, b) => b[0].length - a[0].length)
+
+function search(query, limit = 60) {
+  const q = query.toLowerCase().replace(/[^a-z0-9.\s-]/g, " ").trim();
+  if (!q) return [];
+  const digits = q.replace(/[.\s]/g, "");
+  const byImports = (a, b) => (b.imports ?? 0) - (a.imports ?? 0);
+  if (/^\d{2,10}$/.test(digits)) {
+    return catalog.filter(d => d.hs10.startsWith(digits)).sort(byImports).slice(0, limit);
+  }
+  let text = ` ${q} `;
+  for (const [term, expansion] of aliasList) text = text.replace(` ${term} `, ` ${expansion} `);
+  const toks = words(text).filter(t => !STOP.has(t));
+  if (!toks.length) return [];
+  return catalog
+    .filter(d => toks.every(t => d.w.some(w => w.startsWith(t))))
+    .map(d => ({...d, lead: d.w[0].startsWith(toks[0]) ? 1 : 0}))
+    .sort((a, b) => b.lead - a.lead || byImports(a, b))
+    .slice(0, limit);
+}
+```
+
+```{ojs}
+//| echo: false
+viewof query = Inputs.text({
+  label: "Product",
+  placeholder: "washing machines, toys, 8450 \u2026",
+  value: "washing machines",
+  submit: false,
+  width: 420
+})
+```
+
+```{ojs}
+//| echo: false
+results = search(query)
+viewof pick = {
+  const view = results.length
+    ? Inputs.table(results, {
+        columns: ["hs10", "imports", "desc"],
+        header: {hs10: "HS10", desc: "Description", imports: "Imports, 12 mo."},
+        format: {
+          hs10: fmtCode,
+          desc: d => sentence(d),
+          imports: d => d == null ? "\u2013" : usd(d) + "m"
+        },
+        width: {hs10: 104, imports: 110},
+        layout: "fixed",
+        multiple: false,
+        required: false,
+        value: results[0],
+        rows: 8
+      })
+    : html`<p class="explorer-empty">No product matches &ldquo;${query}&rdquo;. Try a shorter or more
+           general word, or an HS code.</p>`;
+  view.id = "explorer-results";
+  return view;
+}
+```
+
+```{ojs}
+//| echo: false
+product = {
+  const row = pick ?? results[0];
+  if (!row) return null;
+  const rel = `${row.hs10.slice(0, 2)}/${row.hs10.slice(0, 4)}.json`;
+  if (!fileCache.has(rel)) fileCache.set(rel, d3.json(`explorer_data/${rel}`));
+  const p = (await fileCache.get(rel))[row.hs10];
+  return {...p, hs10: row.hs10, desc: row.desc, imports: row.imports};
+}
+```
+
+```{ojs}
+//| echo: false
+productHeader = product ? html`<div id="explorer-product" class="explorer-product">
+  <h3>${fmtCode(product.hs10)} &middot; ${sentence(product.desc)}</h3>
+  <p>Quantity unit: ${unitName(product.u)}.
+     ${product.mfn == null ? "" : `Normal (MFN) duty in the latest month: ${pct(product.mfn)}.`}
+     Imports in the 12 months to ${monthName(meta.data_month)}:
+     ${product.imports == null ? "none" : `${usd(product.imports)}m`}.
+     Largest suppliers since 2017: ${sources.filter(s => s.c !== "other").map(s => s.name).join(", ")}.
+     <a href="explorer_data/${product.hs10.slice(0, 2)}/${product.hs10.slice(0, 4)}.json">Data (JSON)</a></p>
+</div>` : html``
+```
+
+### Additional tariff rate by supplier
+
+Statutory additional duty in each month the supplier shipped the product (gaps are months
+with no imports from it). It excludes the normal (MFN) duty and does not net out exclusions,
+USMCA claims or in-transit exemptions; the duties Census records as collected are in the price
+chart below.
+
+```{ojs}
+//| echo: false
+html`<div id="chart-tariff">${product ? Plot.plot({
+  height: 300,
+  width: Math.min(width, 860),
+  style: {background: "transparent"},
+  marginLeft: 48,
+  x: {type: "utc", label: null},
+  y: {label: "Additional duty (%)", tickFormat: d => d3.format(".0f")(d * 100), grid: true, zero: true},
+  color: colorScale,
+  marks: [
+    Plot.ruleY([0], {stroke: tokens.axis}),
+    Plot.line(rates, {x: "date", y: "rate", z: "name", stroke: "name", strokeWidth: 2,
+                      curve: "step-after"}),
+    Plot.tip(rates, Plot.pointerX({x: "date", y: "rate", z: "name",
+      title: d => `${d.name}\n${monthName(d.month)}\nAdditional duty: ${pct(d.rate)}`}))
+  ]
+}) : ""}</div>`
+```
+
+### Pre-duty unit value and duty-inclusive price
+
+```{ojs}
+//| echo: false
+viewof priceSource = Inputs.select(["All countries", ...sources.map(s => s.name)], {
+  label: "Supplier"
+})
+```
+
+Customs value per unit before duty, and the same plus duties Census records as calculated at
+entry (MFN and additional duties). Unit values mix models and qualities within a code, so
+month-to-month jumps can reflect a change in what was shipped rather than in prices.
+
+```{ojs}
+//| echo: false
+html`<div id="chart-price">${product && product.u !== "X" ? Plot.plot({
+  height: 300,
+  width: Math.min(width, 860),
+  style: {background: "transparent"},
+  marginLeft: 56,
+  x: {type: "utc", label: null},
+  y: {label: `$ per ${unitName(product.u)}`, grid: true, zero: true},
+  color: {domain: ["Pre-duty unit value", "Duty-inclusive price"],
+          range: [palette[0], palette[1]], legend: true},
+  marks: [
+    Plot.ruleY([0], {stroke: tokens.axis}),
+    Plot.line(prices, {x: "date", y: "value", stroke: "measure", strokeWidth: 2}),
+    Plot.tip(prices, Plot.pointerX({x: "date", y: "value", z: "measure",
+      title: d => `${d.measure}\n${monthName(d.month)}\n${usd(d.value, ",.4~r")} per ${unitName(product.u)}`}))
+  ]
+}) : html`<p>No quantity is recorded for this code, so there is no unit value.</p>`}</div>`
+```
+
+### Import sources
+
+Share of the product's import value by supplier, by quarter.
+
+```{ojs}
+//| echo: false
+html`<div id="chart-sources">${product ? Plot.plot({
+  height: 300,
+  width: Math.min(width, 860),
+  style: {background: "transparent"},
+  marginLeft: 48,
+  x: {type: "utc", label: null},
+  y: {label: "Share of imports (%)", tickFormat: d => d3.format(".0f")(d * 100), domain: [0, 1]},
+  color: colorScale,
+  marks: [
+    Plot.areaY(shares, Plot.stackY({x: "date", y: "share", fill: "name", order: sourceNames,
+                                     stroke: tokens.surface, strokeWidth: 1, curve: "step-after"})),
+    Plot.tip(shares, Plot.pointerX(Plot.stackY({x: "date", y: "share", z: "name", order: sourceNames,
+      title: d => `${d.name}\n${d.quarter}\n${pct(d.share)} of ${usd(d.total / 1e3)}m`})))
+  ]
+}) : ""}</div>`
+```
+
+::: {.callout-note appearance="simple"}
+## About these data
+HS10 codes are revised most Januaries, so a product can start or stop part way through the
+window (the report's border estimates link codes across revisions; this page does not). Charts show the five largest suppliers of the
+product since 2017; the rest are grouped as "Other". Duties recorded by Census are as assessed
+at entry and are not revised for the refunds that followed the Supreme Court's IEEPA ruling.
+Shipments below the de minimis threshold were mostly not recorded before its end. The data
+behind each product are linked above as JSON; the bundle is built by `make explorer`
+(`src/tpt/report/explorer.py`).
+:::
+
+```{ojs}
+//| echo: false
+//| output: false
+fileCache = new Map()
+
+dark = Generators.observe(notify => {
+  const check = () => notify(document.body.classList.contains("quarto-dark"));
+  check();
+  const obs = new MutationObserver(check);
+  obs.observe(document.body, {attributes: true, attributeFilter: ["class"]});
+  return () => obs.disconnect();
+})
+
+// Validated palette (src/tpt/viz/theme.py): fixed slot order, separate dark steps.
+THEME = ({
+  light: {surface: "#fcfcfb", axis: "#c3c2b7", muted: "#898781",
+          series: ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"]},
+  dark: {surface: "#1a1a19", axis: "#383835", muted: "#898781",
+         series: ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300"]}
+})
+tokens = dark ? THEME.dark : THEME.light
+palette = tokens.series
+
+CHINA = "5700"
+
+// China always takes the first slot so it keeps one colour across products.
+sources = {
+  if (!product) return [];
+  const rest = product.s.filter(s => s.c !== CHINA && s.c !== "other");
+  const china = product.s.filter(s => s.c === CHINA);
+  const other = product.s.filter(s => s.c === "other");
+  return [...china, ...rest, ...other].map((s, i) => ({
+    ...s,
+    name: s.c === "other" ? "Other" : (meta.countries[s.c] ?? s.c),
+    color: s.c === "other" ? tokens.muted : palette[china.length ? i : i + 1]
+  }));
+}
+sourceNames = sources.map(s => s.name)
+colorScale = ({domain: sourceNames, range: sources.map(s => s.color), legend: true})
+
+month = i => meta.months[i]
+toDate = m => new Date(`${m}-01T00:00:00Z`)
+
+// Expand a change-point list [[i, value], ...] to n monthly values.
+steps = (cp, n) => {
+  const out = new Array(n);
+  let k = 0;
+  for (let i = 0; i < n; i++) {
+    while (k + 1 < cp.length && cp[k + 1][0] <= i) k++;
+    out[i] = cp.length ? cp[k][1] : null;
+  }
+  return out;
+}
+
+// Each source on the full month axis: v ($k), uv (null = none), e, r (null without imports).
+decoded = sources.map(s => {
+  const N = meta.months.length, n = s.v.length, e = steps(s.e, n), r = steps(s.r, n);
+  const out = {...s, V: new Array(N).fill(0), UV: new Array(N).fill(null),
+               E: new Array(N).fill(null), R: new Array(N).fill(null)};
+  for (let i = 0; i < n; i++) {
+    const j = s.m0 + i;
+    out.V[j] = s.v[i];
+    if (s.v[i] > 0) { out.UV[j] = s.uv[i] > 0 ? s.uv[i] : null; out.E[j] = e[i]; out.R[j] = r[i]; }
+  }
+  return out;
+})
+
+span = {
+  const traded = meta.months.map((_, j) => decoded.some(s => s.V[j] > 0));
+  return [traded.indexOf(true), traded.lastIndexOf(true)];
+}
+
+rates = decoded.filter(s => s.c !== "other").flatMap(s =>
+  d3.range(span[0], span[1] + 1).map(j =>
+    ({name: s.name, month: month(j), date: toDate(month(j)), rate: s.R[j]})))
+
+prices = {
+  if (!product) return [];
+  const chosen = priceSource === "All countries" ? decoded : decoded.filter(s => s.name === priceSource);
+  const out = [];
+  for (let j = span[0]; j <= span[1]; j++) {
+    let vq = 0, q = 0, v = 0, d = 0;
+    for (const s of chosen) {
+      const val = s.V[j], uv = s.UV[j], e = s.E[j];
+      if (uv > 0) { vq += val; q += val / uv; }
+      if (e != null) { v += val; d += val * e; }
+    }
+    if (q <= 0) continue;
+    const m = month(j), uv = vq / q, e = v > 0 ? d / v : 0;
+    out.push({measure: "Pre-duty unit value", month: m, date: toDate(m), value: uv});
+    out.push({measure: "Duty-inclusive price", month: m, date: toDate(m), value: uv * (1 + e)});
+  }
+  return out;
+}
+
+shares = {
+  if (!product) return [];
+  const byQ = new Map();
+  for (const s of decoded) s.V.forEach((v, j) => {
+    if (j < span[0] || j > span[1]) return;
+    const m = month(j), y = m.slice(0, 4), qn = Math.floor((+m.slice(5) - 1) / 3);
+    const key = `${y} Q${qn + 1}`;
+    if (!byQ.has(key)) byQ.set(key, {quarter: key, date: new Date(Date.UTC(+y, qn * 3, 1)), by: new Map()});
+    const e = byQ.get(key).by;
+    e.set(s.name, (e.get(s.name) ?? 0) + (v ?? 0));
+  });
+  return [...byQ.values()].flatMap(({quarter, date, by}) => {
+    const total = d3.sum(by.values());
+    return total > 0 ? sourceNames.map(name => ({quarter, date, name, total,
+                                                 share: (by.get(name) ?? 0) / total})) : [];
+  });
+}
+
+UNITS = ({NO: "unit", KG: "kg", DOZ: "dozen", PRS: "pair", DPR: "dozen pairs", M2: "m\u00b2",
+          M3: "m\u00b3", L: "litre", T: "tonne", M: "metre", GM: "gram", DOZPRS: "dozen pairs",
+          DOZPCS: "dozen pieces", PCS: "piece", DS: "dose", BBL: "barrel", X: "no unit",
+          KM3: "1,000 m\u00b3", CYK: "clean yield kg", PFL: "proof litre", LNM: "linear metre",
+          CTN: "content tonne", SQ: "square", GR: "gross", THS: "thousand units", MWH: "MWh",
+          FBM: "board foot", JWL: "jewel", CG: "centigram", KTS: "kg total sugars"})
+unitName = u => UNITS[u] ?? u
+fmtCode = c => `${c.slice(0, 4)}.${c.slice(4, 6)}.${c.slice(6)}`
+sentence = s => s.charAt(0) + s.slice(1).toLowerCase()
+usd = (x, f = ",.3~r") => "$" + d3.format(f)(x)
+pct = r => `${d3.format(".1f")(r * 100)}%`
+monthName = m => new Date(`${m}-01T00:00:00Z`).toLocaleDateString("en-US",
+  {month: "short", year: "numeric", timeZone: "UTC"})
+```

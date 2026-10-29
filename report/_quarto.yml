@@ -3,6 +3,9 @@ project:
   output-dir: _site
   render:
     - index.qmd
+    - explore.qmd
+  resources:
+    - explorer_data/**
 
 website:
   title: "Who Pays the Tariffs?"
@@ -12,6 +15,8 @@ website:
     left:
       - href: index.qmd
         text: Report
+      - href: explore.qmd
+        text: Product explorer
     right:
       - icon: github
         href: "https://github.com/johnpospisil/tariff-pass-through"
