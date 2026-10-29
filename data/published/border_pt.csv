@@ -94,21 +94,21 @@ period,spec,outcome,group,term,coef,se,ci_low,ci_high,n,n_term,r2,fe,cluster,x,i
 2018_19,tbin_trim3,uv,pre,dln_1p_tau_stat__pre,0.34734,0.19037,-0.02583,0.72052,1728765,4765,0.06101,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2018-01-01,2019-12-01,"",1.34734
 2018_19,mxp_locality,mxp,all,dln_1p_tau_stat,0.09616,0.07830,-0.05868,0.25100,168,168,0.57623,locality + ym,hetero,dln_1p_tau_stat,,2018-01-01,2019-12-01,BLS locality-of-origin import price indexes,
 2018_19,mxp_locality,mxp,all,dln_1p_tau_eff,0.12625,0.10095,-0.07337,0.32587,168,168,0.57638,locality + ym,hetero,dln_1p_tau_eff,,2018-01-01,2019-12-01,BLS locality-of-origin import price indexes,
-2025_26,main,uv,all,dln_1p_tau_stat,0.04117,0.02904,-0.01575,0.09809,3725047,1652651,0.04478,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.04117
-2025_26,main,uv_dut,all,dln_1p_tau_stat,0.50766,0.03409,0.44084,0.57449,3725047,1652651,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,main,qty,all,dln_1p_tau_stat,-0.70623,0.05251,-0.80916,-0.60331,3725047,1652651,0.05129,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,main,val,all,dln_1p_tau_stat,-0.65884,0.03973,-0.73673,-0.58096,3729368,1655049,0.05927,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,twoway,uv,all,dln_1p_tau_stat,0.04117,0.05980,-0.07673,0.15907,3725047,1652651,0.04478,hs6^ym + cty_code^ym,hs8+cty_code,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.04117
-2025_26,twoway,uv_dut,all,dln_1p_tau_stat,0.50766,0.08838,0.33343,0.68190,3725047,1652651,0.04715,hs6^ym + cty_code^ym,hs8+cty_code,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,twoway,qty,all,dln_1p_tau_stat,-0.70623,0.15715,-1.01605,-0.39642,3725047,1652651,0.05129,hs6^ym + cty_code^ym,hs8+cty_code,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,twoway,val,all,dln_1p_tau_stat,-0.65884,0.10212,-0.86017,-0.45752,3729368,1655049,0.05927,hs6^ym + cty_code^ym,hs8+cty_code,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,main_trim3,uv,all,dln_1p_tau_stat,-0.03876,0.01118,-0.06068,-0.01683,2877668,1266329,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"unwinsorised, unit-value ratio beyond 3 dropped (ARW)",0.96124
-2025_26,main_trim3,uv_dut,all,dln_1p_tau_stat,0.43337,0.01964,0.39489,0.47186,2877668,1266329,0.08106,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"unwinsorised, unit-value ratio beyond 3 dropped (ARW)",
-2025_26,main_trim3,qty,all,dln_1p_tau_stat,-0.57367,0.04371,-0.65935,-0.48798,2877668,1266329,0.06900,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"unwinsorised, unit-value ratio beyond 3 dropped (ARW)",
-2025_26,pre_ruling,uv,all,dln_1p_tau_stat,-0.00089,0.03154,-0.06271,0.06094,2900412,1084117,0.04466,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-01-01,"to 2026-01, before IEEPA duties ended",0.99911
-2025_26,pre_ruling,uv_dut,all,dln_1p_tau_stat,0.49747,0.03791,0.42316,0.57179,2900412,1084117,0.04695,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-01-01,"to 2026-01, before IEEPA duties ended",
-2025_26,pre_ruling,qty,all,dln_1p_tau_stat,-0.72441,0.05823,-0.83856,-0.61027,2900412,1084117,0.05139,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-01-01,"to 2026-01, before IEEPA duties ended",
-2025_26,pre_ruling,val,all,dln_1p_tau_stat,-0.71955,0.04480,-0.80737,-0.63173,2903543,1085522,0.05916,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-01-01,"to 2026-01, before IEEPA duties ended",
+2025_26,main,uv,all,dln_1p_tau_stat,0.04117,0.02904,-0.01575,0.09809,3725047,1652654,0.04478,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.04117
+2025_26,main,uv_dut,all,dln_1p_tau_stat,0.50766,0.03409,0.44084,0.57449,3725047,1652654,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,main,qty,all,dln_1p_tau_stat,-0.70623,0.05251,-0.80916,-0.60331,3725047,1652654,0.05129,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,main,val,all,dln_1p_tau_stat,-0.65884,0.03973,-0.73673,-0.58096,3729368,1655052,0.05927,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,twoway,uv,all,dln_1p_tau_stat,0.04117,0.05980,-0.07673,0.15907,3725047,1652654,0.04478,hs6^ym + cty_code^ym,hs8+cty_code,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.04117
+2025_26,twoway,uv_dut,all,dln_1p_tau_stat,0.50766,0.08838,0.33343,0.68190,3725047,1652654,0.04715,hs6^ym + cty_code^ym,hs8+cty_code,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,twoway,qty,all,dln_1p_tau_stat,-0.70623,0.15715,-1.01605,-0.39642,3725047,1652654,0.05129,hs6^ym + cty_code^ym,hs8+cty_code,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,twoway,val,all,dln_1p_tau_stat,-0.65884,0.10212,-0.86017,-0.45752,3729368,1655052,0.05927,hs6^ym + cty_code^ym,hs8+cty_code,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,main_trim3,uv,all,dln_1p_tau_stat,-0.03876,0.01118,-0.06068,-0.01683,2877668,1266332,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"unwinsorised, unit-value ratio beyond 3 dropped (ARW)",0.96124
+2025_26,main_trim3,uv_dut,all,dln_1p_tau_stat,0.43337,0.01964,0.39489,0.47186,2877668,1266332,0.08106,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"unwinsorised, unit-value ratio beyond 3 dropped (ARW)",
+2025_26,main_trim3,qty,all,dln_1p_tau_stat,-0.57367,0.04371,-0.65935,-0.48798,2877668,1266332,0.06900,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"unwinsorised, unit-value ratio beyond 3 dropped (ARW)",
+2025_26,pre_ruling,uv,all,dln_1p_tau_stat,-0.00089,0.03154,-0.06271,0.06094,2900412,1084119,0.04466,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-01-01,"to 2026-01, before IEEPA duties ended",0.99911
+2025_26,pre_ruling,uv_dut,all,dln_1p_tau_stat,0.49747,0.03791,0.42316,0.57179,2900412,1084119,0.04695,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-01-01,"to 2026-01, before IEEPA duties ended",
+2025_26,pre_ruling,qty,all,dln_1p_tau_stat,-0.72441,0.05823,-0.83856,-0.61027,2900412,1084119,0.05139,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-01-01,"to 2026-01, before IEEPA duties ended",
+2025_26,pre_ruling,val,all,dln_1p_tau_stat,-0.71955,0.04480,-0.80737,-0.63173,2903543,1085524,0.05916,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-01-01,"to 2026-01, before IEEPA duties ended",
 2025_26,implied_ols,uv,all,dln_1p_tau_eff,0.22379,0.02585,0.17312,0.27445,3725047,2850383,0.04486,hs6^ym + cty_code^ym,hs8,dln_1p_tau_eff,,2024-01-01,2026-08-01,implied rate (duties/value) is endogenous: specific duties and composition move it with unit values; IV uses the statutory change,1.22379
 2025_26,implied_ols,uv_dut,all,dln_1p_tau_eff,1.19188,0.02570,1.14151,1.24224,3725047,2850383,0.04925,hs6^ym + cty_code^ym,hs8,dln_1p_tau_eff,,2024-01-01,2026-08-01,implied rate (duties/value) is endogenous: specific duties and composition move it with unit values; IV uses the statutory change,
 2025_26,implied_ols,qty,all,dln_1p_tau_eff,-1.53513,0.04374,-1.62087,-1.44940,3725047,2850383,0.05279,hs6^ym + cty_code^ym,hs8,dln_1p_tau_eff,,2024-01-01,2026-08-01,implied rate (duties/value) is endogenous: specific duties and composition move it with unit values; IV uses the statutory change,
@@ -116,29 +116,29 @@ period,spec,outcome,group,term,coef,se,ci_low,ci_high,n,n_term,r2,fe,cluster,x,i
 2025_26,implied_iv,uv_dut,all,dln_1p_tau_eff,1.06093,0.06028,0.94278,1.17909,3725047,2850383,NaN,hs6^ym + cty_code^ym,hs8,dln_1p_tau_eff,dln_1p_tau_stat,2024-01-01,2026-08-01,implied rate (duties/value) is endogenous: specific duties and composition move it with unit values; IV uses the statutory change,
 2025_26,implied_iv,qty,all,dln_1p_tau_eff,-1.47592,0.09637,-1.66482,-1.28701,3725047,2850383,NaN,hs6^ym + cty_code^ym,hs8,dln_1p_tau_eff,dln_1p_tau_stat,2024-01-01,2026-08-01,implied rate (duties/value) is endogenous: specific duties and composition move it with unit values; IV uses the statutory change,
 2025_26,country,uv,canada,dln_1p_tau_stat__canada,0.15066,0.04872,0.05516,0.24616,3725047,75892,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.15066
-2025_26,country,uv,china,dln_1p_tau_stat__china,0.05823,0.04232,-0.02472,0.14118,3725047,176596,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.05823
+2025_26,country,uv,china,dln_1p_tau_stat__china,0.05823,0.04232,-0.02472,0.14118,3725047,176598,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.05823
 2025_26,country,uv,mexico,dln_1p_tau_stat__mexico,0.11065,0.04967,0.01329,0.20801,3725047,62226,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.11065
-2025_26,country,uv,other,dln_1p_tau_stat__other,-0.01425,0.03358,-0.08008,0.05157,3725047,1337937,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.98575
+2025_26,country,uv,other,dln_1p_tau_stat__other,-0.01425,0.03358,-0.08008,0.05157,3725047,1337938,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.98575
 2025_26,country,uv_dut,canada,dln_1p_tau_stat__canada,0.59865,0.05234,0.49606,0.70124,3725047,75892,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,country,uv_dut,china,dln_1p_tau_stat__china,0.42231,0.04347,0.33711,0.50751,3725047,176596,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,country,uv_dut,china,dln_1p_tau_stat__china,0.42231,0.04347,0.33711,0.50751,3725047,176598,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,country,uv_dut,mexico,dln_1p_tau_stat__mexico,0.56944,0.05201,0.46749,0.67140,3725047,62226,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,country,uv_dut,other,dln_1p_tau_stat__other,0.48373,0.03957,0.40616,0.56129,3725047,1337937,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,country,uv_dut,other,dln_1p_tau_stat__other,0.48373,0.03957,0.40616,0.56129,3725047,1337938,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,country,qty,canada,dln_1p_tau_stat__canada,-1.25518,0.08444,-1.42069,-1.08967,3725047,75892,0.05137,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,country,qty,china,dln_1p_tau_stat__china,-0.48423,0.06669,-0.61495,-0.35352,3725047,176596,0.05137,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,country,qty,china,dln_1p_tau_stat__china,-0.48423,0.06669,-0.61495,-0.35352,3725047,176598,0.05137,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,country,qty,mexico,dln_1p_tau_stat__mexico,-0.99596,0.09203,-1.17635,-0.81557,3725047,62226,0.05137,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,country,qty,other,dln_1p_tau_stat__other,-0.51390,0.05685,-0.62535,-0.40246,3725047,1337937,0.05137,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,country,qty,other,dln_1p_tau_stat__other,-0.51390,0.05685,-0.62535,-0.40246,3725047,1337938,0.05137,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,country_trim3,uv,canada,dln_1p_tau_stat__canada,-0.00239,0.01987,-0.04134,0.03655,2877668,58397,0.06056,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.99761
-2025_26,country_trim3,uv,china,dln_1p_tau_stat__china,-0.00966,0.01949,-0.04786,0.02854,2877668,144112,0.06056,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.99034
+2025_26,country_trim3,uv,china,dln_1p_tau_stat__china,-0.00966,0.01949,-0.04786,0.02854,2877668,144114,0.06056,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.99034
 2025_26,country_trim3,uv,mexico,dln_1p_tau_stat__mexico,-0.09247,0.02280,-0.13717,-0.04777,2877668,52170,0.06056,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.90753
-2025_26,country_trim3,uv,other,dln_1p_tau_stat__other,-0.04331,0.01259,-0.06800,-0.01862,2877668,1011650,0.06056,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.95669
-2025_26,china,uv,china,dln_1p_tau_stat__china,0.07392,0.04213,-0.00866,0.15649,3725047,176596,0.04478,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.07392
-2025_26,china,uv,other,dln_1p_tau_stat__other,0.03629,0.03058,-0.02365,0.09624,3725047,1476055,0.04478,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.03629
-2025_26,china,uv_dut,china,dln_1p_tau_stat__china,0.43318,0.04335,0.34821,0.51815,3725047,176596,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,china,uv_dut,other,dln_1p_tau_stat__other,0.51875,0.03629,0.44762,0.58989,3725047,1476055,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,china,qty,china,dln_1p_tau_stat__china,-0.55144,0.06774,-0.68423,-0.41866,3725047,176596,0.05129,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,china,qty,other,dln_1p_tau_stat__other,-0.72929,0.05621,-0.83948,-0.61910,3725047,1476055,0.05129,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,china_trim3,uv,china,dln_1p_tau_stat__china,-0.00942,0.01954,-0.04772,0.02889,2877668,144112,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.99058
-2025_26,china_trim3,uv,other,dln_1p_tau_stat__other,-0.04362,0.01168,-0.06652,-0.02072,2877668,1122217,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.95638
+2025_26,country_trim3,uv,other,dln_1p_tau_stat__other,-0.04331,0.01259,-0.06800,-0.01862,2877668,1011651,0.06056,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.95669
+2025_26,china,uv,china,dln_1p_tau_stat__china,0.07392,0.04213,-0.00866,0.15649,3725047,176598,0.04478,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.07392
+2025_26,china,uv,other,dln_1p_tau_stat__other,0.03629,0.03058,-0.02365,0.09624,3725047,1476056,0.04478,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.03629
+2025_26,china,uv_dut,china,dln_1p_tau_stat__china,0.43318,0.04335,0.34821,0.51815,3725047,176598,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,china,uv_dut,other,dln_1p_tau_stat__other,0.51875,0.03629,0.44762,0.58989,3725047,1476056,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,china,qty,china,dln_1p_tau_stat__china,-0.55144,0.06774,-0.68423,-0.41866,3725047,176598,0.05129,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,china,qty,other,dln_1p_tau_stat__other,-0.72929,0.05621,-0.83948,-0.61910,3725047,1476056,0.05129,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,china_trim3,uv,china,dln_1p_tau_stat__china,-0.00942,0.01954,-0.04772,0.02889,2877668,144114,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.99058
+2025_26,china_trim3,uv,other,dln_1p_tau_stat__other,-0.04362,0.01168,-0.06652,-0.02072,2877668,1122218,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.95638
 2025_26,authority,uv,s232,dln_1p_tau_stat__s232,-0.08579,0.03947,-0.16315,-0.00842,3629622,278075,0.04537,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.91421
 2025_26,authority,uv,ieepa,dln_1p_tau_stat__ieepa,0.19488,0.03624,0.12384,0.26592,3629622,1520930,0.04537,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.19488
 2025_26,authority,uv,s301,dln_1p_tau_stat__s301,0.05930,0.12842,-0.19242,0.31102,3629622,157253,0.04537,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.05930
@@ -155,45 +155,45 @@ period,spec,outcome,group,term,coef,se,ci_low,ci_high,n,n_term,r2,fe,cluster,x,i
 2025_26,authority_trim3,uv,ieepa,dln_1p_tau_stat__ieepa,0.00022,0.01438,-0.02796,0.02840,2800287,1163194,0.06111,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.00022
 2025_26,authority_trim3,uv,s301,dln_1p_tau_stat__s301,0.10149,0.06330,-0.02260,0.22558,2800287,118870,0.06111,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.10149
 2025_26,authority_trim3,uv,other,dln_1p_tau_stat__other,-0.12545,0.05561,-0.23446,-0.01645,2800287,385584,0.06111,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.87455
-2025_26,rauch,uv,differentiated,dln_1p_tau_stat__differentiated,0.04399,0.02983,-0.01448,0.10247,3725047,1371448,0.04478,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.04399
+2025_26,rauch,uv,differentiated,dln_1p_tau_stat__differentiated,0.04399,0.02983,-0.01448,0.10247,3725047,1371451,0.04478,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.04399
 2025_26,rauch,uv,homogeneous,dln_1p_tau_stat__homogeneous,0.04961,0.03695,-0.02281,0.12204,3725047,230558,0.04478,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.04961
 2025_26,rauch,uv,unclassified,dln_1p_tau_stat__unclassified,-0.04735,0.09034,-0.22445,0.12974,3725047,50645,0.04478,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.95265
-2025_26,rauch,uv_dut,differentiated,dln_1p_tau_stat__differentiated,0.51089,0.03514,0.44202,0.57976,3725047,1371448,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,rauch,uv_dut,differentiated,dln_1p_tau_stat__differentiated,0.51089,0.03514,0.44202,0.57976,3725047,1371451,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,rauch,uv_dut,homogeneous,dln_1p_tau_stat__homogeneous,0.52245,0.03924,0.44553,0.59937,3725047,230558,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,rauch,uv_dut,unclassified,dln_1p_tau_stat__unclassified,0.39071,0.09993,0.19483,0.58660,3725047,50645,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,rauch,qty,differentiated,dln_1p_tau_stat__differentiated,-0.66049,0.05333,-0.76504,-0.55595,3725047,1371448,0.05131,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,rauch,qty,differentiated,dln_1p_tau_stat__differentiated,-0.66049,0.05333,-0.76504,-0.55595,3725047,1371451,0.05131,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,rauch,qty,homogeneous,dln_1p_tau_stat__homogeneous,-1.04023,0.07083,-1.17906,-0.90139,3725047,230558,0.05131,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,rauch,qty,unclassified,dln_1p_tau_stat__unclassified,-0.70303,0.14715,-0.99148,-0.41459,3725047,50645,0.05131,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,rauch_trim3,uv,differentiated,dln_1p_tau_stat__differentiated,-0.03244,0.01162,-0.05522,-0.00966,2877668,1028396,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.96756
+2025_26,rauch_trim3,uv,differentiated,dln_1p_tau_stat__differentiated,-0.03244,0.01162,-0.05522,-0.00966,2877668,1028399,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.96756
 2025_26,rauch_trim3,uv,homogeneous,dln_1p_tau_stat__homogeneous,-0.07074,0.01573,-0.10157,-0.03992,2877668,201639,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.92926
 2025_26,rauch_trim3,uv,unclassified,dln_1p_tau_stat__unclassified,-0.06769,0.03070,-0.12787,-0.00752,2877668,36294,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.93231
 2025_26,tbin,uv,m0_2,dln_1p_tau_stat__m0_2,0.03887,0.04615,-0.05159,0.12933,3725047,356702,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.03887
-2025_26,tbin,uv,m12p,dln_1p_tau_stat__m12p,0.20298,0.04935,0.10625,0.29971,3725047,362288,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.20298
+2025_26,tbin,uv,m12p,dln_1p_tau_stat__m12p,0.20298,0.04935,0.10625,0.29971,3725047,362289,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.20298
 2025_26,tbin,uv,m3_5,dln_1p_tau_stat__m3_5,-0.02026,0.03769,-0.09414,0.05363,3725047,314692,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.97974
 2025_26,tbin,uv,m6_8,dln_1p_tau_stat__m6_8,-0.00472,0.03559,-0.07449,0.06506,3725047,301175,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.99528
 2025_26,tbin,uv,m9_11,dln_1p_tau_stat__m9_11,0.01623,0.03830,-0.05886,0.09131,3725047,278443,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.01623
 2025_26,tbin,uv,none,dln_1p_tau_stat__none,0.11947,0.08268,-0.04260,0.28155,3725047,34431,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.11947
-2025_26,tbin,uv,pre,dln_1p_tau_stat__pre,-0.08487,0.14751,-0.37402,0.20429,3725047,4920,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.91513
+2025_26,tbin,uv,pre,dln_1p_tau_stat__pre,-0.08487,0.14751,-0.37402,0.20429,3725047,4922,0.04479,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.91513
 2025_26,tbin,uv_dut,m0_2,dln_1p_tau_stat__m0_2,0.48492,0.04954,0.38781,0.58202,3725047,356702,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,tbin,uv_dut,m12p,dln_1p_tau_stat__m12p,0.63490,0.05100,0.53493,0.73488,3725047,362288,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,tbin,uv_dut,m12p,dln_1p_tau_stat__m12p,0.63490,0.05100,0.53493,0.73488,3725047,362289,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,tbin,uv_dut,m3_5,dln_1p_tau_stat__m3_5,0.46255,0.04206,0.38011,0.54499,3725047,314692,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,tbin,uv_dut,m6_8,dln_1p_tau_stat__m6_8,0.49017,0.04241,0.40703,0.57331,3725047,301175,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,tbin,uv_dut,m9_11,dln_1p_tau_stat__m9_11,0.47829,0.04245,0.39509,0.56149,3725047,278443,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,tbin,uv_dut,none,dln_1p_tau_stat__none,0.50545,0.08190,0.34491,0.66599,3725047,34431,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,tbin,uv_dut,pre,dln_1p_tau_stat__pre,0.50224,0.16524,0.17833,0.82615,3725047,4920,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,tbin,uv_dut,pre,dln_1p_tau_stat__pre,0.50224,0.16524,0.17833,0.82615,3725047,4922,0.04715,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,tbin,qty,m0_2,dln_1p_tau_stat__m0_2,-0.65017,0.07082,-0.78899,-0.51135,3725047,356702,0.05131,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,tbin,qty,m12p,dln_1p_tau_stat__m12p,-0.83058,0.07708,-0.98167,-0.67949,3725047,362288,0.05131,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,tbin,qty,m12p,dln_1p_tau_stat__m12p,-0.83058,0.07708,-0.98167,-0.67949,3725047,362289,0.05131,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,tbin,qty,m3_5,dln_1p_tau_stat__m3_5,-0.48061,0.06267,-0.60345,-0.35777,3725047,314692,0.05131,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,tbin,qty,m6_8,dln_1p_tau_stat__m6_8,-0.64546,0.06473,-0.77233,-0.51858,3725047,301175,0.05131,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,tbin,qty,m9_11,dln_1p_tau_stat__m9_11,-0.87985,0.06874,-1.01460,-0.74511,3725047,278443,0.05131,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,tbin,qty,none,dln_1p_tau_stat__none,-0.73296,0.13718,-1.00186,-0.46407,3725047,34431,0.05131,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
-2025_26,tbin,qty,pre,dln_1p_tau_stat__pre,-2.13067,0.54937,-3.20755,-1.05379,3725047,4920,0.05131,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
+2025_26,tbin,qty,pre,dln_1p_tau_stat__pre,-2.13067,0.54937,-3.20755,-1.05379,3725047,4922,0.05131,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",
 2025_26,tbin_trim3,uv,m0_2,dln_1p_tau_stat__m0_2,-0.02339,0.01713,-0.05697,0.01020,2877668,273211,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.97661
-2025_26,tbin_trim3,uv,m12p,dln_1p_tau_stat__m12p,-0.00971,0.01992,-0.04875,0.02933,2877668,278042,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.99029
+2025_26,tbin_trim3,uv,m12p,dln_1p_tau_stat__m12p,-0.00971,0.01992,-0.04875,0.02933,2877668,278043,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.99029
 2025_26,tbin_trim3,uv,m3_5,dln_1p_tau_stat__m3_5,-0.03206,0.01465,-0.06078,-0.00335,2877668,241459,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.96794
 2025_26,tbin_trim3,uv,m6_8,dln_1p_tau_stat__m6_8,-0.05147,0.01454,-0.07996,-0.02298,2877668,229387,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.94853
 2025_26,tbin_trim3,uv,m9_11,dln_1p_tau_stat__m9_11,-0.05540,0.01552,-0.08582,-0.02498,2877668,213499,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.94460
 2025_26,tbin_trim3,uv,none,dln_1p_tau_stat__none,-0.08215,0.03358,-0.14798,-0.01632,2877668,26951,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",0.91785
-2025_26,tbin_trim3,uv,pre,dln_1p_tau_stat__pre,0.03013,0.10046,-0.16679,0.22705,2877668,3780,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.03013
+2025_26,tbin_trim3,uv,pre,dln_1p_tau_stat__pre,0.03013,0.10046,-0.16679,0.22705,2877668,3782,0.06055,hs6^ym + cty_code^ym,hs8,dln_1p_tau_stat,,2024-01-01,2026-08-01,"",1.03013
 2025_26,mxp_locality,mxp,all,dln_1p_tau_stat,0.01099,0.01587,-0.02030,0.04227,248,248,0.38706,locality + ym,hetero,dln_1p_tau_stat,,2024-01-01,2026-08-01,BLS locality-of-origin import price indexes,
 2025_26,mxp_locality,mxp,all,dln_1p_tau_eff,0.02563,0.03173,-0.03693,0.08819,248,248,0.38768,locality + ym,hetero,dln_1p_tau_eff,,2024-01-01,2026-08-01,BLS locality-of-origin import price indexes,
