@@ -1044,6 +1044,40 @@ some).
 - These flags list where to look (customs origin investigations and evasion findings), not
   findings of evasion.
 
+## Figures (P21)
+
+`make figures` (`src/tpt/viz/figures.py`, theme in `src/tpt/viz/theme.py`) draws every chart from
+the CSVs in `data/published/`, in light and dark. Each is written as SVG (text kept as text) and
+PNG to `report/figures/`, and `report/figures/alt_text.json` gives every figure alt text, its data
+table and its light and dark files.
+
+| Figure | File | Data |
+|---|---|---|
+| Hero: border pass-through, 2018–19 vs 2025–26 | `hero_border_pt` | `border_pt.csv` |
+| 2: statutory vs effective tariff rates by partner | `chart2_effective_rates` | `effective_rates.csv` |
+| 3: CPI of high- vs low-exposure goods | `chart3_retail` | `retail_high_low.csv` |
+| 4: supplier shares, Section 301 products vs the rest | `chart4_diversion` | `diversion_shares.csv` |
+| 5: imports around the 2025 actions | `chart5_front_running` | `front_running.csv` |
+| 6: recorded low-value imports | `chart6_low_value` | `low_value_imports.csv` |
+| Robustness specification curve | `robustness_spec_curve` | `robustness.csv` |
+
+**Palette.** The theme's eight categorical slots were checked with the dataviz validator on both
+surfaces:
+- **Light:** passes. Worst adjacent pair for colour-blind readers ΔE 9.1 (protanopia); three slots
+  fall below 3:1 contrast with the background, so every multi-series chart has a legend plus
+  direct labels.
+- **Dark:** passes. Worst adjacent pair ΔE 8.4.
+- **Chart 4:** stacked bands are separated by surface-coloured edges and labelled with their
+  shares.
+
+**Hero.**
+- Rows are grouped (overall, by supplier, by authority, by type of good).
+- Reference lines at β = −1 ("Foreign exporters pay") and β = 0 ("US buyers pay").
+- Filled dots are main estimates; open dots use the ARW outlier trim.
+- 95% CIs, clustered by HS8.
+
+Hover and interactive versions come with the Quarto report and explorer (P22–P23).
+
 ## Known issues
 
 - **Unweighted 2025–26 diversion elasticity (P20)**: positive (+0.56), driven by small flows and

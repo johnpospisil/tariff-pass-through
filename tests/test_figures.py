@@ -26,7 +26,7 @@ def test_chart2_writes_svg_and_png(effective_csv, tmp_path, mode):
     assert [p.suffix for p in paths] == [".svg", ".png"]
     assert all(p.stat().st_size > 10_000 for p in paths)
     svg = paths[0].read_text()
-    assert "Tariff rates on U.S. imports by trading partner" in svg  # text kept as text
+    assert "Tariff rates on US imports by trading partner" in svg  # text kept as text
     assert theme.tokens(mode)["series"][0] in svg.lower()
 
 
@@ -143,3 +143,20 @@ def test_chart4_diversion_renders(tmp_path, mode):
     paths = figures.chart4_diversion(mode, data=path, out_dir=tmp_path)
     svg = paths[0].read_text()
     assert "Where US imports come from" in svg
+
+
+def test_every_figure_has_alt_text_and_a_data_table():
+    names = {fn.__name__ for fn in figures.FIGURES}
+    assert names == set(figures.ALT_TEXT)
+    for name, entry in figures.ALT_TEXT.items():
+        assert len(entry["alt"]) > 80, name
+        assert entry["data"].startswith("data/published/"), name
+
+
+def test_manifest_written(tmp_path):
+    path = figures.write_manifest(tmp_path / "alt_text.json")
+    import json
+
+    m = json.loads(path.read_text())
+    assert m["hero_border_pt"]["files"]["light"] == "hero_border_pt.png"
+    assert m["hero_border_pt"]["files"]["dark"] == "hero_border_pt_dark.png"

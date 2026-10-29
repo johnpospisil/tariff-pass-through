@@ -1,0 +1,58 @@
+{
+  "chart2_effective_rates": {
+    "alt": "Eight small line charts, one per trading partner (all countries, Canada, Mexico, EU, Japan, Vietnam, India, China), of the monthly tariff rate on US imports from 2017: the statutory rate from tariff orders and the effective rate actually assessed. Both are low and flat until early 2025, then jump; the statutory rate rises above the effective rate, most of all for China, Canada and Mexico.",
+    "data": "data/published/effective_rates.csv",
+    "files": {
+      "light": "chart2_effective_rates.png",
+      "dark": "chart2_effective_rates_dark.png"
+    }
+  },
+  "chart3_retail": {
+    "alt": "Two line charts of consumer price indexes for CPI goods in the highest and lowest thirds of 2025-26 tariff exposure, indexed to January 2025. Left: deseasonalised indexes; high-exposure goods were falling relative to low-exposure goods through 2023-24. Right: each item relative to its own 2023-24 trend; after February 2025 high-exposure goods rise above trend more than low-exposure goods.",
+    "data": "data/published/retail_high_low.csv",
+    "files": {
+      "light": "chart3_retail.png",
+      "dark": "chart3_retail_dark.png"
+    }
+  },
+  "chart4_diversion": {
+    "alt": "Two stacked area charts of the share of US imports by supplier (China, Vietnam, Taiwan, Mexico, other Southeast Asia, India, EU, rest of world), 12-month rolling, from 2017. Left: products on the 2018-19 Section 301 lists, where China's share falls steadily and drops again in 2025 while Taiwan, Vietnam, Mexico and other Southeast Asia grow. Right: all other products, where China's share falls mainly in 2025.",
+    "data": "data/published/diversion_shares.csv",
+    "files": {
+      "light": "chart4_diversion.png",
+      "dark": "chart4_diversion_dark.png"
+    }
+  },
+  "chart5_front_running": {
+    "alt": "Six line charts, one per 2025 tariff action, of imports of affected products relative to their own seasonal pattern, from 9 months before to 9 months after the duty took effect, with a grey band for normal variation. Imports peak in the months just before most actions and fall below the band afterwards.",
+    "data": "data/published/front_running.csv",
+    "files": {
+      "light": "chart5_front_running.png",
+      "dark": "chart5_front_running_dark.png"
+    }
+  },
+  "chart6_low_value": {
+    "alt": "Line chart of monthly recorded low-value import shipments (HTS 9999.95) from 2022, for China and Hong Kong and for all other countries, with markers at the end of de minimis for China and Hong Kong (May 2025) and for all countries (August 2025). Recorded values step up after each date, partly because these shipments were not recorded before.",
+    "data": "data/published/low_value_imports.csv",
+    "files": {
+      "light": "chart6_low_value.png",
+      "dark": "chart6_low_value_dark.png"
+    }
+  },
+  "hero_border_pt": {
+    "alt": "Dot plot with confidence intervals of how pre-duty import prices responded to tariff changes, for 2018-19 and 2025-26, overall and by supplier, tariff authority and type of good, with reference lines at 0 (US buyers pay the full duty) and -1 (foreign exporters pay it). Nearly all estimates sit close to 0; Section 232 metals and autos are slightly below it.",
+    "data": "data/published/border_pt.csv",
+    "files": {
+      "light": "hero_border_pt.png",
+      "dark": "hero_border_pt_dark.png"
+    }
+  },
+  "chart_spec_curve": {
+    "alt": "Specification curve for 2018-19 and 2025-26: each column is one estimate of the border pass-through coefficient with its confidence interval, sorted, with the main specification highlighted, and a grid below marking each column's cleaning rule and change to the main specification. Most estimates lie between -0.1 and +0.3; the value-weighted ones are lower and wide.",
+    "data": "data/published/robustness.csv",
+    "files": {
+      "light": "robustness_spec_curve.png",
+      "dark": "robustness_spec_curve_dark.png"
+    }
+  }
+}

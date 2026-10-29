@@ -301,7 +301,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 
 ### Phase 6 — Publish (Weeks 6–7)
 
-**P21 — Hero chart and final figures**
+**P21 — Hero chart and final figures ✅ DONE!**
 > Load the dataviz skill. Finalize the hero chart: pass-through estimates (2018–19 vs 2025–26, by
 > authority/country) of pre-duty import prices vs the tariff change, with reference lines labelled "Foreign
 > exporters pay" (β = −1) and "US buyers pay" (β = 0), CIs shown. Polish charts 2–6 for consistency,

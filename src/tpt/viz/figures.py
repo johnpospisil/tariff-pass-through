@@ -3,6 +3,7 @@
 Run: make figures   (writes report/figures/<name>.svg/.png and <name>_dark.svg/.png)
 """
 
+import json
 from datetime import date
 from pathlib import Path
 
@@ -43,7 +44,7 @@ def chart2_effective_rates(mode: str = "light", data: Path = EFFECTIVE,
     with theme.style(mode) as t:
         eff_c, stat_c = t["series"][0], t["series"][1]
         fig, axes = plt.subplots(2, 4, figsize=(theme.WIDTH_IN, 6.2), sharex=True)
-        fig.subplots_adjust(left=0.05, right=0.95, top=0.80, bottom=0.12, hspace=0.38,
+        fig.subplots_adjust(left=0.05, right=0.95, top=0.76, bottom=0.12, hspace=0.38,
                             wspace=0.26)  # fmt: skip
         for i, (ax, name) in enumerate(zip(axes.flat, PANELS, strict=True)):
             p = df.filter(pl.col("group") == name).sort("month")
@@ -67,24 +68,26 @@ def chart2_effective_rates(mode: str = "light", data: Path = EFFECTIVE,
             ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
             ax.tick_params(axis="x", which="minor", length=2, color=t["axis"])
             ax.set_xlim(x[0], last)
-        # direct labels on the first panel only (legend carries identity everywhere)
+        # direct labels on the first panel only (legend carries identity everywhere), placed
+        # left of each series' peak so they stay inside the panel
         ax0 = axes.flat[0]
-        end = df.filter((pl.col("group") == "All countries") & (pl.col("month") == last))
-        for col, label, dy in (
-            ("statutory_rate", "Statutory", 4),
-            ("effective_rate", "Effective", -4),
-        ):
-            ax0.annotate(label, (last, end[col][0]), xytext=(7, dy), textcoords="offset points",
-                         ha="left", va="center", fontsize=8, color=t["text2"],
-                         annotation_clip=False)  # fmt: skip
+        allc = df.filter(pl.col("group") == "All countries").sort("month")
+        peak = allc.row(int(allc["statutory_rate"].arg_max()), named=True)
+        ax0.annotate("Statutory", (peak["month"], peak["statutory_rate"]), xytext=(-10, 0),
+                     textcoords="offset points", ha="right", va="center", fontsize=8,
+                     color=t["text2"])  # fmt: skip
+        pre = allc.filter(pl.col("month") == date(2025, 1, 1)).row(0, named=True)
+        ax0.annotate("Effective", (pre["month"], pre["effective_rate"]), xytext=(-8, 12),
+                     textcoords="offset points", ha="right", va="bottom", fontsize=8,
+                     color=t["text2"])  # fmt: skip
         handles = [plt.Line2D([], [], color=eff_c, lw=theme.LINE_WIDTH),
                    plt.Line2D([], [], color=stat_c, lw=theme.LINE_WIDTH)]  # fmt: skip
         fig.legend(handles, ["Effective rate (duties assessed ÷ imports)",
                              "Statutory rate (tariff orders, incl. MFN)"],
-                   loc="upper left", bbox_to_anchor=(0.006, 0.875), ncol=2, fontsize=8.5,
+                   loc="upper left", bbox_to_anchor=(0.006, 0.86), ncol=2, fontsize=8.5,
                    handlelength=1.6, columnspacing=1.6, labelcolor=t["text2"])  # fmt: skip
         theme.header(
-            fig, "Tariff rates on U.S. imports by trading partner, 2017–2026",
+            fig, "Tariff rates on US imports by trading partner, 2017–2026",
             "Monthly. The statutory rate weights the rates in force by same-month imports; "
             "the effective rate is what was assessed at entry.\nAll panels share the left "
             "scale except China, which is on its own scale (right).", t,
@@ -111,7 +114,7 @@ def chart5_front_running(mode: str = "light", data: Path = FRONT_RUNNING,
     with theme.style(mode) as t:
         c = t["series"][0]
         fig, axes = plt.subplots(2, 3, figsize=(theme.WIDTH_IN, 6.4), sharex=True, sharey=True)
-        fig.subplots_adjust(left=0.07, right=0.985, top=0.79, bottom=0.15, hspace=0.42,
+        fig.subplots_adjust(left=0.07, right=0.985, top=0.79, bottom=0.19, hspace=0.42,
                             wspace=0.10)  # fmt: skip
         for i, (ax, (aid, label)) in enumerate(zip(axes.flat, actions, strict=True)):
             p = df.filter(pl.col("action") == aid).sort("k")
@@ -130,7 +133,7 @@ def chart5_front_running(mode: str = "light", data: Path = FRONT_RUNNING,
             ax.set_ylim(lo - 0.05, hi + 0.12)
             ax.yaxis.set_major_locator(MultipleLocator(0.25))
             ax.yaxis.set_major_formatter(
-                FuncFormatter(lambda x, _: f"{x * 100:+.0f}%" if x else "0")
+                FuncFormatter(lambda x, _: f"{x * 100:+.0f}%".replace("-", "−") if x else "0")
             )
             ax.xaxis.set_major_locator(MultipleLocator(3))
             if i == 0:
@@ -149,7 +152,7 @@ def chart5_front_running(mode: str = "light", data: Path = FRONT_RUNNING,
         theme.footer(
             fig, theme.SOURCE_CENSUS, t,
             note="Products: HS6 × country pairs whose statutory rate for the action rose; "
-            "pharmaceuticals: HS chapter 30, month 0 = inquiry opened (duty from Sep 2026). "
+            "pharmaceuticals: HS chapter 30, month 0 = inquiry opened (duty from Sep 2026).\n"
             "China after month +2 also reflects the April 2025 increases.",
         )  # fmt: skip
         return theme.save(fig, "chart5_front_running", mode, out_dir)
@@ -229,7 +232,7 @@ def _qa_event(mode: str, data: Path, samples: tuple, title: str, name: str,
                         markeredgecolor=t["surface"], markeredgewidth=1, zorder=5)  # fmt: skip
             ax.set_title(panel, color=t["text"], fontsize=9.5)
             ax.yaxis.set_major_formatter(
-                FuncFormatter(lambda x, _: f"{x * 100:+.0f}%" if x else "0")
+                FuncFormatter(lambda x, _: f"{x * 100:+.0f}%".replace("-", "−") if x else "0")
             )
             ax.xaxis.set_major_locator(MultipleLocator(3))
             ax.set_xlabel("Months from first tariff increase", color=t["muted"], fontsize=8)
@@ -267,16 +270,16 @@ def qa_border_event_2025(mode: str = "light", data: Path = BORDER_EVENT_2025,
 
 
 # label -> (spec, group) in border_pt.csv; ARW-trim twin via trim_spec
-HERO_ROWS = {
-    "All imports": ("main", "all"),
-    "China": ("china", "china"),
-    "Other countries": ("china", "other"),
-    "Section 232 duties": ("authority", "s232"),
-    "IEEPA duties": ("authority", "ieepa"),
-    "Section 301 duties": ("authority", "s301"),
-    "Differentiated goods": ("rauch", "differentiated"),
-    "Homogeneous goods": ("rauch", "homogeneous"),
-}  # fmt: skip
+HERO_GROUPS = (
+    ("Overall", (("All imports", "main", "all"),)),
+    ("By supplier", (("China", "china", "china"), ("Other countries", "china", "other"))),
+    ("By tariff authority", (("Section 232 (metals, autos)", "authority", "s232"),
+                             ("IEEPA (2025 only)", "authority", "ieepa"),
+                             ("Section 301 (China)", "authority", "s301"))),
+    ("By type of good", (("Differentiated", "rauch", "differentiated"),
+                         ("Homogeneous", "rauch", "homogeneous"))),
+)  # fmt: skip
+HERO_ROWS = {label: (spec, group) for _, rows in HERO_GROUPS for label, spec, group in rows}
 HERO_PERIODS = (("2018_19", "2018–19"), ("2025_26", "2025–26"))
 
 
@@ -284,61 +287,96 @@ def trim_spec(spec: str) -> str:
     return f"{spec}_trim3"
 
 
+def hero_layout() -> tuple[list[tuple[float, str, str, str]], list[tuple[float, str]]]:
+    """Row positions: (y, label, spec, group) per estimate row and (y, title) per group header;
+    each group starts with a header line and is followed by a gap."""
+    rows, heads, y = [], [], 0.0
+    for title, members in HERO_GROUPS:
+        heads.append((y, title))
+        y += 0.8
+        for label, spec, group in members:
+            rows.append((y, label, spec, group))
+            y += 1.0
+        y += 0.3
+    return rows, heads
+
+
 def hero_border_pt(mode: str = "light", data: Path = BORDER_PT,
                    out_dir: Path | None = None) -> list[Path]:  # fmt: skip
-    """Hero (P16 draft, final in P21): pass-through of tariffs to pre-duty import prices."""
+    """Hero: pass-through of tariffs to pre-duty import prices, 2018-19 vs 2025-26, overall and
+    by supplier, authority and type of good; main (winsorised) and ARW-trimmed estimates."""
     df = pl.read_csv(data).filter(pl.col("outcome") == "uv")
     est = {(r["period"], r["spec"], r["group"]): r for r in df.iter_rows(named=True)}
-    labels = list(HERO_ROWS)
+    rows, heads = hero_layout()
+    y_max = rows[-1][0] + 0.6
     with theme.style(mode) as t:
         colors = dict(zip([p for p, _ in HERO_PERIODS], t["series"][:2], strict=True))
-        fig, ax = plt.subplots(figsize=(theme.WIDTH_IN, 6.4))
-        fig.subplots_adjust(left=0.2, right=0.97, top=0.74, bottom=0.14)
-        for x, label in ((-1.0, "Foreign exporters pay"), (0.0, "US buyers pay")):
-            ax.axvline(x, color=t["axis"], linewidth=1, zorder=1)
-            ax.text(x, -0.75, label, ha="center", va="bottom", fontsize=8.5,
-                    color=t["text2"])  # fmt: skip
-        for i, label in enumerate(labels):
-            spec, group = HERO_ROWS[label]
+        fig, ax = plt.subplots(figsize=(theme.WIDTH_IN, 7.0))
+        fig.subplots_adjust(left=0.24, right=0.96, top=0.75, bottom=0.145)
+        ax.axvspan(-1.15, 0, color=t["grid"], alpha=0.35, linewidth=0, zorder=0)
+        for x, label, ha in ((-1.0, "β = −1\nForeign exporters pay", "center"),
+                             (0.0, "β = 0\nUS buyers pay", "center")):  # fmt: skip
+            ax.axvline(x, color=t["axis"], linewidth=1.2, zorder=1)
+            ax.text(x, -0.35, label, ha=ha, va="bottom", fontsize=8.5, color=t["text"],
+                    linespacing=1.3)  # fmt: skip
+        ax.annotate("", xy=(-0.95, -0.15), xytext=(-0.05, -0.15),
+                    arrowprops={"arrowstyle": "->", "color": t["muted"], "lw": 0.8})  # fmt: skip
+        ax.text(-0.5, -0.25, "more of the tariff absorbed by foreign exporters", ha="center",
+                va="bottom", fontsize=7.5, color=t["muted"])  # fmt: skip
+        for y, title in heads:
+            ax.text(-0.02, y + 0.15, title, transform=ax.get_yaxis_transform(), ha="right",
+                    va="center", fontsize=9, weight="bold", color=t["text"])  # fmt: skip
+            ax.axhline(y + 0.35, color=t["grid"], linewidth=0.7, zorder=0)
+        for y, _label, spec, group in rows:
             for j, (p, _) in enumerate(HERO_PERIODS):
-                for dy, sp, filled in ((-0.18, spec, True), (-0.06, trim_spec(spec), False)):
+                for dy, sp, filled in ((-0.30, spec, True), (-0.14, trim_spec(spec), False)):
                     r = est.get((p, sp, group))
                     if r is None:
                         continue
-                    y = i + dy + 0.24 * j
-                    ax.plot([r["ci_low"], r["ci_high"]], [y, y], color=colors[p],
+                    yy = y + dy + 0.32 * j
+                    ax.plot([r["ci_low"], r["ci_high"]], [yy, yy], color=colors[p],
                             linewidth=theme.LINE_WIDTH, zorder=3)  # fmt: skip
-                    ax.plot([r["coef"]], [y], "o", markersize=6,
+                    ax.plot([r["coef"]], [yy], "o", markersize=6.5,
                             color=colors[p] if filled else t["surface"],
                             markeredgecolor=colors[p], markeredgewidth=1.5, zorder=4)  # fmt: skip
-        ax.set_yticks(range(len(labels)), labels, color=t["text"], fontsize=9.5)
-        ax.set_ylim(len(labels) - 0.4, -0.8)
-        ax.set_xlim(-1.25, 0.55)
+                    if group == "all" and filled:
+                        ax.annotate(f"{r['coef']:+.2f}".replace("-", "−"), (r["ci_high"], yy),
+                                    xytext=(5, 0), textcoords="offset points", va="center",
+                                    fontsize=8, color=t["text2"])  # fmt: skip
+        ax.set_yticks([y for y, *_ in rows], [lbl for _, lbl, *_ in rows], color=t["text"],
+                      fontsize=9)  # fmt: skip
+        ax.tick_params(axis="y", length=0)
+        ax.set_ylim(y_max, -0.6)
+        ax.set_xlim(-1.15, 0.5)
         ax.xaxis.set_major_locator(MultipleLocator(0.25))
+        ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:+.2f}".replace("-", "−")
+                                                   if v else "0"))  # fmt: skip
         ax.grid(axis="y", visible=False)
-        ax.set_xlabel("Change in pre-duty import price per unit change in ln(1 + tariff) (β)",
+        ax.grid(axis="x", visible=True, color=t["grid"], linewidth=0.6)
+        ax.set_xlabel("β: change in pre-duty import price per unit change in ln(1 + tariff)",
                       color=t["muted"], fontsize=8.5)  # fmt: skip
         handles = [plt.Line2D([], [], color=colors[p], marker="o", lw=theme.LINE_WIDTH)
                    for p, _ in HERO_PERIODS]  # fmt: skip
         handles += [
-            plt.Line2D([], [], color=t["muted"], marker="o", lw=0, markersize=6),
-            plt.Line2D([], [], color=t["muted"], marker="o", lw=0, markersize=6,
+            plt.Line2D([], [], color=t["muted"], marker="o", lw=0, markersize=6.5),
+            plt.Line2D([], [], color=t["muted"], marker="o", lw=0, markersize=6.5,
                        markerfacecolor=t["surface"], markeredgewidth=1.5),
         ]  # fmt: skip
         names = [lbl for _, lbl in HERO_PERIODS]
-        names += ["Winsorised 1/99 (main)", "Unit-value ratio > 3 dropped (ARW)"]
-        fig.legend(handles, names, loc="upper left", bbox_to_anchor=(0.006, 0.83), ncol=4,
+        names += ["Main estimate (winsorised 1/99)", "Outliers trimmed (unit-value ratio > 3)"]
+        fig.legend(handles, names, loc="upper left", bbox_to_anchor=(0.006, 0.845), ncol=4,
                    fontsize=8.5, labelcolor=t["text2"])  # fmt: skip
         theme.header(
-            fig, "Who pays the tariffs at the border: 2018–19 and 2025–26 (draft)",
-            "Estimated response of pre-duty import unit values to tariff changes, 95% CIs. "
-            "β = 0: the duty is added in full to what US buyers pay;\nβ = −1: foreign exporters "
-            "cut prices by the full duty. 12-month changes, HS6 × month and country × month "
-            "fixed effects, SEs clustered by HS8.", t,
+            fig, "Pre-duty import prices changed little when tariffs rose, 2018–19 and 2025–26",
+            "Estimated response of import prices before duty to tariff changes, with 95% "
+            "confidence intervals. Near 0: the duty was added in full to what US\nimporters "
+            "paid. Near −1: foreign exporters cut their prices by the full duty. 12-month "
+            "changes, HS6 × month and country × month fixed effects.", t,
         )  # fmt: skip
         theme.footer(fig, theme.SOURCE_CENSUS, t,
-                     note="Section 232 and IEEPA terms come from one regression with duties "
-                     "split by authority; IEEPA duties began in 2025.")  # fmt: skip
+                     note="Authority rows come from one regression with the tariff change split "
+                     "by authority; IEEPA duties began in 2025. SEs clustered by HS8. Data: "
+                     "data/published/border_pt.csv.")  # fmt: skip
         return theme.save(fig, "hero_border_pt", mode, out_dir)
 
 
@@ -371,6 +409,9 @@ def chart_spec_curve(mode: str = "light", data: Path = ROBUSTNESS,
             top.vlines(x, p["ci_low"], p["ci_high"], colors=cols, linewidth=1.2, zorder=2)
             top.scatter(x, p["coef"], s=16, c=cols, edgecolors=t["surface"], linewidths=0.8,
                         zorder=3)  # fmt: skip
+            m = next(i for i, flag in enumerate(is_main) if flag)
+            top.annotate("Main", (m, p["ci_high"][m]), xytext=(0, 4), textcoords="offset points",
+                         ha="center", va="bottom", fontsize=8, color=t["text2"])  # fmt: skip
             top.set_ylim(-0.3, 0.45)
             top.yaxis.set_major_locator(MultipleLocator(0.1))
             top.yaxis.set_major_formatter(FuncFormatter(_beta_tick))
@@ -553,6 +594,79 @@ FIGURES = [
 ]
 QA_FIGURES = [qa_border_event_2018, qa_border_event_2025]  # light only, to reports/qa
 
+# Alt text and data table per figure (accessibility; the report embeds these). Descriptions
+# state what the chart shows, not the numbers, so they stay true when the data refresh.
+ALT_TEXT = {
+    "chart2_effective_rates": {
+        "alt": "Eight small line charts, one per trading partner (all countries, Canada, Mexico, "
+        "EU, Japan, Vietnam, India, China), of the monthly tariff rate on US imports from 2017: "
+        "the statutory rate from tariff orders and the effective rate actually assessed. Both "
+        "are low and flat until early 2025, then jump; the statutory rate rises above the "
+        "effective rate, most of all for China, Canada and Mexico.",
+        "data": "data/published/effective_rates.csv",
+    },
+    "chart3_retail": {
+        "alt": "Two line charts of consumer price indexes for CPI goods in the highest and "
+        "lowest thirds of 2025-26 tariff exposure, indexed to January 2025. Left: "
+        "deseasonalised indexes; high-exposure goods were falling relative to low-exposure goods "
+        "through 2023-24. Right: each item relative to its own 2023-24 trend; after February "
+        "2025 high-exposure goods rise above trend more than low-exposure goods.",
+        "data": "data/published/retail_high_low.csv",
+    },
+    "chart4_diversion": {
+        "alt": "Two stacked area charts of the share of US imports by supplier (China, Vietnam, "
+        "Taiwan, Mexico, other Southeast Asia, India, EU, rest of world), 12-month rolling, from "
+        "2017. Left: products on the 2018-19 Section 301 lists, where China's share falls "
+        "steadily and drops again in 2025 while Taiwan, Vietnam, Mexico and other Southeast Asia "
+        "grow. Right: all other products, where China's share falls mainly in 2025.",
+        "data": "data/published/diversion_shares.csv",
+    },
+    "chart5_front_running": {
+        "alt": "Six line charts, one per 2025 tariff action, of imports of affected products "
+        "relative to their own seasonal pattern, from 9 months before to 9 months after the "
+        "duty took effect, with a grey band for normal variation. Imports peak in the months "
+        "just before most actions and fall below the band afterwards.",
+        "data": "data/published/front_running.csv",
+    },
+    "chart6_low_value": {
+        "alt": "Line chart of monthly recorded low-value import shipments (HTS 9999.95) from "
+        "2022, for China and Hong Kong and for all other countries, with markers at the end of "
+        "de minimis for China and Hong Kong (May 2025) and for all countries (August 2025). "
+        "Recorded values step up after each date, partly because these shipments were not "
+        "recorded before.",
+        "data": "data/published/low_value_imports.csv",
+    },
+    "hero_border_pt": {
+        "alt": "Dot plot with confidence intervals of how pre-duty import prices responded to "
+        "tariff changes, for 2018-19 and 2025-26, overall and by supplier, tariff authority and "
+        "type of good, with reference lines at 0 (US buyers pay the full duty) and -1 (foreign "
+        "exporters pay it). Nearly all estimates sit close to 0; Section 232 metals and autos "
+        "are slightly below it.",
+        "data": "data/published/border_pt.csv",
+    },
+    "chart_spec_curve": {
+        "alt": "Specification curve for 2018-19 and 2025-26: each column is one estimate of "
+        "the border pass-through coefficient with its confidence interval, sorted, with the "
+        "main specification highlighted, and a grid below marking each column's cleaning rule "
+        "and change to the main specification. Most estimates lie between -0.1 and +0.3; the "
+        "value-weighted ones are lower and wide.",
+        "data": "data/published/robustness.csv",
+    },
+}
+FILE_STEMS = {"chart_spec_curve": "robustness_spec_curve"}
+
+
+def write_manifest(path: Path | None = None) -> Path:
+    """report/figures/alt_text.json: per figure, alt text, data table and light/dark PNGs."""
+    path = path or config.FIGURES_DIR / "alt_text.json"
+    out = {}
+    for name, entry in ALT_TEXT.items():
+        stem = FILE_STEMS.get(name, name)
+        out[name] = {**entry, "files": {"light": f"{stem}.png", "dark": f"{stem}_dark.png"}}
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n")
+    return path
+
 
 def run() -> None:
     for fn in FIGURES:
@@ -562,6 +676,7 @@ def run() -> None:
     for fn in QA_FIGURES:
         for path in fn("light"):
             print(path.relative_to(config.PROJECT_ROOT))
+    print(write_manifest().relative_to(config.PROJECT_ROOT))
 
 
 if __name__ == "__main__":
