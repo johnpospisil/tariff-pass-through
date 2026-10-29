@@ -1,0 +1,149 @@
+# Monthly refresh (P24): when Census has a month newer than the published data, re-pull the
+# trailing 24 months (revisions) plus BLS and Treasury, rebuild every panel and model, run all
+# tests (reconciliation gates, pinned estimates), render the Quarto site and deploy it to
+# GitHub Pages. Opens an issue if anything fails, and another if 2025-26 pins moved.
+#
+# Census shifted its 2026 FT-900 release dates after the funding lapse, so instead of one
+# fixed date the workflow checks weekly in the first part of each month and only rebuilds
+# when there is new data (tpt.ci.new_month).
+#
+# Data: the runner starts from the `data-snapshot` release asset (raw downloads except the
+# Census HS10 JSON, plus parsed interim data; `make snapshot-pack`), and replaces it at the end.
+# Secrets: CENSUS_API_KEY, BLS_API_KEY, BLS_CONTACT_EMAIL.
+
+name: Monthly refresh
+
+on:
+  schedule:
+    - cron: "0 14 3,10,17,24 * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Rebuild even if Census has no new month"
+        type: boolean
+        default: false
+      deploy:
+        description: "Deploy the rendered site to GitHub Pages"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  issues: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: monthly-refresh
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      new: ${{ steps.gate.outputs.new }}
+      available: ${{ steps.gate.outputs.available }}
+      published: ${{ steps.gate.outputs.published }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - id: gate
+        env:
+          CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+        run: uv run python -m tpt.ci.new_month
+
+  refresh:
+    needs: check
+    if: needs.check.outputs.new == 'true' || inputs.force
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    env:
+      CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+      BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
+      BLS_CONTACT_EMAIL: ${{ secrets.BLS_CONTACT_EMAIL }}
+      GH_TOKEN: ${{ github.token }}
+      TPT_PINS_2025: warn
+      TPT_PIN_DRIFT_LOG: reports/qa/pin_drift.csv
+    steps:
+      - name: Free disk space (the data need ~8 GB)
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h /
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Install
+        run: |
+          uv sync --frozen
+          uv run playwright install --with-deps chromium-headless-shell
+      - name: Restore data snapshot
+        run: |
+          gh release download data-snapshot --pattern data-snapshot.tar.gz
+          make snapshot-unpack
+          rm data-snapshot.tar.gz
+          du -sh data/*
+      - name: Re-pull, rebuild, model, render
+        run: |
+          mkdir -p reports/qa
+          make refresh 2>&1 | tee reports/qa/refresh.log
+      - name: Tests (reconciliation gates, pinned estimates, report, explorer in a browser)
+        run: uv run pytest -q -rw 2>&1 | tee reports/qa/tests.log
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: report/_site
+      - name: Commit refreshed published data and figures
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/published data/reference report/figures
+          if git diff --cached --quiet; then echo "no changes"; else
+            git commit -m "Monthly refresh: Census data through ${{ needs.check.outputs.available }}"
+            git pull --rebase
+            git push
+          fi
+      - name: Save data snapshot
+        run: |
+          make snapshot-pack
+          gh release upload data-snapshot data-snapshot.tar.gz --clobber
+      - name: Open an issue if 2025-26 pins moved
+        run: |
+          if [ -s "$TPT_PIN_DRIFT_LOG" ]; then
+            { echo "The monthly refresh (data through ${{ needs.check.outputs.available }}) moved these"
+              echo "2025–26 estimates beyond their pinned tolerance. The site was still deployed;"
+              echo "check the report text and re-pin in tests/test_pinned_estimates.py."
+              echo; echo '```'; cat "$TPT_PIN_DRIFT_LOG"; echo '```'
+              echo; echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            } > drift.md
+            gh issue create --title "Pinned 2025–26 estimates moved (data through ${{ needs.check.outputs.available }})" --body-file drift.md
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: refresh-logs
+          path: reports/qa/
+          retention-days: 90
+
+  deploy:
+    needs: refresh
+    if: github.event_name == 'schedule' || inputs.deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  report-failure:
+    needs: [check, refresh, deploy]
+    if: failure()
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - run: |
+          gh issue create --repo "${{ github.repository }}" \
+            --title "Monthly refresh failed (run ${{ github.run_number }})" \
+            --body "A gate, test or build step failed, so the site was not updated. Logs (refresh-logs artifact): ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

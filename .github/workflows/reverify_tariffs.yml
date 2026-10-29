@@ -1,0 +1,37 @@
+# Monthly reminder (P24): open an issue to re-verify tariff actions and the IEEPA legal status.
+# Recall is not a source: every change to data/reference/tariff_actions.csv needs an official
+# citation and a new verified_on date (CLAUDE.md).
+
+name: Re-verify tariff actions
+
+on:
+  schedule:
+    - cron: "0 14 1 * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - run: |
+          month=$(date -u +%Y-%m)
+          cat > body.md <<'BODY'
+          Monthly check that the tariff timeline is still current. For each item, cite an official
+          source (Federal Register, proclamation/EO, USTR notice or CBP CSMS) and update
+          `verified_on` in `data/reference/tariff_actions.csv`.
+
+          - [ ] New or modified actions in the Federal Register since the last check (Section 232,
+                301, 122, 338 and any new authority); add rows with HS scope and stacking rules
+          - [ ] CBP CSMS messages: exclusions, in-transit rules, effective-date changes
+          - [ ] IEEPA: court proceedings and refunds (CAPE phases, CIT class action); update
+                `data/published/legal_status.csv` and the "as of" date in the report
+          - [ ] Expiring actions (end dates in the next two months)
+          - [ ] `make timeline-validate rates` and the P11 statutory-vs-collected check after edits
+          BODY
+          gh issue create --repo "${{ github.repository }}" \
+            --title "Re-verify tariff actions and legal status ($month)" --body-file body.md

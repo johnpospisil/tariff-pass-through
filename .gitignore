@@ -30,3 +30,4 @@ report/*_files/
 
 # Claude Code personal settings
 .claude/settings.local.json
+data-snapshot.tar.gz

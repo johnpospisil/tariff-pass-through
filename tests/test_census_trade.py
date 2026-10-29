@@ -225,3 +225,20 @@ def test_build_interim_writes_one_parquet_per_year(client, tmp_path):
 def test_fixture_is_real_census_shape():
     header = json.loads(HS10_FIXTURE.read_text())[0]
     assert header[-1] == "CTY_CODE" and header.count("CTY_CODE") == 2
+
+
+# --- trailing-window refresh (P24) ---------------------------------------------
+
+
+def test_window_start_counts_back_from_latest_month():
+    assert ct.window_start("2026-08", 24) == "2024-09"
+    assert ct.window_start("2026-01", 1) == "2026-01"
+
+
+def test_window_chunks_are_whole_years_touching_the_window():
+    """Year chunks overlapping the window are refreshed whole, so each rewritten year
+    partition stays complete; earlier years keep their existing partitions."""
+    chunks = [ct.Chunk("5700", lo, hi) for lo, hi in ct.year_spans("2017-01", "2026-08")]
+    got = ct.window_chunks(chunks, "2024-09")
+    assert [c.start for c in got] == ["2024-01", "2025-01", "2026-01"]
+    assert got[-1].end == "2026-08"

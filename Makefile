@@ -1,4 +1,4 @@
-.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value exposure retail-did diversion explorer border-pt border-pt-2025 robustness build models figures report test lint format all
+.PHONY: setup ingest ingest-census ingest-bls ingest-reference ingest-status reconcile concordance hs-lists timeline-2025 timeline-validate rates mfn usmca-share validate-rates import-panel effective-rates front-running low-value exposure retail-did diversion explorer refresh snapshot-pack snapshot-unpack border-pt border-pt-2025 robustness build models figures report test lint format all
 
 UV := uv run
 
@@ -66,7 +66,6 @@ timeline-validate:  ## P07 check data/reference/tariff_actions.csv (citations, d
 	$(UV) python -m tpt.build.tariff_timeline
 
 build: concordance timeline-validate rates validate-rates import-panel effective-rates front-running low-value exposure
-	@echo "build: not implemented yet (P10, P12, P18)"
 
 models: border-pt robustness retail-did diversion  ## P15-P20 regressions -> data/published/
 
@@ -99,6 +98,20 @@ report:  ## P22/P23 report numbers + explorer data + Quarto render -> report/_si
 	$(UV) python -m tpt.report.numbers
 	rsync -a --delete data/published/explorer/ report/explorer_data/
 	JUPYTER_PATH=$(CURDIR)/.venv/share/jupyter QUARTO_PYTHON=$(CURDIR)/.venv/bin/python $(UV) quarto render report --execute-daemon-restart
+
+# --- P24 monthly refresh (.github/workflows/monthly_refresh.yml) ---------------------------
+REFRESH_MONTHS ?= 24
+SNAPSHOT ?= data-snapshot.tar.gz
+
+refresh:  ## re-pull trailing Census window (revisions) + BLS/Treasury, rebuild everything, render
+	$(UV) python -u -m tpt.ingest.census_trade --refresh-months $(REFRESH_MONTHS)
+	$(MAKE) ingest-bls ingest-reference reconcile build models explorer figures report
+
+snapshot-pack:  ## CI data snapshot: raw downloads (not Census HS10 JSON) + parsed interim data
+	tar -czf $(SNAPSHOT) --exclude=data/raw/census --exclude=data/interim/import_panel_unwinsorised.parquet --exclude='_progress.json' data/raw data/interim
+
+snapshot-unpack:
+	tar -xzf $(SNAPSHOT)
 
 test:
 	$(UV) pytest

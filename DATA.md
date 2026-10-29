@@ -1140,6 +1140,41 @@ Bibliography: `report/references.bib`. The render gives no warnings. In a browse
   toys, laptops, solar panels and an HS code; row selection; no-match message; dark mode
   switches the chart palette; no page errors.
 
+## Monthly refresh and deploy (P24)
+
+`.github/workflows/monthly_refresh.yml` keeps the site current; `reverify_tariffs.yml` opens an
+issue on the 1st of each month with a checklist for re-verifying tariff actions and the IEEPA
+legal status (no tariff change goes in without an official citation).
+
+- **When**: the 3rd, 10th, 17th and 24th of each month at 14:00 UTC, plus manual runs
+  (`force`, `deploy` inputs). Census moved its 2026 FT-900 release dates after the funding
+  lapse (e.g. the January 2026 report slipped from 5 to 12 March;
+  [Census FT-900 index](https://www.census.gov/foreign-trade/Press-Release/ft900_index.html)),
+  so a `check` job (`tpt.ci.new_month`) compares the latest month in the Census API with the
+  latest published month and rebuilds only when Census is ahead.
+- **Data on the runner**: the `data-snapshot` release asset (`make snapshot-pack`, ~0.66 GB:
+  `data/raw` except the Census HS10 JSON, and `data/interim` except the rebuilt unwinsorised
+  panel). Scanned for API keys and the BLS contact email before upload (none). Each successful
+  run replaces it.
+- **Revisions**: `census_trade --refresh-months 24` re-downloads the calendar years that touch
+  the trailing 24 months (whole years, so each rewritten year partition is complete) and
+  leaves older year partitions as they are; Census totals are re-fetched from the same year.
+  BLS, FT-900 and Treasury are re-pulled in full. A one-year local test re-pulled 232 country
+  chunks (2,147,784 rows) in 3.7 minutes.
+- **Pipeline**: `make refresh` = Census window, `ingest-bls ingest-reference reconcile build
+  models explorer figures report`; then `pytest` (all tests, including the reconciliation gates,
+  report lint and the Playwright explorer tests), Pages deploy, a commit of `data/published`,
+  `data/reference` and `report/figures`, and a new snapshot.
+- **Pinned estimates policy**: 2018–19 pins and every qualitative gate fail the run (those data
+  are not re-pulled; the gates guard claims made in the report text). 2025–26 coefficient pins
+  drift as Census revises and extends the window, so CI runs with `TPT_PINS_2025=warn`: a moved
+  pin is a pytest warning and a row in `reports/qa/pin_drift.csv`, the site still deploys, and
+  the workflow opens an issue listing the moved pins so the text can be checked and re-pinned.
+- **Failures**: any failed step (gate, test, build) stops the deploy and opens an issue
+  linking the run; logs are kept 90 days as the `refresh-logs` artifact.
+- **Secrets**: `CENSUS_API_KEY`, `BLS_API_KEY`, `BLS_CONTACT_EMAIL` (repository secrets; never
+  in code, logs or manifests).
+
 ## Known issues
 
 - **Unweighted 2025–26 diversion elasticity (P20)**: positive (+0.56), driven by small flows and

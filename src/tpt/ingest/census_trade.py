@@ -147,6 +147,18 @@ def year_spans(start: str, end: str) -> list[tuple[str, str]]:
     return spans
 
 
+def window_start(latest: str, months: int) -> str:
+    """First month of a trailing window of `months` months ending at `latest` (YYYY-MM)."""
+    n = int(latest[:4]) * 12 + int(latest[5:]) - months
+    return f"{n // 12}-{n % 12 + 1:02d}"
+
+
+def window_chunks(chunks: list[Chunk], since: str) -> list[Chunk]:
+    """Chunks whose span reaches into [since, ...]: whole years, so rewritten partitions stay
+    complete."""
+    return [c for c in chunks if c.end >= since]
+
+
 def _month(ym: str) -> date:
     return date(int(ym[:4]), int(ym[5:]), 1)
 
@@ -195,16 +207,19 @@ def fetch_totals(
     end: str | None,
     workers: int = 4,
     progress: ProgressFile | None = None,
+    refresh_from: int | None = None,
 ) -> pl.DataFrame:
-    """Country x month totals (all commodities). The latest year is always re-fetched."""
+    """Country x month totals (all commodities). The latest year (and every year from
+    `refresh_from`) is re-fetched."""
     last_year = int(end[:4]) if end else date.today().year
+    refresh_from = min(refresh_from or last_year, last_year)
     years = range(int(start[:4]), last_year + 1)
     if progress:
         progress.start(total=len(years), label="census totals")
 
     def one_year(year: int) -> pl.DataFrame:
         params = {"get": ",".join(TOTAL_VARS), "time": f"from {year}-01 to {year}-12"}
-        resp = client.get(URL, params, refresh=year == last_year, validate=validate_response)
+        resp = client.get(URL, params, refresh=year >= refresh_from, validate=validate_response)
         df = parse_response(resp.content)
         client.record_rows(resp, df.height)
         if progress:
@@ -306,12 +321,20 @@ def run(
     years: list[int] | None = None,
     workers: int = 4,
     refresh: bool = False,
+    refresh_months: int | None = None,
 ) -> None:
+    """refresh_months: re-download the years covering the trailing window of that many months
+    (Census revisions) and rebuild only those year partitions; older years are left as they are,
+    so their raw cache is not needed (CI)."""
     client = CachedClient("census")
     t0 = time.time()
 
     progress = ProgressFile(progress_path("census"), label="census totals")
-    totals = fetch_totals(client, start, end, workers, progress)
+    refresh_from = None
+    if refresh_months:  # the latest month is not known yet: refresh from the window's year
+        today = date.today().strftime("%Y-%m")
+        refresh_from = int(window_start(today, refresh_months + 2)[:4])
+    totals = fetch_totals(client, start, end, workers, progress, refresh_from)
     INTERIM_TOTALS.parent.mkdir(parents=True, exist_ok=True)
     totals.write_parquet(INTERIM_TOTALS)
     country_reference(totals).write_csv(COUNTRIES_CSV)
@@ -321,6 +344,11 @@ def run(
     chunks = plan_chunks(totals, start, end or latest)
     if years:
         chunks = [c for c in chunks if c.year in years]
+    if refresh_months:
+        since = window_start(latest, refresh_months)
+        chunks = window_chunks(chunks, since)
+        refresh = True
+        log.warning("refreshing %s chunks touching %s..%s", len(chunks), since, latest)
     random.Random(0).shuffle(chunks)  # mix big and small countries so the ETA is stable
 
     progress.start(total=len(chunks), label="census HS10")
@@ -354,6 +382,12 @@ def main() -> None:
     parser.add_argument("--years", type=int, nargs="*", help="only these years (pilot)")
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--refresh", action="store_true", help="re-download cached chunks")
+    parser.add_argument(
+        "--refresh-months",
+        type=int,
+        default=None,
+        help="re-pull only the years covering this trailing window (revisions)",
+    )
     args = parser.parse_args()
 
     log_path = config.RAW_DIR / "census" / "ingest.log"
@@ -363,7 +397,7 @@ def main() -> None:
         format="%(asctime)s %(name)s %(levelname)s %(message)s",
         handlers=[logging.FileHandler(log_path), logging.StreamHandler()],
     )
-    run(args.start, args.end, args.years, args.workers, args.refresh)
+    run(args.start, args.end, args.years, args.workers, args.refresh, args.refresh_months)
 
 
 if __name__ == "__main__":

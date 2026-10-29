@@ -5,7 +5,11 @@ skipped if not built. Pins are the P15 run (data vintage 2026-10); 2018-19 data 
 Census revisions, so a pin that moves needs a look, not a new number.
 """
 
+import csv
 import math
+import os
+import warnings
+from pathlib import Path
 
 import polars as pl
 import pytest
@@ -13,6 +17,49 @@ import pytest
 from tpt.models import border_pt as bp
 
 pytestmark = pytest.mark.skipif(not bp.OUT.exists(), reason="run make border-pt")
+
+
+# --- pin policy (P24) ------------------------------------------------------------------
+# 2018-19 pins and every qualitative gate always fail: those data are not re-pulled, and the
+# gates guard claims the report makes. 2025-26 coefficient pins drift as Census revises and
+# extends the window, so the monthly refresh runs with TPT_PINS_2025=warn: a moved pin is a
+# warning plus a row in TPT_PIN_DRIFT_LOG (CI opens an issue from it), not a failed deploy.
+
+
+class PinDrift(UserWarning):
+    pass
+
+
+def check_pin(label: str, got: float, pin: float, tol: float, period: str) -> None:
+    if got == pytest.approx(pin, abs=tol):
+        return
+    msg = f"{label}: {got:.3f} vs pinned {pin:.3f} (tolerance {tol})"
+    if period != "2025_26" or os.environ.get("TPT_PINS_2025") != "warn":
+        pytest.fail(msg)
+    warnings.warn(msg, PinDrift, stacklevel=2)
+    if log := os.environ.get("TPT_PIN_DRIFT_LOG"):
+        new = not Path(log).exists()
+        with open(log, "a", newline="") as f:
+            w = csv.writer(f)
+            if new:
+                w.writerow(["pin", "estimate", "pinned", "tolerance"])
+            w.writerow([label, round(got, 4), pin, tol])
+
+
+def test_pin_policy(monkeypatch, tmp_path):
+    log = tmp_path / "drift.csv"
+    monkeypatch.setenv("TPT_PIN_DRIFT_LOG", str(log))
+    check_pin("ok", 0.10, 0.11, 0.02, "2025_26")
+    monkeypatch.delenv("TPT_PINS_2025", raising=False)
+    with pytest.raises(pytest.fail.Exception):
+        check_pin("x", 0.5, 0.1, 0.02, "2025_26")
+    monkeypatch.setenv("TPT_PINS_2025", "warn")
+    with pytest.warns(PinDrift):
+        check_pin("x", 0.5, 0.1, 0.02, "2025_26")
+    with pytest.raises(pytest.fail.Exception):
+        check_pin("y", 0.5, 0.1, 0.02, "2018_19")
+    assert log.read_text().splitlines() == ["pin,estimate,pinned,tolerance", "x,0.5,0.1,0.02"]
+
 
 # (spec, outcome) -> coefficient, P15 run
 PINNED = {
@@ -34,7 +81,7 @@ def est() -> dict:
 
 @pytest.mark.parametrize(("key", "coef"), PINNED.items(), ids=lambda v: str(v))
 def test_pinned(est, key, coef):
-    assert est[key]["coef"] == pytest.approx(coef, abs=TOL[key[1]])
+    check_pin(f"border 2018_19 {key}", est[key]["coef"], coef, TOL[key[1]], "2018_19")
 
 
 def test_gate_pre_duty_prices_near_complete_pass_through(est):
@@ -94,7 +141,7 @@ def test_event_study_full_sample_shows_2019_run_up(ev):
 
 # --- P16: 2025-26 (data vintage 2026-10, through 2026-08) ------------------------
 # 2025-26 months are revised by Census (annual revision each June) and extended monthly, so
-# these pins will drift on refresh; P24 decides whether they warn or fail.
+# these pins will drift on refresh: they warn in the monthly refresh (see pin policy above).
 
 PINNED_25 = {
     ("main", "uv", "all"): 0.041, ("main", "uv_dut", "all"): 0.508,
@@ -124,7 +171,8 @@ def _get(pt: dict, period: str, spec: str, outcome: str, group: str) -> dict:
 
 @pytest.mark.parametrize(("key", "coef"), PINNED_25.items(), ids=lambda v: str(v))
 def test_pinned_2025(pt, key, coef):
-    assert _get(pt, "2025_26", *key)["coef"] == pytest.approx(coef, abs=TOL_25[key[1]])
+    got = _get(pt, "2025_26", *key)["coef"]
+    check_pin(f"border 2025_26 {key}", got, coef, TOL_25[key[1]], "2025_26")
 
 
 def test_2025_pre_duty_prices_near_complete_pass_through(pt):
@@ -226,7 +274,7 @@ def retail() -> dict:
 
 @pytest.mark.parametrize(("key", "pin"), PINNED_RETAIL.items(), ids=lambda v: str(v))
 def test_pinned_retail(retail, key, pin):
-    assert retail[key]["coef"] == pytest.approx(pin[0], abs=pin[1])
+    check_pin(f"retail {key}", retail[key]["coef"], pin[0], pin[1], key[0])
 
 
 def test_retail_pass_through_partial_and_below_border(retail):
@@ -278,7 +326,7 @@ def div() -> dict:
 
 @pytest.mark.parametrize(("key", "pin"), PINNED_DIV.items(), ids=lambda v: str(v))
 def test_pinned_diversion(div, key, pin):
-    assert div[key]["coef"] == pytest.approx(pin[0], abs=pin[1])
+    check_pin(f"diversion {key}", div[key]["coef"], pin[0], pin[1], key[0])
 
 
 def test_trade_weighted_elasticities_negative(div):
