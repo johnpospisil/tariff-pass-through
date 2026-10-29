@@ -324,7 +324,7 @@ Copy each prompt into Claude Code as written. Prompts assume the earlier ones ar
 > small; include HS descriptions). Test with playwright: search works, charts render, page loads under
 > 3 s on the bundle. Commit `P23`.
 
-**P24 — Monthly refresh and deploy**
+**P24 — Monthly refresh and deploy ✅ DONE!**
 > Create `.github/workflows/monthly_refresh.yml`: on a schedule after the Census monthly release plus a
 > manual trigger, re-pull a trailing 24-month window (revisions), rebuild, run all tests including
 > reconciliation gates and pinned estimates (pinned tests may warn rather than fail on new months; decide
