@@ -21,3 +21,13 @@ def test_github_output(tmp_path):
     out = tmp_path / "gh_out"
     nm.write_output(out, new=True, available="2026-09", published="2026-08")
     assert out.read_text().splitlines() == ["new=true", "available=2026-09", "published=2026-08"]
+
+
+def test_watch_bar_and_elapsed():
+    from datetime import UTC, datetime
+
+    from tpt.ci import watch
+
+    assert watch.bar(8, 16, width=10) == "[#####-----] 8/16"
+    now = datetime(2026, 10, 29, 10, 0, tzinfo=UTC)
+    assert watch.minutes("2026-10-29T08:35:37Z", now) == "1h24m"
