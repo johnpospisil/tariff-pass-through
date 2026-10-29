@@ -5,6 +5,7 @@ refresh job and shows how long the current step has been going. Default: the lat
 """
 
 import json
+import shutil
 import subprocess
 import sys
 import time
@@ -46,7 +47,8 @@ def main() -> None:
             line = f"{bar(done, len(steps))}  job {minutes(job['startedAt'], now)}  {step}"
         else:
             line = f"waiting for refresh job ({r['status']})"
-        print(f"\r{line:<110}", end="", flush=True)
+        cols = shutil.get_terminal_size().columns - 1  # never wrap, so \r redraws in place
+        print(f"\r{line[:cols]:<{cols}}", end="", flush=True)
         if r["status"] == "completed":
             print(f"\nrun {run}: {r['conclusion']}  {r['url']}")
             for j in r["jobs"]:
